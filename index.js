@@ -99,7 +99,7 @@ class SliderContainer extends Component {
     }
   }
   getPinStyle(value){
-    var {styleName,getPercentByValue,thickness = 4} = this.context;
+    var {styleName,getPercentByValue,thickness = 2} = this.context;
     var {Thickness,Thickness_r,OtherSide,StartSide} = styleName;
     return {
       position:'absolute',
@@ -156,7 +156,7 @@ class Line extends Component{
     super(props);
   }
   getStyle(){
-    var {styleName,thickness = 4} = this.context;
+    var {styleName,thickness = 2} = this.context;
     var {StartSide,OtherSide,Thickness,Thickness_r} = styleName;
     return {
       position:'absolute',
@@ -217,7 +217,7 @@ class Space extends Component{
     };
   }
   getFillStyle() {
-    var {style,styleName,thickness = 4,points,endRange} = this.context;
+    var {style,styleName,thickness = 2,points,endRange} = this.context;
     var {StartSise,OtherSide,Thickness,Thickness_r} = styleName;
     var {index} = this.props;
     var length = points.length;

@@ -1,34 +1,11 @@
-.slider{
+.r-slider{
   height:70px;
     width:100%;
     font-size:12px;
 }
-.r-slider-button{
-    background:#fff;
-    box-shadow:inset 0 0 0 1px #777;
-    border-radius:100%;
-  }
-#slider2{
-  width:200px;
-}
-#slider3 .r-slider-button{
-  border-radius:0;
-  background:#999;
-}
-#slider6{
-  height:200px;
-  width:50px;
-}
-#slider6 .r-slider-button{
-  border-radius:0;
-  background:#999;
-}  
   .r-slider-line{
     background:#ddd;
-    
   }
-  
-
 .r-slider-number{
   font-family:'Arial';
   position:absolute;
