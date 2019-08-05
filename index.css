@@ -38,3 +38,6 @@
 .r-slider-pin{
   background:#ddd;
 }
+.r-slider-label{
+  z-index:1000;
+}
