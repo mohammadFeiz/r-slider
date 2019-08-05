@@ -1,7 +1,7 @@
 import React, { Component,createRef,Fragment,createContext } from 'react';
 import $ from 'jquery';
 import './index.css';
-const ctx = createContext();
+const sliderContext = createContext();
 export default class Slider extends Component {
   constructor(props) {
     super(props);
@@ -60,17 +60,17 @@ export default class Slider extends Component {
     contextValue.update = this.update.bind(this);
     contextValue.getValue = this.getValue.bind(this);
       return (
-        <ctx.Provider value={contextValue}>
+        <sliderContext.Provider value={contextValue}>
           <div style={this.getStyle()} className={this.getClassName(className)} ref={this.dom} id={id}>
             <SliderContainer />
           </div>
-        </ctx.Provider>
+        </sliderContext.Provider>
       );
   }
 }
 
 class SliderContainer extends Component {
-  static contextType = ctx;
+  static contextType = sliderContext;
   constructor(props) {
     super(props);
     this.dom = createRef()
@@ -157,7 +157,7 @@ class SliderContainer extends Component {
 }
 
 class Line extends Component{
-  static contextType = ctx;
+  static contextType = sliderContext;
   getStyle(){
     var {styleName,thickness = 3} = this.context;
     var {StartSide,OtherSide,Thickness,Thickness_r} = styleName;
@@ -177,7 +177,7 @@ class Line extends Component{
   }
 } 
 class Range extends Component{
-  static contextType = ctx;
+  static contextType = sliderContext;
   
   render(){
     var {points} = this.context;
@@ -192,7 +192,7 @@ class Range extends Component{
   }
 } 
 class Space extends Component{
-  static contextType = ctx;
+  static contextType = sliderContext;
   constructor(props){
     super(props);
     this.dom = createRef();
@@ -362,7 +362,7 @@ class Space extends Component{
 } 
 
 class Button extends Component{
-  static contextType = ctx;
+  static contextType = sliderContext;
   constructor(props){
     super(props);
     this.dom = createRef();
