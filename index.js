@@ -1,7 +1,7 @@
 import React, { Component,createRef,Fragment,createContext } from 'react';
 import $ from 'jquery';
 import './index.css';
-const SliderContext = createContext();
+const ctx = createContext();
 export default class Slider extends Component {
   constructor(props) {
     super(props);
@@ -31,10 +31,10 @@ export default class Slider extends Component {
       Axis : (direction === 'left' || direction === 'right')?'x':'y',
       Sign : (direction === 'right' || direction === 'down')?1:-1,
     }
-    if (direction === "right") { sn['StartSide'] = "left", sn['EndSide'] = "right";}
-    else if (direction === "left") { sn['StartSide'] = "right", sn['EndSide'] = "left"; }
-    else if (direction === "down") { sn['StartSide'] = "top", sn['EndSide'] = "bottom"; }
-    else if (direction === "up") { sn['StartSide'] = "bottom", sn['EndSide'] = "top"; }
+    if (direction === "right") { sn['StartSide'] = "left"; sn['EndSide'] = "right";}
+    else if (direction === "left") { sn['StartSide'] = "right"; sn['EndSide'] = "left"; }
+    else if (direction === "down") { sn['StartSide'] = "top"; sn['EndSide'] = "bottom"; }
+    else if (direction === "up") { sn['StartSide'] = "bottom"; sn['EndSide'] = "top"; }
     return sn;
   }
   getClassName(className){
@@ -57,20 +57,20 @@ export default class Slider extends Component {
     var contextValue = {...this.props};
     contextValue.styleName = this.getStyleName();
     contextValue.getPercentByValue = this.getPercentByValue.bind(this);
-    contextValue.update = this.update.bind(this)
-    contextValue.getValue = this.getValue.bind(this)
+    contextValue.update = this.update.bind(this);
+    contextValue.getValue = this.getValue.bind(this);
       return (
-        <SliderContext.Provider value={contextValue}>
+        <ctx.Provider value={contextValue}>
           <div style={this.getStyle()} className={this.getClassName(className)} ref={this.dom} id={id}>
             <SliderContainer />
           </div>
-        </SliderContext.Provider>
+        </ctx.Provider>
       );
   }
 }
 
 class SliderContainer extends Component {
-  static contextType = SliderContext;
+  static contextType = ctx;
   constructor(props) {
     super(props);
     this.dom = createRef()
@@ -116,11 +116,9 @@ class SliderContainer extends Component {
       [OtherSide]:'calc(50% - ' + ((thickness + 4) / 2) + 'px)',
       [StartSide]:getPercentByValue(value) + '%'
     };
-    obj;
-    return obj;
   }
   render() {
-    const {points,pinStep,start,end,labelStep,endRange,end,max=end} = this.context;
+    const {points,pinStep,start,end,labelStep} = this.context;
     var ranges = points.map((value,i)=>{return <Range index={i} key={i}/>});
     if(pinStep){
       var pins = [];
@@ -159,10 +157,7 @@ class SliderContainer extends Component {
 }
 
 class Line extends Component{
-  static contextType = SliderContext;
-  constructor(props){
-    super(props);
-  }
+  static contextType = ctx;
   getStyle(){
     var {styleName,thickness = 3} = this.context;
     var {StartSide,OtherSide,Thickness,Thickness_r} = styleName;
@@ -172,7 +167,7 @@ class Line extends Component{
       [OtherSide]:'calc(50% - ' + (thickness / 2) + 'px)',
       [Thickness_r]:thickness + 'px',
       [Thickness]:'100%',
-      ['zIndex']:1
+      zIndex:1
     };
   }
   render(){
@@ -182,10 +177,8 @@ class Line extends Component{
   }
 } 
 class Range extends Component{
-  static contextType = SliderContext;
-  constructor(props){
-    super(props);
-  }
+  static contextType = ctx;
+  
   render(){
     var {points} = this.context;
     var {index} = this.props;
@@ -199,7 +192,7 @@ class Range extends Component{
   }
 } 
 class Space extends Component{
-  static contextType = SliderContext;
+  static contextType = ctx;
   constructor(props){
     super(props);
     this.dom = createRef();
@@ -225,18 +218,19 @@ class Space extends Component{
     };
   }
   getFillStyle() {
-    var {style,styleName,thickness = 3,points,endRange} = this.context;
-    var {StartSise,OtherSide,Thickness,Thickness_r} = styleName;
+    var {styleName,thickness = 3,points,endRange} = this.context;
     var {index} = this.props;
     var length = points.length;
     var value = index === length?endRange:points[index];
     return {
-      position: 'absolute',zIndex: 10,cursor: 'pointer',
+      position: 'absolute',
+      zIndex: 10,
+      cursor: 'pointer',
       [styleName.StartSide]:0,
       [styleName.OtherSide]:'calc(50% - ' + (thickness / 2) + 'px)',
       [styleName.Thickness_r]:thickness + 'px',
       [styleName.Thickness]:'100%',
-      ['background']:value && value.rangeColor?value.rangeColor:undefined
+      background:value && value.rangeColor?value.rangeColor:undefined
     };
   }
   getTextStyle() {
@@ -302,8 +296,8 @@ class Space extends Component{
     offset = offset[styleName.Axis] * styleName.Sign;
     offset = (end - start) * offset / so.width;
     offset = Math.round(offset / step) * step;
-    var startDistance = points[so.index-1].value - so.startLimit;
-    var endDistance = so.endLimit - points[so.index].value;
+    //var startDistance = points[so.index-1].value - so.startLimit;
+    //var endDistance = so.endLimit - points[so.index].value;
     points[so.index - 1].value = offset + so.startValue;
     points[so.index].value = offset + so.endValue;
     if(points[so.index - 1].value < so.startLimit){
@@ -322,7 +316,7 @@ class Space extends Component{
   mouseUp(){
     $(window).unbind('mousemove',this.mouseMove);
     $(window).unbind('mouseup',this.mouseUp);
-    var {onchange,points,fixValue} = this.context;
+    var {onchange,fixValue} = this.context;
     if(!fixValue){
       var space = $(this.dom.current);
       space.parent('.r-slider-container').find('.r-slider-number').hide();
@@ -368,14 +362,14 @@ class Space extends Component{
 } 
 
 class Button extends Component{
-  static contextType = SliderContext;
+  static contextType = ctx;
   constructor(props){
-    this.dom = createRef();
     super(props);
+    this.dom = createRef();
   }
   getStyle() {
     const {points,styleName,getPercentByValue,point_width = 10,point_height = 10,getValue} = this.context;
-    var {StartSide,OtherSide,Thickness,Thickness_r,Thickness} = styleName;
+    var {StartSide,OtherSide,Thickness} = styleName;
     var {index} = this.props;
     var value = points[index];
     var percent = getPercentByValue(value.value);
@@ -402,7 +396,7 @@ class Button extends Component{
     };
   }
   mouseDown(e){
-    var {update,changable,start,end,points,min=start,max=end,fixValue,showValue,styleName,onpointmousedown} = this.context;
+    var {update,changable,start,end,points,min=start,max=end,showValue,styleName,onpointmousedown} = this.context;
     var {Thickness} = styleName;
     var {index} = this.props;
     if(changable === false){return;}
@@ -429,7 +423,7 @@ class Button extends Component{
     $(window).bind('mouseup',$.proxy(this.mouseUp,this));
   }
   mouseMove(e){
-    var {styleName,onchange,update,start,end,step,min = start,max = end,points} = this.context;
+    var {styleName,onchange,update,start,end,step,points} = this.context;
     var {Axis,Sign} = styleName;
     var so = this.startOffset;
     var offset ={x:e.clientX - so.x,y:e.clientY - so.y};
@@ -449,7 +443,7 @@ class Button extends Component{
   mouseUp(){
     $(window).unbind('mousemove',this.mouseMove);
     $(window).unbind('mouseup',this.mouseUp);
-    var {points,fixValue,onchange} = this.context;
+    var {fixValue,onchange} = this.context;
     if(!fixValue){
       var button = $(this.dom.current);
       button.parent('.r-slider-container').find('.r-slider-number').hide();
@@ -460,7 +454,7 @@ class Button extends Component{
   }
   render(){
     var {index} = this.props;
-    var {points,showValue,showButton,pointStyle = {}} = this.context;
+    var {points,showValue,showButton} = this.context;
     if(showButton === false){return '';}
     var value = points[index]; 
     return(
