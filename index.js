@@ -43,7 +43,7 @@ export default class Slider extends Component {
   }
   getStyle(){
     var {style = {}} = this.props;
-    return $.extend({},{overflow:'hidden'},style);
+    return $.extend({},{},style);
   }
   render() {
     var {className,id} = this.props;
@@ -69,14 +69,14 @@ class SliderContainer extends Component {
   }
   
   getStyle(){
-    var {margin = 20,styleName} = this.context;
+    var {styleName} = this.context;
     var {Thickness,Thickness_r,StartSide,OtherSide} = styleName;
     var size = this.context['point_' + Thickness] || 10; 
     var size_r = this.context['point_' + Thickness_r] || 10; 
     var obj = {position:'absolute'};
-    obj[StartSide] = ((size / 2) + margin) + 'px';
+    obj[StartSide] = ((size / 2)) + 'px';
     obj[OtherSide] = 'calc(50% - ' + (size_r / 2) + 'px)';
-    obj[Thickness] = 'calc(100% - ' + (size + (margin * 2)) + 'px';
+    obj[Thickness] = 'calc(100% - ' + size + 'px';
     obj[Thickness_r] = size_r + 'px';
     obj['userSelect'] = 'none';
     return obj;
@@ -156,7 +156,7 @@ class Line extends Component{
     super(props);
   }
   getStyle(){
-    var {styleName,thickness = 2} = this.context;
+    var {styleName,thickness = 3} = this.context;
     var {StartSide,OtherSide,Thickness,Thickness_r} = styleName;
     return {
       position:'absolute',
@@ -217,7 +217,7 @@ class Space extends Component{
     };
   }
   getFillStyle() {
-    var {style,styleName,thickness = 2,points,endRange} = this.context;
+    var {style,styleName,thickness = 3,points,endRange} = this.context;
     var {StartSise,OtherSide,Thickness,Thickness_r} = styleName;
     var {index} = this.props;
     var length = points.length;
@@ -365,7 +365,7 @@ class Button extends Component{
     this.dom = createRef();
     super(props);
   }
-  getStyle(index) {
+  getStyle() {
     const {points,styleName,getPercentByValue,point_width = 10,point_height = 10} = this.context;
     var {StartSide,OtherSide,Thickness,Thickness_r,Thickness} = styleName;
     var {index} = this.props;
@@ -389,7 +389,8 @@ class Button extends Component{
     const {fixValue} = this.context;
     return {
       zIndex:1000,
-      display:fixValue !== true?'none':'block'
+      display:fixValue !== true?'none':'block',
+      
     };
   }
   mouseDown(e){
@@ -445,12 +446,12 @@ class Button extends Component{
   }
   render(){
     var {index} = this.props;
-    var {points,showValue,showButton} = this.context;
+    var {points,showValue,showButton,pointStyle = {}} = this.context;
     if(showButton === false){return '';}
     var value = points[index]; 
     return(
       <div ref={this.dom}
-        className="r-slider-button" 
+        className="r-slider-point" 
         style={this.getStyle()}
         onMouseDown={this.mouseDown.bind(this)}>
         {

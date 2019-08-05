@@ -1,11 +1,15 @@
 .r-slider{
   height:70px;
-    width:100%;
-    font-size:12px;
+  width:100%;
+  font-size:12px;
 }
-  .r-slider-line{
-    background:#ddd;
+.r-slider-point{
+    border-radius:100%;
+    background:blue;
   }
+.r-slider-line{
+  background:#ddd;    
+}
 .r-slider-number{
   font-family:'Arial';
   position:absolute;
@@ -32,5 +36,5 @@
   border-left:4px solid transparent;
 }
 .r-slider-pin{
-  background:#aaa;
+  background:#ddd;
 }
