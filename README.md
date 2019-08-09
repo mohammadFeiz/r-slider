@@ -71,12 +71,12 @@ mobile support.
   </tr>
   <tr>
      <td>showValue</td>
-     <td>Makes the value appear on the point.default is true</td>
+     <td>Makes the point value appear on the point.default is true</td>
   <td>boolean</td>
   </tr>
   <tr>
      <td>fixValue</td>
-     <td>Makes the value always show. default is false</td>
+     <td>Makes the point value always show. default is false</td>
   <td>boolean</td>
   </tr>
   <tr>
@@ -140,20 +140,5 @@ mobile support.
   </tr>
 </table>
 
-basic slider
-```
-<Slider 
-  start={0}
-  step={1}
-  end={100}
-  points={[
-    {value:30,pointColor:'blue'},
-    {value:70,rangeColor:'blue',pointColor:'blue'},
-  ]}
-  labelStep={10}
-  pinStep{10}
-  labelPosition:{{y:20}}
-  fixValue:{true}
-/>
-```
+<a href="https://stackblitz.com/edit/r-slider-demo1?file=style.css">Demo1</a>
           
