@@ -24,24 +24,15 @@ use in many ui controls like:switch,slider,wizard,progressbar,games and other.
   <li>
 rtl,ltr and vertical slider support.
 </li>
-  <li>
-Placing in center of the defined container without the CSS positioning effort.</li>
-</li>
-<li>
-In compact sliders ,one step changing slider button is difficult.in r-slider by click sides of point you can change slider one step.
-</li>
 <li>
 mobile support.
 </li>
 </ul>
 
-<h3>Create Slider</h3>
-var slider = new slider(object);
-object is and object contain slider properties
-<h3>Properties</h3>
+<h3>props list</h3>
 <table>
   <tr>
-    <th>Property</th>
+    <th>prop</th>
     <th>Description</th>
     <th>Type</th>
   </tr>
@@ -157,53 +148,21 @@ object is and object contain slider properties
      <td>Set empty space in sided of slider</td>
   </tr>
 </table>
-<img width="600" src="https://raw.githubusercontent.com/mohammadFeiz/r-slider/master/image/styles.jpg">
-<h3>Methods</h3>
-<table>
-  <tr>
-    <th>Method</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-     <td>slider.update(object)</td>
-     <td>use this method for update slider by sending an object contain slider properties</td>
-  </tr>
-  <tr>
-     <td>slider.getState()</td>
-     <td>use this method for get slider properties with current values</td>
-  </tr>
-</table>
-<h3>Elements</h3>
-<img width="600" src="https://raw.githubusercontent.com/mohammadFeiz/r-slider/master/image/elements.jpg">
-for undrestand how it work please visit and modify demos and see index.html<br>
 
-<a href="https://codepen.io/mohammadfeiz/pen/wQqErM">
-  <img width="200" src="https://raw.githubusercontent.com/mohammadFeiz/r-slider/master/image/demo0.jpg">
-</a>
-<a href="https://codepen.io/mohammadfeiz/pen/PyNzVK">
-  <img width="200" src="https://raw.githubusercontent.com/mohammadFeiz/r-slider/master/image/demo1.jpg">
-</a>
-<a href="https://codepen.io/mohammadfeiz/pen/GYZjoO">
-  <img width="200" src="https://raw.githubusercontent.com/mohammadFeiz/r-slider/master/image/demo2.jpg">
-</a>
-<a href="https://codepen.io/mohammadfeiz/pen/pxyErX">
-  <img width="200" src="https://raw.githubusercontent.com/mohammadFeiz/r-slider/master/image/demo3.jpg">
-</a>
-<a href="https://codepen.io/mohammadfeiz/pen/zmqNjX">
-  <img width="200" src="https://raw.githubusercontent.com/mohammadFeiz/r-slider/master/image/demo4.jpg">
-</a>
-<a href="https://codepen.io/mohammadfeiz/pen/VEaGBM">
-<img width="200" src="https://raw.githubusercontent.com/mohammadFeiz/r-slider/master/image/demo5.jpg">
-</a>
-<a href="https://codepen.io/mohammadfeiz/pen/wYGNwO">
-<img width="200" src="https://raw.githubusercontent.com/mohammadFeiz/r-slider/master/image/demo6.jpg">
-</a>
-<a href="https://codepen.io/mohammadfeiz/pen/RqVPRj">
-<img width="200" src="https://raw.githubusercontent.com/mohammadFeiz/r-slider/master/image/demo7.jpg">
-</a>
-<a href="https://codepen.io/mohammadfeiz/pen/RqgpxW">
-<img width="200" src="https://raw.githubusercontent.com/mohammadFeiz/r-slider/master/image/demo8.jpg">
-</a>
-
-
-
+basic slider
+```
+<Slider 
+  start={0}
+  step={1}
+  end={100}
+  points={[
+    {value:30,pointColor:'blue'},
+    {value:70,rangeColor:'blue',pointColor:'blue'},
+  ]}
+  labelStep={10}
+  pinStep{10}
+  labelPosition:{{y:20}}
+  fixValue:{true}
+/>
+```
+          
