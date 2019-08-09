@@ -56,9 +56,9 @@ mobile support.
      <td>Set Slider Points. each point is an object that can get 4 properties:<br />
     <ul>
       <li>1- value:value of point in range.</li>
-      <li>2- pointColor: set color of point in slider.</li>
-      <li>3- rangeColor: set color of range line in slider.</li>
-      <li>4- text: this text will be rendered in center of range line.</li>
+      <li>2- pointColor: set color of point in slider.(string or function).(default is 'blue') </li>
+      <li>3- fillColor: set color of range line in slider..(string or function).(default is 'blue')</li>
+      <li>4- text: this text will be rendered in center of range line.(string or function).</li>
       </ul>
     </td>
   <td>Array of objects</td>
