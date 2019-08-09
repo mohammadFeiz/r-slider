@@ -141,4 +141,7 @@ mobile support.
 </table>
 
 <a href="https://stackblitz.com/edit/r-slider-demo1?file=style.css">Demo1</a>
-          
+<a href="https://stackblitz.com/edit/r-slider-demo2?file=index.js">Demo2</a>
+         
+         
+         
