@@ -59,6 +59,7 @@ mobile support.
       <li>2- pointColor: set color of point in slider.(string or function).(default is 'blue') </li>
       <li>3- fillColor: set color of range line in slider..(string or function).(default is 'blue')</li>
       <li>4- text: this text will be rendered in center of range line.(string or function).</li>
+      <li>5- rounded: set rounded:false to omit border radius of point.(default is true)</li>
       </ul>
     </td>
   <td>Array of objects</td>
@@ -112,16 +113,6 @@ mobile support.
            </li>
          </ul>
     </td>
-     <td>callback</td>
-  </tr>
-  <tr>
-     <td>onDragEnd</td>
-     <td>onDragEnd is a function that is to be executed in end of changing(mouseup) point(s) of slider</td>
-     <td>callback</td>
-  </tr>
-  <tr>
-     <td>onPointMouseDown</td>
-     <td>onPointMouseDown is a function that is to be executed after mousedown on point(s) of slider</td>
      <td>callback</td>
   </tr>
   <tr>
