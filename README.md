@@ -140,8 +140,8 @@ mobile support.
   </tr>
 </table>
 
-<a href="https://stackblitz.com/edit/r-slider-demo1?file=style.css">Demo1</a>
-<a href="https://stackblitz.com/edit/r-slider-demo2?file=index.js">Demo2</a>
-         
+<a href="https://stackblitz.com/edit/r-slider-demo1?file=style.css">Demo1</a><br/>
+<a href="https://stackblitz.com/edit/r-slider-demo2?file=index.js">Demo2</a><br/>
+<a href="https://stackblitz.com/edit/react-9tuesa">Use slider as switch</a><br/>
          
          
