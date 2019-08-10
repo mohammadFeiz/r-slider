@@ -140,8 +140,11 @@ mobile support.
   </tr>
 </table>
 
-<a href="https://stackblitz.com/edit/r-slider-demo1?file=style.css">Demo1</a><br/>
-<a href="https://stackblitz.com/edit/r-slider-demo2?file=index.js">Demo2</a><br/>
+<a href="https://stackblitz.com/edit/r-slider-demo1?file=style.css">Single range width Label Demo</a><br/>
+<a href="https://stackblitz.com/edit/r-slider-demo2?file=index.js">use custome style and range text</a><br/>
 <a href="https://stackblitz.com/edit/react-9tuesa">Use slider as switch</a><br/>
+<a href="https://stackblitz.com/edit/r-slider-triple-mode-switch?file=index.js">Use slider as triple mode switch</a><br/>
+
+
          
          
