@@ -138,6 +138,10 @@ mobile support.
      <td>margin</td>
      <td>Set empty space in sided of slider</td>
   </tr>
+  <tr>
+     <td>backgroundColor</td>
+     <td>Set background color of slider(string or function)</td>
+  </tr>
 </table>
 
 <a href="https://stackblitz.com/edit/r-slider-demo1?file=style.css">Single range width Label Demo</a><br/>
