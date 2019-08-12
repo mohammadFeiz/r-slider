@@ -362,7 +362,6 @@ class Space extends Component{
     }
   }
   render(){
-    debugger;
     const {points,showFill,endRange} = this.context;
     var {index} = this.props;
     var length = points.length;
