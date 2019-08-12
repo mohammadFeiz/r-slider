@@ -56,9 +56,10 @@ mobile support.
      <td>Set Slider Points. each point is an object that can get 4 properties:<br />
     <ul>
       <li>1- value:value of point in range.</li>
-      <li>2- pointColor: set color of point in slider.</li>
-      <li>3- rangeColor: set color of range line in slider.</li>
-      <li>4- text: this text will be rendered in center of range line.</li>
+      <li>2- pointColor: set color of point in slider.(string or function).(default is 'blue') </li>
+      <li>3- fillColor: set color of range line in slider..(string or function).(default is 'blue')</li>
+      <li>4- text: this text will be rendered in center of range line.(string or function).</li>
+      <li>5- rounded: set rounded:false to omit border radius of point.(default is true)</li>
       </ul>
     </td>
   <td>Array of objects</td>
@@ -70,12 +71,12 @@ mobile support.
   </tr>
   <tr>
      <td>showValue</td>
-     <td>Makes the value appear on the point.default is true</td>
+     <td>Makes the point value appear on the point.default is true</td>
   <td>boolean</td>
   </tr>
   <tr>
      <td>fixValue</td>
-     <td>Makes the value always show. default is false</td>
+     <td>Makes the point value always show. default is false</td>
   <td>boolean</td>
   </tr>
   <tr>
@@ -115,16 +116,6 @@ mobile support.
      <td>callback</td>
   </tr>
   <tr>
-     <td>onDragEnd</td>
-     <td>onDragEnd is a function that is to be executed in end of changing(mouseup) point(s) of slider</td>
-     <td>callback</td>
-  </tr>
-  <tr>
-     <td>onPointMouseDown</td>
-     <td>onPointMouseDown is a function that is to be executed after mousedown on point(s) of slider</td>
-     <td>callback</td>
-  </tr>
-  <tr>
      <td>direction</td>
      <td>Set direction of slider("left","right","up","down")(default is "right")</td>
      <td>string</td>
@@ -147,22 +138,17 @@ mobile support.
      <td>margin</td>
      <td>Set empty space in sided of slider</td>
   </tr>
+  <tr>
+     <td>backgroundColor</td>
+     <td>Set background color of slider(string or function)</td>
+  </tr>
 </table>
 
-basic slider
-```
-<Slider 
-  start={0}
-  step={1}
-  end={100}
-  points={[
-    {value:30,pointColor:'blue'},
-    {value:70,rangeColor:'blue',pointColor:'blue'},
-  ]}
-  labelStep={10}
-  pinStep{10}
-  labelPosition:{{y:20}}
-  fixValue:{true}
-/>
-```
-          
+<a href="https://stackblitz.com/edit/r-slider-demo1?file=style.css">Single range width Label Demo</a><br/>
+<a href="https://stackblitz.com/edit/r-slider-demo2?file=index.js">use custome style and range text</a><br/>
+<a href="https://stackblitz.com/edit/react-9tuesa">Use slider as switch</a><br/>
+<a href="https://stackblitz.com/edit/r-slider-triple-mode-switch?file=index.js">Use slider as triple mode switch</a><br/>
+
+
+         
+         
