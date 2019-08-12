@@ -165,7 +165,7 @@ class SliderContainer extends Component {
         {textLabels}
         <Line />
         {ranges}
-        {endRange && <Range index={points.length}/>}
+        <Range index={points.length}/>
       </div>
     );
   }
@@ -362,6 +362,7 @@ class Space extends Component{
     }
   }
   render(){
+    debugger;
     const {points,showFill,endRange} = this.context;
     var {index} = this.props;
     var length = points.length;
