@@ -219,7 +219,7 @@ class Space extends Component{
     var {index} = this.props;
     var length = points.length;
     var value = index === length?max:points[index].value;
-    var beforeValue = index === 0?min:points[index - 1].value ;
+    var beforeValue = index === 0?start:points[index - 1].value ;
     var percent = getPercentByValue(value);
     var beforePercent = getPercentByValue(beforeValue);
     return {
