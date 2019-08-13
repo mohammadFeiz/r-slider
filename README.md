@@ -1,6 +1,6 @@
 
 # r-slider <br>
-a javascript plugin for all in one sliders <br>
+a reactjs plugin for all in one sliders <br>
 r-slider is a multi-purpose, highly customizable slider control plugin that helps users select a single value or a range of values in an elegant way.
 Also can be used to create toggle switch, progress bar, step based form wizard with your own styles. Check out the examples in the zip for more information.
 
@@ -25,7 +25,7 @@ use in many ui controls like:switch,slider,wizard,progressbar,games and other.
 rtl,ltr and vertical slider support.
 </li>
 <li>
-mobile support.
+mobile support(mobile browser,phonegap,cordova and ....).
 </li>
 </ul>
 
