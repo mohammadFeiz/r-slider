@@ -11,8 +11,6 @@ var _jquery = _interopRequireDefault(require("jquery"));
 
 require("./index.css");
 
-var _class, _temp;
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
@@ -168,14 +166,8 @@ function (_Component) {
 }(_react.Component);
 
 exports.default = Slider;
-Slider.defaultProps = {
-  start: 0,
-  step: 1,
-  end: 100,
-  points: [{
-    value: 0
-  }]
-}, (_temp = _class =
+
+var SliderContainer =
 /*#__PURE__*/
 function (_Component2) {
   _inherits(SliderContainer, _Component2);
@@ -355,7 +347,9 @@ function (_Component2) {
   }]);
 
   return SliderContainer;
-}(_react.Component), _defineProperty(_class, "contextType", ctx), _temp);
+}(_react.Component);
+
+_defineProperty(SliderContainer, "contextType", ctx);
 
 var Line =
 /*#__PURE__*/
