@@ -151,6 +151,7 @@ function (_Component) {
       contextValue.getPercentByValue = this.getPercentByValue.bind(this);
       contextValue.update = this.update.bind(this);
       contextValue.getValue = this.getValue.bind(this);
+      contextValue.points = this.state.points;
       return _react.default.createElement(ctx.Provider, {
         value: contextValue
       }, _react.default.createElement("div", {
@@ -613,7 +614,9 @@ function (_Component5) {
       update(points);
 
       if (onchange) {
-        onchange(this.context, false);
+        var st = false;
+        console.log(st + '...');
+        onchange(this.context, st);
       }
     }
   }, {
@@ -864,7 +867,7 @@ function (_Component6) {
       update(points);
 
       if (onchange) {
-        onchange(this.context, true);
+        onchange(this.context, false);
       }
     }
   }, {
