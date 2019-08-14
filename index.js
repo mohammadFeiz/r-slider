@@ -167,6 +167,22 @@ function (_Component) {
 }(_react.Component);
 
 exports.default = Slider;
+Slider.defaultProps = {
+  start: 0,
+  step: 1,
+  end: 100,
+  points: [{
+    value: 0
+  }],
+  point_width: 10,
+  point_height: 10,
+  margin: 0,
+  thixkness: 2,
+  labelPosition: {
+    x: 0,
+    y: 0
+  }
+};
 
 var SliderContainer =
 /*#__PURE__*/
@@ -187,15 +203,15 @@ function (_Component2) {
     key: "getStyle",
     value: function getStyle() {
       var _this$context = this.context,
-          _this$context$margin = _this$context.margin,
-          margin = _this$context$margin === void 0 ? 0 : _this$context$margin,
-          styleName = _this$context.styleName;
+          margin = _this$context.margin,
+          styleName = _this$context.styleName,
+          getValue = _this$context.getValue;
       var Thickness = styleName.Thickness,
           Thickness_r = styleName.Thickness_r,
           StartSide = styleName.StartSide,
           OtherSide = styleName.OtherSide;
-      var size = this.context['point_' + Thickness] || 10;
-      var size_r = this.context['point_' + Thickness_r] || 10;
+      var size = getValue(this.context['point_' + Thickness]);
+      var size_r = getValue(this.context['point_' + Thickness_r]);
       var obj = {
         position: 'absolute'
       };
@@ -218,8 +234,7 @@ function (_Component2) {
       var _this$context2 = this.context,
           styleName = _this$context2.styleName,
           getPercentByValue = _this$context2.getPercentByValue,
-          _this$context2$labelP = _this$context2.labelPosition,
-          labelPosition = _this$context2$labelP === void 0 ? {} : _this$context2$labelP;
+          labelPosition = _this$context2.labelPosition;
       var StartSide = styleName.StartSide;
       var _labelPosition$x = labelPosition.x,
           x = _labelPosition$x === void 0 ? 0 : _labelPosition$x,
@@ -253,17 +268,44 @@ function (_Component2) {
       }, _defineProperty(_ref2, Thickness, '1px'), _defineProperty(_ref2, Thickness_r, thickness + 4), _defineProperty(_ref2, OtherSide, 'calc(50% - ' + (thickness + 4) / 2 + 'px)'), _defineProperty(_ref2, StartSide, getPercentByValue(value) + '%'), _ref2;
     }
   }, {
+    key: "labelMouseDown",
+    value: function labelMouseDown(e) {
+      var _this$context4 = this.context,
+          points = _this$context4.points,
+          update = _this$context4.update,
+          onchange = _this$context4.onchange;
+      var value = parseFloat((0, _jquery.default)(e.currentTarget).attr('data-value'));
+      var index = 0;
+      var diff = Math.abs(points[0].value - value);
+
+      for (var i = 1; i < points.length; i++) {
+        var point = points[i];
+
+        if (Math.abs(point.value - value) < diff) {
+          index = i;
+        }
+      }
+
+      points[index].value = value;
+      update(points);
+
+      if (onchange) {
+        onchange(this.context, true);
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
-      var _this$context4 = this.context,
-          endRange = _this$context4.endRange,
-          points = _this$context4.points,
-          pinStep = _this$context4.pinStep,
-          start = _this$context4.start,
-          end = _this$context4.end,
-          labelStep = _this$context4.labelStep,
-          _this$context4$labels = _this$context4.labels,
-          labels = _this$context4$labels === void 0 ? [] : _this$context4$labels;
+      var _this$context5 = this.context,
+          endRange = _this$context5.endRange,
+          points = _this$context5.points,
+          pinStep = _this$context5.pinStep,
+          start = _this$context5.start,
+          end = _this$context5.end,
+          labelStep = _this$context5.labelStep,
+          _this$context5$labels = _this$context5.labels,
+          labels = _this$context5$labels === void 0 ? [] : _this$context5$labels,
+          getValue = _this$context5.getValue;
       var ranges = points.map(function (value, i) {
         return _react.default.createElement(Range, {
           index: i,
@@ -300,7 +342,9 @@ function (_Component2) {
             Labels.push(_react.default.createElement("div", {
               className: "r-slider-label",
               style: this.getLabelStyle(labelValue),
-              key: labelIndex
+              key: labelIndex,
+              onMouseDown: this.labelMouseDown.bind(this),
+              "data-value": labelValue
             }, _react.default.createElement("div", {
               style: {
                 width: '200px',
@@ -321,8 +365,10 @@ function (_Component2) {
         var tl = labels[i];
         textLabels.push(_react.default.createElement("div", {
           className: "r-slider-label",
-          style: this.getLabelStyle(tl.value, tl.color),
-          key: tl.value + 'label'
+          style: this.getLabelStyle(tl.value, getValue(tl.color)),
+          key: tl.value + 'label',
+          onMouseDown: this.labelMouseDown.bind(this),
+          "data-value": tl.value
         }, _react.default.createElement("div", {
           style: {
             width: '200px',
@@ -368,12 +414,11 @@ function (_Component3) {
     value: function getStyle() {
       var _ref3;
 
-      var _this$context5 = this.context,
-          styleName = _this$context5.styleName,
-          _this$context5$thickn = _this$context5.thickness,
-          thickness = _this$context5$thickn === void 0 ? 3 : _this$context5$thickn,
-          _this$context5$emptyC = _this$context5.emptyColor,
-          emptyColor = _this$context5$emptyC === void 0 ? '#ddd' : _this$context5$emptyC;
+      var _this$context6 = this.context,
+          styleName = _this$context6.styleName,
+          _this$context6$thickn = _this$context6.thickness,
+          thickness = _this$context6$thickn === void 0 ? 3 : _this$context6$thickn,
+          emptyColor = _this$context6.emptyColor;
       var StartSide = styleName.StartSide,
           OtherSide = styleName.OtherSide,
           Thickness = styleName.Thickness,
@@ -447,16 +492,16 @@ function (_Component5) {
     value: function getStyle() {
       var _ref4;
 
-      var _this$context6 = this.context,
-          start = _this$context6.start,
-          _this$context6$min = _this$context6.min,
-          min = _this$context6$min === void 0 ? start : _this$context6$min,
-          end = _this$context6.end,
-          _this$context6$max = _this$context6.max,
-          max = _this$context6$max === void 0 ? end : _this$context6$max,
-          points = _this$context6.points,
-          styleName = _this$context6.styleName,
-          getPercentByValue = _this$context6.getPercentByValue;
+      var _this$context7 = this.context,
+          start = _this$context7.start,
+          _this$context7$min = _this$context7.min,
+          min = _this$context7$min === void 0 ? start : _this$context7$min,
+          end = _this$context7.end,
+          _this$context7$max = _this$context7.max,
+          max = _this$context7$max === void 0 ? end : _this$context7$max,
+          points = _this$context7.points,
+          styleName = _this$context7.styleName,
+          getPercentByValue = _this$context7.getPercentByValue;
       var Thickness = styleName.Thickness,
           Thickness_r = styleName.Thickness_r,
           OtherSide = styleName.OtherSide,
@@ -479,13 +524,13 @@ function (_Component5) {
     value: function getFillStyle() {
       var _ref5;
 
-      var _this$context7 = this.context,
-          styleName = _this$context7.styleName,
-          _this$context7$thickn = _this$context7.thickness,
-          thickness = _this$context7$thickn === void 0 ? 3 : _this$context7$thickn,
-          points = _this$context7.points,
-          endRange = _this$context7.endRange,
-          getValue = _this$context7.getValue;
+      var _this$context8 = this.context,
+          styleName = _this$context8.styleName,
+          _this$context8$thickn = _this$context8.thickness,
+          thickness = _this$context8$thickn === void 0 ? 3 : _this$context8$thickn,
+          points = _this$context8.points,
+          endRange = _this$context8.endRange,
+          getValue = _this$context8.getValue;
       var index = this.props.index;
       var length = points.length;
       var value = index === length ? endRange : points[index];
@@ -498,22 +543,23 @@ function (_Component5) {
   }, {
     key: "getTextStyle",
     value: function getTextStyle() {
-      var _this$context8 = this.context,
-          styleName = _this$context8.styleName,
-          _this$context8$point_ = _this$context8.point_height,
-          point_height = _this$context8$point_ === void 0 ? 10 : _this$context8$point_,
-          points = _this$context8.points;
+      var _this$context9 = this.context,
+          styleName = _this$context9.styleName,
+          _this$context9$point_ = _this$context9.point_height,
+          point_height = _this$context9$point_ === void 0 ? 10 : _this$context9$point_,
+          points = _this$context9.points,
+          getValue = _this$context9.getValue;
       var StartSide = styleName.StartSide,
           OtherSide = styleName.OtherSide,
           Thickness = styleName.Thickness,
           EndSide = styleName.EndSide;
       var index = this.props.index;
-      var size = this.context['point_' + Thickness] || 10;
+      var size = getValue(this.context['point_' + Thickness]);
       var obj = {
         position: 'absolute',
         textAlign: 'center',
         zIndex: 10,
-        lineHeight: point_height + 'px'
+        lineHeight: getValue(point_height) + 'px'
       };
 
       if (index === 0) {
@@ -533,17 +579,17 @@ function (_Component5) {
   }, {
     key: "mouseDown",
     value: function mouseDown(e) {
-      var _this$context9 = this.context,
-          points = _this$context9.points,
-          showValue = _this$context9.showValue,
-          start = _this$context9.start,
-          end = _this$context9.end,
-          _this$context9$min = _this$context9.min,
-          min = _this$context9$min === void 0 ? start : _this$context9$min,
-          _this$context9$max = _this$context9.max,
-          max = _this$context9$max === void 0 ? end : _this$context9$max,
-          styleName = _this$context9.styleName,
-          changable = _this$context9.changable;
+      var _this$context10 = this.context,
+          points = _this$context10.points,
+          showValue = _this$context10.showValue,
+          start = _this$context10.start,
+          end = _this$context10.end,
+          _this$context10$min = _this$context10.min,
+          min = _this$context10$min === void 0 ? start : _this$context10$min,
+          _this$context10$max = _this$context10.max,
+          max = _this$context10$max === void 0 ? end : _this$context10$max,
+          styleName = _this$context10.styleName,
+          changable = _this$context10.changable;
 
       if (changable === false) {
         return;
@@ -580,14 +626,14 @@ function (_Component5) {
   }, {
     key: "mouseMove",
     value: function mouseMove(e) {
-      var _this$context10 = this.context,
-          start = _this$context10.start,
-          end = _this$context10.end,
-          step = _this$context10.step,
-          styleName = _this$context10.styleName,
-          points = _this$context10.points,
-          onchange = _this$context10.onchange,
-          update = _this$context10.update;
+      var _this$context11 = this.context,
+          start = _this$context11.start,
+          end = _this$context11.end,
+          step = _this$context11.step,
+          styleName = _this$context11.styleName,
+          points = _this$context11.points,
+          onchange = _this$context11.onchange,
+          update = _this$context11.update;
       var so = this.startOffset;
       var offset = {
         x: e.clientX - so.x,
@@ -615,7 +661,6 @@ function (_Component5) {
 
       if (onchange) {
         var st = false;
-        console.log(st + '...');
         onchange(this.context, st);
       }
     }
@@ -624,11 +669,11 @@ function (_Component5) {
     value: function mouseUp() {
       (0, _jquery.default)(window).unbind('mousemove', this.mouseMove);
       (0, _jquery.default)(window).unbind('mouseup', this.mouseUp);
-      var _this$context11 = this.context,
-          onchange = _this$context11.onchange,
-          fixValue = _this$context11.fixValue;
+      var _this$context12 = this.context,
+          onchange = _this$context12.onchange,
+          showValue = _this$context12.showValue;
 
-      if (!fixValue) {
+      if (showValue !== 'fix') {
         var space = (0, _jquery.default)(this.dom.current);
         space.parent('.r-slider-container').find('.r-slider-number').hide();
       }
@@ -640,14 +685,14 @@ function (_Component5) {
   }, {
     key: "decreaseAll",
     value: function decreaseAll() {
-      var _this$context12 = this.context,
-          start = _this$context12.start,
-          _this$context12$min = _this$context12.min,
-          min = _this$context12$min === void 0 ? start : _this$context12$min,
-          step = _this$context12.step,
-          points = _this$context12.points,
-          onchange = _this$context12.onchange,
-          update = _this$context12.update;
+      var _this$context13 = this.context,
+          start = _this$context13.start,
+          _this$context13$min = _this$context13.min,
+          min = _this$context13$min === void 0 ? start : _this$context13$min,
+          step = _this$context13.step,
+          points = _this$context13.points,
+          onchange = _this$context13.onchange,
+          update = _this$context13.update;
       var offset = Math.min(step, points[0].value - min);
 
       for (var i = 0; i < points.length; i++) {
@@ -663,14 +708,14 @@ function (_Component5) {
   }, {
     key: "increaseAll",
     value: function increaseAll() {
-      var _this$context13 = this.context,
-          end = _this$context13.end,
-          _this$context13$max = _this$context13.max,
-          max = _this$context13$max === void 0 ? end : _this$context13$max,
-          step = _this$context13.step,
-          points = _this$context13.points,
-          onchange = _this$context13.onchange,
-          update = _this$context13.update;
+      var _this$context14 = this.context,
+          end = _this$context14.end,
+          _this$context14$max = _this$context14.max,
+          max = _this$context14$max === void 0 ? end : _this$context14$max,
+          step = _this$context14.step,
+          points = _this$context14.points,
+          onchange = _this$context14.onchange,
+          update = _this$context14.update;
       var offset = Math.min(step, max - points[points.length - 1].value);
 
       for (var i = 0; i < points.length; i++) {
@@ -686,10 +731,10 @@ function (_Component5) {
   }, {
     key: "render",
     value: function render() {
-      var _this$context14 = this.context,
-          points = _this$context14.points,
-          showFill = _this$context14.showFill,
-          endRange = _this$context14.endRange;
+      var _this$context15 = this.context,
+          points = _this$context15.points,
+          showFill = _this$context15.showFill,
+          endRange = _this$context15.endRange;
       var index = this.props.index;
       var length = points.length;
       var value = index === length ? endRange : points[index];
@@ -736,61 +781,59 @@ function (_Component6) {
 
   _createClass(Button, [{
     key: "getStyle",
-    value: function getStyle() {
-      var _ref6;
+    value: function getStyle(style) {
+      var _$$extend;
 
-      var _this$context15 = this.context,
-          points = _this$context15.points,
-          styleName = _this$context15.styleName,
-          getPercentByValue = _this$context15.getPercentByValue,
-          _this$context15$point = _this$context15.point_width,
-          point_width = _this$context15$point === void 0 ? 10 : _this$context15$point,
-          _this$context15$point2 = _this$context15.point_height,
-          point_height = _this$context15$point2 === void 0 ? 10 : _this$context15$point2,
-          getValue = _this$context15.getValue;
+      var _this$context16 = this.context,
+          points = _this$context16.points,
+          styleName = _this$context16.styleName,
+          getPercentByValue = _this$context16.getPercentByValue,
+          point_width = _this$context16.point_width,
+          point_height = _this$context16.point_height,
+          getValue = _this$context16.getValue;
       var StartSide = styleName.StartSide,
           OtherSide = styleName.OtherSide,
           Thickness = styleName.Thickness;
       var index = this.props.index;
       var value = points[index];
       var percent = getPercentByValue(value.value);
-      var size = this.context['point_' + Thickness] || 10;
-      return _ref6 = {
+      var size = getValue(this.context['point_' + Thickness]);
+      return _jquery.default.extend({}, (_$$extend = {
         border: 'none',
         position: 'absolute',
         borderRadius: value.rounded === false ? 0 : undefined,
         zIndex: 1000,
         cursor: 'pointer',
         background: getValue(value.pointColor),
-        height: point_height + 'px',
-        width: point_width + 'px'
-      }, _defineProperty(_ref6, StartSide, 'calc(' + percent + '% - ' + size / 2 + 'px)'), _defineProperty(_ref6, OtherSide, 0), _ref6;
+        height: getValue(point_height) + 'px',
+        width: getValue(point_width) + 'px'
+      }, _defineProperty(_$$extend, StartSide, 'calc(' + percent + '% - ' + size / 2 + 'px)'), _defineProperty(_$$extend, OtherSide, 0), _$$extend), style);
     }
   }, {
     key: "getNumberStyle",
     value: function getNumberStyle() {
-      var fixValue = this.context.fixValue;
+      var showValue = this.context.showValue;
       return {
         zIndex: 1000,
-        display: fixValue !== true ? 'none' : 'block'
+        display: showValue !== 'fix' ? 'none' : 'block'
       };
     }
   }, {
     key: "mouseDown",
     value: function mouseDown(e) {
-      var _this$context16 = this.context,
-          update = _this$context16.update,
-          changable = _this$context16.changable,
-          start = _this$context16.start,
-          end = _this$context16.end,
-          points = _this$context16.points,
-          _this$context16$min = _this$context16.min,
-          min = _this$context16$min === void 0 ? start : _this$context16$min,
-          _this$context16$max = _this$context16.max,
-          max = _this$context16$max === void 0 ? end : _this$context16$max,
-          showValue = _this$context16.showValue,
-          styleName = _this$context16.styleName,
-          onpointmousedown = _this$context16.onpointmousedown;
+      var _this$context17 = this.context,
+          update = _this$context17.update,
+          changable = _this$context17.changable,
+          start = _this$context17.start,
+          end = _this$context17.end,
+          points = _this$context17.points,
+          _this$context17$min = _this$context17.min,
+          min = _this$context17$min === void 0 ? start : _this$context17$min,
+          _this$context17$max = _this$context17.max,
+          max = _this$context17$max === void 0 ? end : _this$context17$max,
+          showValue = _this$context17.showValue,
+          styleName = _this$context17.styleName,
+          onpointmousedown = _this$context17.onpointmousedown;
       var Thickness = styleName.Thickness;
       var index = this.props.index;
 
@@ -831,14 +874,14 @@ function (_Component6) {
   }, {
     key: "mouseMove",
     value: function mouseMove(e) {
-      var _this$context17 = this.context,
-          styleName = _this$context17.styleName,
-          onchange = _this$context17.onchange,
-          update = _this$context17.update,
-          start = _this$context17.start,
-          end = _this$context17.end,
-          step = _this$context17.step,
-          points = _this$context17.points;
+      var _this$context18 = this.context,
+          styleName = _this$context18.styleName,
+          onchange = _this$context18.onchange,
+          update = _this$context18.update,
+          start = _this$context18.start,
+          end = _this$context18.end,
+          step = _this$context18.step,
+          points = _this$context18.points;
       var Axis = styleName.Axis,
           Sign = styleName.Sign;
       var so = this.startOffset;
@@ -875,11 +918,11 @@ function (_Component6) {
     value: function mouseUp() {
       (0, _jquery.default)(window).unbind('mousemove', this.mouseMove);
       (0, _jquery.default)(window).unbind('mouseup', this.mouseUp);
-      var _this$context18 = this.context,
-          fixValue = _this$context18.fixValue,
-          onchange = _this$context18.onchange;
+      var _this$context19 = this.context,
+          showValue = _this$context19.showValue,
+          onchange = _this$context19.onchange;
 
-      if (!fixValue) {
+      if (showValue !== 'fix') {
         var button = (0, _jquery.default)(this.dom.current);
         button.parent('.r-slider-container').find('.r-slider-number').hide();
       }
@@ -892,10 +935,11 @@ function (_Component6) {
     key: "render",
     value: function render() {
       var index = this.props.index;
-      var _this$context19 = this.context,
-          points = _this$context19.points,
-          showValue = _this$context19.showValue,
-          showButton = _this$context19.showButton;
+      var _this$context20 = this.context,
+          points = _this$context20.points,
+          showValue = _this$context20.showValue,
+          showButton = _this$context20.showButton,
+          getValue = _this$context20.getValue;
 
       if (showButton === false) {
         return '';
@@ -905,12 +949,12 @@ function (_Component6) {
       return _react.default.createElement("div", {
         ref: this.dom,
         className: "r-slider-point",
-        style: this.getStyle(),
+        style: this.getStyle(value.style),
         onMouseDown: this.mouseDown.bind(this)
       }, showValue !== false && _react.default.createElement("div", {
         style: this.getNumberStyle(),
         className: "r-slider-number"
-      }, value.value), value.html || '');
+      }, value.value), getValue(value.html) || '');
     }
   }]);
 
