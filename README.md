@@ -74,13 +74,9 @@ es6: import Slider from "@mohamadfeiz/r-slider";
   </tr>
   <tr>
      <td>showValue</td>
-     <td>Makes the point value appear on the point.default is true</td>
-  <td>boolean</td>
+     <td>Makes the point value appear on the point.default is true. if false , never show value, and if 'fix' alwais show value</td>
+  <td>boolean(false or true) or 'fix'</td>
   </tr>
-  <tr>
-     <td>fixValue</td>
-     <td>Makes the point value always show. default is false</td>
-  <td>boolean</td>
   </tr>
   <tr>
      <td>min</td>
