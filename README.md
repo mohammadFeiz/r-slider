@@ -28,7 +28,10 @@ rtl,ltr and vertical slider support.
 mobile support(mobile browser,phonegap,cordova and ....).
 </li>
 </ul>
-
+<h3>Usage</h3>
+npm install @mohamadfeiz/r-slider
+es5: var Slider = require("@mohamadfeiz/r-slider");
+es6: import Slider from "@mohamadfeiz/r-slider";
 <h3>props list</h3>
 <table>
   <tr>
@@ -148,6 +151,7 @@ mobile support(mobile browser,phonegap,cordova and ....).
 <a href="https://stackblitz.com/edit/r-slider-demo2?file=index.js">use custome style and range text</a><br/>
 <a href="https://stackblitz.com/edit/react-9tuesa">Use slider as switch</a><br/>
 <a href="https://stackblitz.com/edit/r-slider-triple-mode-switch?file=index.js">Use slider as triple mode switch</a><br/>
+<a href="https://stackblitz.com/edit/awesome-sliders?file=slider.js">Awesome Demos</a><br/>
 
 
          
