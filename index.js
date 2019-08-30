@@ -51,18 +51,13 @@ function (_Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Slider).call(this, props));
     _this.dom = (0, _react.createRef)();
-    _this.state = {
-      points: _this.props.points
-    };
     return _this;
   }
 
   _createClass(Slider, [{
     key: "update",
-    value: function update(points) {
-      this.setState({
-        points: points
-      });
+    value: function update() {
+      this.setState({});
     }
   }, {
     key: "componentDidMount",
@@ -140,18 +135,40 @@ function (_Component) {
       }, style);
     }
   }, {
+    key: "getValidPoints",
+    value: function getValidPoints(points, min, max) {
+      for (var i = 0; i < points.length; i++) {
+        var point = points[i];
+
+        if (point.value < min) {
+          point.value = min;
+        }
+
+        if (point.value > max) {
+          point.value = max;
+        }
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
       var _this$props3 = this.props,
           className = _this$props3.className,
-          id = _this$props3.id;
+          id = _this$props3.id,
+          points = _this$props3.points,
+          start = _this$props3.start,
+          end = _this$props3.end,
+          _this$props3$min = _this$props3.min,
+          min = _this$props3$min === void 0 ? start : _this$props3$min,
+          _this$props3$max = _this$props3.max,
+          max = _this$props3$max === void 0 ? end : _this$props3$max;
+      this.getValidPoints(points, min, max);
       var contextValue = { ...this.props
       };
       contextValue.styleName = this.getStyleName();
       contextValue.getPercentByValue = this.getPercentByValue.bind(this);
       contextValue.update = this.update.bind(this);
       contextValue.getValue = this.getValue.bind(this);
-      contextValue.points = this.state.points;
       return _react.default.createElement(ctx.Provider, {
         value: contextValue
       }, _react.default.createElement("div", {
@@ -252,20 +269,23 @@ function (_Component2) {
   }, {
     key: "getPinStyle",
     value: function getPinStyle(value) {
-      var _ref2;
+      var _$$extend;
 
       var _this$context3 = this.context,
           styleName = _this$context3.styleName,
           getPercentByValue = _this$context3.getPercentByValue,
           _this$context3$thickn = _this$context3.thickness,
-          thickness = _this$context3$thickn === void 0 ? 4 : _this$context3$thickn;
+          thickness = _this$context3$thickn === void 0 ? 4 : _this$context3$thickn,
+          pinStyle = _this$context3.pinStyle,
+          _this$context3$pinPos = _this$context3.pinPosition,
+          pinPosition = _this$context3$pinPos === void 0 ? {} : _this$context3$pinPos;
       var Thickness = styleName.Thickness,
           Thickness_r = styleName.Thickness_r,
           OtherSide = styleName.OtherSide,
           StartSide = styleName.StartSide;
-      return _ref2 = {
+      return _jquery.default.extend({}, (_$$extend = {
         position: 'absolute'
-      }, _defineProperty(_ref2, Thickness, '1px'), _defineProperty(_ref2, Thickness_r, thickness + 4), _defineProperty(_ref2, OtherSide, 'calc(50% - ' + (thickness + 4) / 2 + 'px)'), _defineProperty(_ref2, StartSide, getPercentByValue(value) + '%'), _ref2;
+      }, _defineProperty(_$$extend, Thickness, '1px'), _defineProperty(_$$extend, Thickness_r, thickness + 4), _defineProperty(_$$extend, OtherSide, 'calc(50% - ' + (thickness + 4) / 2 + 'px)'), _defineProperty(_$$extend, StartSide, getPercentByValue(value) + '%'), _defineProperty(_$$extend, "transform", "translate(".concat(pinPosition.x || 0, "px,").concat(pinPosition.y || 0, "px)")), _$$extend), pinStyle);
     }
   }, {
     key: "labelMouseDown",
@@ -334,11 +354,12 @@ function (_Component2) {
 
       if (labelStep) {
         var Labels = [];
-        var labelValue = start;
+        var labelStart = Math.round((start - labelStep) / labelStep) * labelStep;
+        var labelValue = labelStart;
         var labelIndex = 0;
 
         while (labelValue <= end) {
-          if (customLabels.indexOf(labelValue) === -1) {
+          if (customLabels.indexOf(labelValue) === -1 && labelValue >= start) {
             Labels.push(_react.default.createElement("div", {
               className: "r-slider-label",
               style: this.getLabelStyle(labelValue),
@@ -355,6 +376,7 @@ function (_Component2) {
           }
 
           labelValue += labelStep;
+          labelValue = parseFloat(labelValue.toFixed(6));
           labelIndex++;
         }
       }
@@ -363,6 +385,11 @@ function (_Component2) {
 
       for (var i = 0; i < labels.length; i++) {
         var tl = labels[i];
+
+        if (tl.value < start || tl.value > end) {
+          continue;
+        }
+
         textLabels.push(_react.default.createElement("div", {
           className: "r-slider-label",
           style: this.getLabelStyle(tl.value, getValue(tl.color)),
@@ -412,7 +439,7 @@ function (_Component3) {
   _createClass(Line, [{
     key: "getStyle",
     value: function getStyle() {
-      var _ref3;
+      var _ref2;
 
       var _this$context6 = this.context,
           styleName = _this$context6.styleName,
@@ -423,9 +450,9 @@ function (_Component3) {
           OtherSide = styleName.OtherSide,
           Thickness = styleName.Thickness,
           Thickness_r = styleName.Thickness_r;
-      return _ref3 = {
+      return _ref2 = {
         position: 'absolute'
-      }, _defineProperty(_ref3, StartSide, 0), _defineProperty(_ref3, OtherSide, 'calc(50% - ' + thickness / 2 + 'px)'), _defineProperty(_ref3, Thickness_r, thickness + 'px'), _defineProperty(_ref3, Thickness, '100%'), _defineProperty(_ref3, "background", emptyColor), _defineProperty(_ref3, "zIndex", 1), _ref3;
+      }, _defineProperty(_ref2, StartSide, 0), _defineProperty(_ref2, OtherSide, 'calc(50% - ' + thickness / 2 + 'px)'), _defineProperty(_ref2, Thickness_r, thickness + 'px'), _defineProperty(_ref2, Thickness, '100%'), _defineProperty(_ref2, "background", emptyColor), _defineProperty(_ref2, "zIndex", 1), _ref2;
     }
   }, {
     key: "render",
@@ -490,7 +517,7 @@ function (_Component5) {
   _createClass(Space, [{
     key: "getStyle",
     value: function getStyle() {
-      var _ref4;
+      var _ref3;
 
       var _this$context7 = this.context,
           start = _this$context7.start,
@@ -512,17 +539,17 @@ function (_Component5) {
       var beforeValue = index === 0 ? start : points[index - 1].value;
       var percent = getPercentByValue(value);
       var beforePercent = getPercentByValue(beforeValue);
-      return _ref4 = {
+      return _ref3 = {
         position: 'absolute',
         zIndex: 100,
         overflow: 'hidden',
         cursor: 'pointer'
-      }, _defineProperty(_ref4, Thickness, percent - beforePercent + '%'), _defineProperty(_ref4, Thickness_r, '100%'), _defineProperty(_ref4, OtherSide, 0), _defineProperty(_ref4, StartSide, beforePercent + '%'), _ref4;
+      }, _defineProperty(_ref3, Thickness, percent - beforePercent + '%'), _defineProperty(_ref3, Thickness_r, '100%'), _defineProperty(_ref3, OtherSide, 0), _defineProperty(_ref3, StartSide, beforePercent + '%'), _ref3;
     }
   }, {
     key: "getFillStyle",
     value: function getFillStyle() {
-      var _ref5;
+      var _ref4;
 
       var _this$context8 = this.context,
           styleName = _this$context8.styleName,
@@ -534,11 +561,11 @@ function (_Component5) {
       var index = this.props.index;
       var length = points.length;
       var value = index === length ? endRange : points[index];
-      return _ref5 = {
+      return _ref4 = {
         position: 'absolute',
         zIndex: 10,
         cursor: 'pointer'
-      }, _defineProperty(_ref5, styleName.StartSide, 0), _defineProperty(_ref5, styleName.OtherSide, 'calc(50% - ' + thickness / 2 + 'px)'), _defineProperty(_ref5, styleName.Thickness_r, thickness + 'px'), _defineProperty(_ref5, styleName.Thickness, '100%'), _defineProperty(_ref5, "background", value && getValue(value.fillColor)), _ref5;
+      }, _defineProperty(_ref4, styleName.StartSide, 0), _defineProperty(_ref4, styleName.OtherSide, 'calc(50% - ' + thickness / 2 + 'px)'), _defineProperty(_ref4, styleName.Thickness_r, thickness + 'px'), _defineProperty(_ref4, styleName.Thickness, '100%'), _defineProperty(_ref4, "background", value && getValue(value.fillColor)), _ref4;
     }
   }, {
     key: "getTextStyle",
@@ -782,7 +809,7 @@ function (_Component6) {
   _createClass(Button, [{
     key: "getStyle",
     value: function getStyle(style) {
-      var _$$extend;
+      var _$$extend2;
 
       var _this$context16 = this.context,
           points = _this$context16.points,
@@ -798,7 +825,7 @@ function (_Component6) {
       var value = points[index];
       var percent = getPercentByValue(value.value);
       var size = getValue(this.context['point_' + Thickness]);
-      return _jquery.default.extend({}, (_$$extend = {
+      return _jquery.default.extend({}, (_$$extend2 = {
         border: 'none',
         position: 'absolute',
         borderRadius: value.rounded === false ? 0 : undefined,
@@ -807,7 +834,7 @@ function (_Component6) {
         background: getValue(value.pointColor),
         height: getValue(point_height) + 'px',
         width: getValue(point_width) + 'px'
-      }, _defineProperty(_$$extend, StartSide, 'calc(' + percent + '% - ' + size / 2 + 'px)'), _defineProperty(_$$extend, OtherSide, 0), _$$extend), style);
+      }, _defineProperty(_$$extend2, StartSide, 'calc(' + percent + '% - ' + size / 2 + 'px)'), _defineProperty(_$$extend2, OtherSide, 0), _$$extend2), style);
     }
   }, {
     key: "getNumberStyle",
