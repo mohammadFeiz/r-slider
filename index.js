@@ -13,7 +13,9 @@ require("./index.css");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; if (obj != null) { var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -268,7 +270,7 @@ function (_Component2) {
     }
   }, {
     key: "getPinStyle",
-    value: function getPinStyle(value) {
+    value: function getPinStyle(value, index) {
       var _$$extend;
 
       var _this$context3 = this.context,
@@ -285,7 +287,7 @@ function (_Component2) {
           StartSide = styleName.StartSide;
       return _jquery.default.extend({}, (_$$extend = {
         position: 'absolute'
-      }, _defineProperty(_$$extend, Thickness, '1px'), _defineProperty(_$$extend, Thickness_r, thickness + 4), _defineProperty(_$$extend, OtherSide, 'calc(50% - ' + (thickness + 4) / 2 + 'px)'), _defineProperty(_$$extend, StartSide, getPercentByValue(value) + '%'), _defineProperty(_$$extend, "transform", "translate(".concat(pinPosition.x || 0, "px,").concat(pinPosition.y || 0, "px)")), _$$extend), pinStyle);
+      }, _defineProperty(_$$extend, Thickness, '1px'), _defineProperty(_$$extend, Thickness_r, thickness + 4), _defineProperty(_$$extend, OtherSide, 'calc(50% - ' + (thickness + 4) / 2 + 'px)'), _defineProperty(_$$extend, StartSide, getPercentByValue(value) + '%'), _defineProperty(_$$extend, "transform", "translate(".concat(pinPosition.x || 0, "px,").concat(pinPosition.y || 0, "px)")), _$$extend), typeof pinStyle === 'function' ? pinStyle(value, index) : pinStyle);
     }
   }, {
     key: "labelMouseDown",
@@ -326,12 +328,6 @@ function (_Component2) {
           _this$context5$labels = _this$context5.labels,
           labels = _this$context5$labels === void 0 ? [] : _this$context5$labels,
           getValue = _this$context5.getValue;
-      var ranges = points.map(function (value, i) {
-        return _react.default.createElement(Range, {
-          index: i,
-          key: i
-        });
-      });
       var customLabels = labels.map(function (label) {
         return label.value;
       });
@@ -344,7 +340,7 @@ function (_Component2) {
         while (pinValue <= end) {
           pins.push(_react.default.createElement("div", {
             className: "r-slider-pin",
-            style: this.getPinStyle(pinValue),
+            style: this.getPinStyle(pinValue, pinIndex),
             key: pinIndex
           }));
           pinValue += pinStep;
@@ -414,9 +410,7 @@ function (_Component2) {
         className: "r-slider-container",
         style: this.getStyle(),
         ref: this.dom
-      }, pins, labelStep && Labels, textLabels, _react.default.createElement(Line, null), ranges, _react.default.createElement(Range, {
-        index: points.length
-      }));
+      }, pins, labelStep && Labels, textLabels, _react.default.createElement(Line, null), _react.default.createElement(Ranges, null));
     }
   }]);
 
@@ -469,10 +463,45 @@ function (_Component3) {
 
 _defineProperty(Line, "contextType", ctx);
 
-var Range =
+var Ranges =
 /*#__PURE__*/
 function (_Component4) {
-  _inherits(Range, _Component4);
+  _inherits(Ranges, _Component4);
+
+  function Ranges() {
+    _classCallCheck(this, Ranges);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(Ranges).apply(this, arguments));
+  }
+
+  _createClass(Ranges, [{
+    key: "render",
+    value: function render() {
+      var points = this.context.points;
+      var ranges = points.map(function (value, i) {
+        return _react.default.createElement(Range, {
+          index: i,
+          key: i
+        });
+      });
+      return _react.default.createElement("div", {
+        className: "r-slider-ranges"
+      }, ranges, _react.default.createElement(Range, {
+        key: points.length,
+        index: points.length
+      }));
+    }
+  }]);
+
+  return Ranges;
+}(_react.Component);
+
+_defineProperty(Ranges, "contextType", ctx);
+
+var Range =
+/*#__PURE__*/
+function (_Component5) {
+  _inherits(Range, _Component5);
 
   function Range() {
     _classCallCheck(this, Range);
@@ -501,8 +530,8 @@ _defineProperty(Range, "contextType", ctx);
 
 var Space =
 /*#__PURE__*/
-function (_Component5) {
-  _inherits(Space, _Component5);
+function (_Component6) {
+  _inherits(Space, _Component6);
 
   function Space(props) {
     var _this3;
@@ -541,7 +570,7 @@ function (_Component5) {
       var beforePercent = getPercentByValue(beforeValue);
       return _ref3 = {
         position: 'absolute',
-        zIndex: 100,
+        zIndex: 1,
         overflow: 'hidden',
         cursor: 'pointer'
       }, _defineProperty(_ref3, Thickness, percent - beforePercent + '%'), _defineProperty(_ref3, Thickness_r, '100%'), _defineProperty(_ref3, OtherSide, 0), _defineProperty(_ref3, StartSide, beforePercent + '%'), _ref3;
@@ -625,10 +654,20 @@ function (_Component5) {
       var Thickness = styleName.Thickness;
       var length = points.length;
       var space = (0, _jquery.default)(this.dom.current);
+      var container = space.parents('.r-slider-container');
       var index = this.props.index;
+      (0, _jquery.default)('.r-slider-point').css({
+        zIndex: 10
+      });
+      space.next('.r-slider-point').css({
+        zIndex: 100
+      });
+      space.prev('.r-slider-point').css({
+        zIndex: 100
+      });
 
       if (showValue !== false) {
-        space.parent('.r-slider-container').find('.r-slider-number').show();
+        container.find('.r-slider-number').show();
       }
 
       if (index === 0) {
@@ -644,7 +683,7 @@ function (_Component5) {
           index: index,
           startValue: points[index - 1].value,
           endValue: points[index].value,
-          width: (0, _jquery.default)(this.dom.current).parent('.r-slider-container')[Thickness]()
+          width: container[Thickness]()
         };
         (0, _jquery.default)(window).bind('mousemove', _jquery.default.proxy(this.mouseMove, this));
         (0, _jquery.default)(window).bind('mouseup', _jquery.default.proxy(this.mouseUp, this));
@@ -702,7 +741,7 @@ function (_Component5) {
 
       if (showValue !== 'fix') {
         var space = (0, _jquery.default)(this.dom.current);
-        space.parent('.r-slider-container').find('.r-slider-number').hide();
+        space.parents('.r-slider-container').find('.r-slider-number').hide();
       }
 
       if (onchange) {
@@ -793,8 +832,8 @@ _defineProperty(Space, "contextType", ctx);
 
 var Button =
 /*#__PURE__*/
-function (_Component6) {
-  _inherits(Button, _Component6);
+function (_Component7) {
+  _inherits(Button, _Component7);
 
   function Button(props) {
     var _this4;
@@ -829,7 +868,7 @@ function (_Component6) {
         border: 'none',
         position: 'absolute',
         borderRadius: value.rounded === false ? 0 : undefined,
-        zIndex: 1000,
+        zIndex: 10,
         cursor: 'pointer',
         background: getValue(value.pointColor),
         height: getValue(point_height) + 'px',
@@ -869,9 +908,16 @@ function (_Component6) {
       }
 
       var button = (0, _jquery.default)(this.dom.current);
+      (0, _jquery.default)('.r-slider-point').css({
+        zIndex: 10
+      });
+      button.css({
+        zIndex: 100
+      });
+      var container = button.parents('.r-slider-container');
 
       if (showValue !== false) {
-        button.parent('.r-slider-container').find('.r-slider-number').show();
+        container.find('.r-slider-number').show();
       }
 
       var value = points[index].value;
@@ -882,7 +928,7 @@ function (_Component6) {
         endLimit: index === points.length - 1 ? max : points[index + 1].value,
         index: index,
         value: value,
-        width: (0, _jquery.default)(this.dom.current).parent('.r-slider-container')[Thickness]()
+        width: container[Thickness]()
       };
 
       if (onpointmousedown) {
@@ -951,7 +997,7 @@ function (_Component6) {
 
       if (showValue !== 'fix') {
         var button = (0, _jquery.default)(this.dom.current);
-        button.parent('.r-slider-container').find('.r-slider-number').hide();
+        button.parents('.r-slider-container').find('.r-slider-number').hide();
       }
 
       if (onchange) {
