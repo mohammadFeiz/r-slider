@@ -395,12 +395,12 @@ class RSliderPoint extends Component{
     super(props);
     this.dom = createRef();
   }
-  getStyle(style) {
+  getStyle() {
     const {points,styleName,start,end} = this.context;
     var {index} = this.props;
-    return $.extend({},{
+    return {
       [styleName.StartSide]:getPercentByValue(points[index].value,start,end) + '%',
-    },style);
+    };
   }
   getNumberStyle(){
     const {showValue} = this.context;
@@ -466,7 +466,7 @@ class RSliderPoint extends Component{
     var value = points[index]; 
     var props = {[touch?'onTouchStart':'onMouseDown']:this.mouseDown.bind(this),className:"r-slider-point-container"};
     return(
-      <div ref={this.dom} style={this.getStyle(value.style)} {...props}>
+      <div ref={this.dom} style={this.getStyle()} {...props}>
         <div className={`r-slider-point${value.className?' ' + value.className:''}`} style={typeof value.style === 'function'?value.style(value):value.style}>
           {
           showValue !== false && 

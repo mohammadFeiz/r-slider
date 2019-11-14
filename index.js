@@ -918,14 +918,14 @@ function (_Component11) {
 
   _createClass(RSliderPoint, [{
     key: "getStyle",
-    value: function getStyle(style) {
+    value: function getStyle() {
       var _this$context18 = this.context,
           points = _this$context18.points,
           styleName = _this$context18.styleName,
           start = _this$context18.start,
           end = _this$context18.end;
       var index = this.props.index;
-      return _jquery.default.extend({}, _defineProperty({}, styleName.StartSide, getPercentByValue(points[index].value, start, end) + '%'), style);
+      return _defineProperty({}, styleName.StartSide, getPercentByValue(points[index].value, start, end) + '%');
     }
   }, {
     key: "getNumberStyle",
@@ -1064,7 +1064,7 @@ function (_Component11) {
       var props = (_props2 = {}, _defineProperty(_props2, touch ? 'onTouchStart' : 'onMouseDown', this.mouseDown.bind(this)), _defineProperty(_props2, "className", "r-slider-point-container"), _props2);
       return _react.default.createElement("div", _extends({
         ref: this.dom,
-        style: this.getStyle(value.style)
+        style: this.getStyle()
       }, props), _react.default.createElement("div", {
         className: "r-slider-point".concat(value.className ? ' ' + value.className : ''),
         style: typeof value.style === 'function' ? value.style(value) : value.style
