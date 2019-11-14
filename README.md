@@ -56,13 +56,13 @@ es6: import Slider from "@mohamadfeiz/r-slider";
   </tr>
   <tr>
     <td>points</td>
-     <td>Set Slider Points. each point is an object that can get 4 properties:<br />
+     <td>Set Slider Points. each point is an object that can get 5 properties:<br />
     <ul>
-      <li>1- value:value of point in range.</li>
-      <li>2- pointColor: set color of point in slider.(string or function).(default is 'blue') </li>
-      <li>3- fillColor: set color of range line in slider..(string or function).(default is 'blue')</li>
-      <li>4- text: this text will be rendered in center of range line.(string or function).</li>
-      <li>5- rounded: set rounded:false to omit border radius of point.(default is true)</li>
+      <li>1- value:value of point in range(number).</li>
+      <li>2- fillColor: set color of range line in slider.(string or function that receives the point object as parameter).(default is 'blue')</li>
+      <li>3- text: this text will be rendered in center of range line.(string or function that receives the point object as parameter).</li>
+      <li>4- className:set className for point.useful in set style of point.(string)</li>
+      <li>5- style:set inline css for point.(object or function that receives the point object as parameter)</li>
       </ul>
     </td>
   <td>Array of objects</td>
@@ -72,45 +72,61 @@ es6: import Slider from "@mohamadfeiz/r-slider";
      <td>This allows us to change the slider with mouse.default is true</td>
   <td>boolean</td>
   </tr>
-  <tr>
-     <td>showValue</td>
-     <td>Makes the point value appear on the point.default is true. if false , never show value, and if 'fix' alwais show value</td>
-  <td>boolean(false or true) or 'fix'</td>
-  </tr>
-  </tr>
-  <tr>
+   <tr>
+      <td>showValue</td>
+      <td>Makes the point value appear on the point. default is true. if false , never show value, and if 'fix' alwais show value</td>
+      <td>boolean(false or true) or 'fix'</td>
+   </tr>
+   <tr>
+      <td>showPoint</td>
+      <td>show/hide slider points. default is true.</td>
+      <td>boolean</td>
+   </tr>
+   </tr>
+   <tr>
      <td>min</td>
      <td>Set Minimum amount allowed.(optional)</td>
      <td>number</td>
-  </tr>
-  <tr>
+   </tr>
+   <tr>
      <td>max</td>
      <td>Set Maximum amount allowed(optional)</td>
      <td>number</td>
   </tr>
   <tr>
-     <td>pinStep</td>
-     <td>Scale based on number of steps(optional)</td>
-     <td>number</td>
+     <td>scale</td>
+     <td>Scaling slider based on number of steps(optional).is an object that can get 2 properties<br />
+      <ul>
+         <li>1- step:Step of scaling slider(number).</li>
+         <li>2- style: set inline css of scale element .(object or function that receives the value of scale as parameter).</li>
+      </ul>
+     </td>
+     <td>object</td>
   </tr>
   <tr>
-     <td>labelStep</td>
-     <td>Labeling slider based on number of steps(optional)</td>
-     <td>number</td>
+     <td>label</td>
+     <td>Labeling slider based on number of steps and custom labels(optional).is an object that can get 3 properties<br />
+      <ul>
+         <li>1- step:Step of scaling slider(number).</li>
+         <li>2- items:list of custom labels(array of objects).each object has text,value and color as properties:</li>
+         <li>3- style: set inline css of label element .(object or function that receives the value of label as parameter).</li>
+      </ul>
+     </td>
+     <td>object</td>
   </tr>
   <tr>
      <td>onchange</td>
      <td>
-       onchange is a callback function that is to be executed while dragging or changing point(s) of slider
-        this function get 2 parameters,
-       <ul>
-         <li>
-           first parameter is an object that contain all of props that used in slider component 
-           </li>
-         <li>
-           second parameter is a boolean that define last change of dragging 
-           </li>
-         </ul>
+       onchange is a callback function that is to be executed in end of changing point(s) of slider
+        this function get all props of slider as parameter in type of object.
+    </td>
+     <td>callback</td>
+  </tr>
+  <tr>
+     <td>ondrag</td>
+     <td>
+       ondrag is a callback function that is to be executed while draging point(s) of slider
+        this function get all props of slider as parameter in type of object.
     </td>
      <td>callback</td>
   </tr>
@@ -120,27 +136,16 @@ es6: import Slider from "@mohamadfeiz/r-slider";
      <td>string</td>
   </tr>
   <tr>
-     <td>point_width</td>
-     <td>Set width of slider point(s)(default is 10)</td>
-     <td>object</td>
+     <td>className</td>
+     <td>Set className of slider</td>
+     <td>string</td>
   </tr>
   <tr>
-     <td>point_height</td>
-     <td>Set height of slider point(s)(default is 10)</td>
-     <td>object</td>
+     <td>id</td>
+     <td>Set id of slider</td>
+     <td>string</td>
   </tr>
-  <tr>
-     <td>thickness</td>
-     <td>Set thickness of slider line(Groove)</td>
-  </tr>
-  <tr>
-     <td>margin</td>
-     <td>Set empty space in sided of slider</td>
-  </tr>
-  <tr>
-     <td>backgroundColor</td>
-     <td>Set background color of slider(string or function)</td>
-  </tr>
+
 </table>
 
 <a href="https://stackblitz.com/edit/r-slider-demo1?file=style.css">Single range width Label Demo</a><br/>
