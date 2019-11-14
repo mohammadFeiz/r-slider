@@ -188,7 +188,7 @@ class RSliderLabels extends Component{
     return Labels;
   }
   render(){
-    var {label} = this.context;
+    var {label = {}} = this.context;
     var {step} = label;
     return (
       <div className='r-slider-labels'>

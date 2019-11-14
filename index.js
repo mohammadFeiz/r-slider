@@ -489,7 +489,8 @@ function (_Component5) {
   }, {
     key: "render",
     value: function render() {
-      var label = this.context.label;
+      var _this$context$label = this.context.label,
+          label = _this$context$label === void 0 ? {} : _this$context$label;
       var step = label.step;
       return _react.default.createElement("div", {
         className: "r-slider-labels"
