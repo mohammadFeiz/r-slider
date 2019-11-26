@@ -183,7 +183,7 @@ class RSliderLabels extends Component{
       var item = items[i];
       if(item.value < start || item.value > end){continue;}
       Labels.push(<RSliderLabel label={item} key={item.value + 'label'} style={Style(item.value)}/>);
-      Labels.push(<RSliderPin value={item.value} key={label.value + i}/>);
+      Labels.push(<RSliderPin value={item.value} key={label.value + '-' + i}/>);
     }
     return Labels;
   }

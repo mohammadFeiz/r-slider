@@ -480,7 +480,7 @@ function (_Component5) {
         }));
         Labels.push(_react.default.createElement(RSliderPin, {
           value: item.value,
-          key: label.value + i
+          key: label.value + '-' + i
         }));
       }
 

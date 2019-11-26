@@ -1,6 +1,7 @@
 import $ from 'jquery';
 export default class RActions{
-  getValueByField(obj,field){
+  constructor(){
+    this.getValueByField = (obj,field)=>{
     if(!field){return undefined;}
     var fields = (typeof field === 'function'?field(obj):field).split('.');
     var value = obj[fields[0]];
@@ -11,10 +12,10 @@ export default class RActions{
     }
     return value;
   }
-  getCopy(obj){
+  this.getCopy = (obj)=>{
     return JSON.parse(JSON.stringify(obj))
   }
-  setValueByField(obj,field,value){
+  this.setValueByField = (obj,field,value)=>{
     var fields = field.split('.');
     var node = obj;
     for(var i = 0; i < fields.length - 1; i++){
@@ -24,7 +25,7 @@ export default class RActions{
     node[fields[fields.length - 1]] = value;
     return obj;
   }
-  eventHandler(selector, event, action,type = 'bind') {
+  this.eventHandler = (selector, event, action,type = 'bind')=> {
     var me = { mousedown: "touchstart", mousemove: "touchmove", mouseup: "touchend" };
     event = 'ontouchstart' in document.documentElement ? me[event] : event;
     var element = typeof selector === "string"? 
@@ -33,16 +34,16 @@ export default class RActions{
     element.unbind(event, action); 
     if(type === 'bind'){element.bind(event, action)}
   }
-  getClient(e){
+  this.getClient = (e)=>{
     return {
       x: e.clientX === undefined?e.changedTouches[0].clientX:e.clientX, 
       y: e.clientY===undefined?e.changedTouches[0].clientY:e.clientY 
     };
   }
-  getLineBySMA({p1,measure,angle}){
+  this.getLineBySMA = ({p1,measure,angle})=>{
     return {p1,p2:{x:p1.x+(Math.cos(angle * Math.PI / 180) * measure),y:p1.y + (Math.sin(angle * -1 * Math.PI / 180) * measure)}};
   }
-  getValueByRange(value,start,end){
+  this.getValueByRange = (value,start,end)=>{
     var val;
     if(value === undefined){return start}
     if(typeof value === 'number'){val = value;}
@@ -59,12 +60,89 @@ export default class RActions{
     val = val < start?start:val;
     return val;
   }
-  getPercentByValue(value,start,end){
+  this.getPercentByValue = (value,start,end)=>{
     return 100 * (value - start) / (end - start);
   }
-  getStartByStep(start,step){
+  this.getValueByPercent = (percent,start,end)=>{
+    return start + (percent * (end - start) / 100);
+  }
+  this.getStartByStep = (start,step)=>{
     var a = Math.round((start - step) / step) * step; 
     while(a < start){a += step;}
     return a;
   }
+  this.fix = (number,a = 6)=>{
+    return parseFloat((number).toFixed(a));
+  }
+  this.searchComposite = (model,query,childsProp = 'childs')=>{
+        var searchRowRecursive = (data,query)=>{
+            if(this.searchResult !== undefined){return;}
+            for(var i = 0; i < data.length; i++){
+                if(this.searchResult !== undefined){break;}
+                var row = data[i];
+                for(var prop in query){
+                    var value = this.getValueByField(row,prop);
+                    if(value !== query[prop]){continue;}
+                    this.searchResult = row;
+                    break;
+                }
+                if(row[childsProp] && row[childsProp].length){
+                    searchRowRecursive(row[childsProp],query);
+                }
+            }
+        }
+        this.searchResult = undefined;
+        searchRowRecursive(model,query);
+        return this.searchResult;
+    }
+    this.convertFlatToComposite = (model,idProp = 'id',parentIdProp = 'parentId')=>{
+        var convertModelRecursive = (model,parentId,parentObject)=>{
+          for(var i = 0; i < model.length; i++){
+            var row = model[i];
+            row._parent = this.getValueByField(row,parentIdProp);
+            if(row._parent !== parentId){continue;}
+            row._id = this.getValueByField(row,idProp);
+            row._childs = [];
+            parentObject.push(row);
+            convertModelRecursive(model,row._id,row._childs)
+          }
+        };
+        var result = [];
+        convertModelRecursive(model,undefined,result);
+        return result;
+    }
+    this.compaire = (a,b)=>{
+        return JSON.stringify(a) === JSON.stringify(b);
+    }
+    this.binarySearch = (arr,value,field,limit = 0)=>{
+      var start = 0,end = arr.length - 1;
+      var startValue = field(arr[start]);
+      var endValue = field(arr[end]);
+      if(value < startValue){
+        return Math.abs(value - startValue) <= limit?start:-1;
+      }
+      if(value > endValue){
+        return Math.abs(value - endValue) <= limit?end:-1;
+      }
+      if(value === startValue){return start;}
+      if(value === endValue){return end;}
+      while(end - start > 1){
+        var mid = Math.floor((end + start)/2);
+        var mp = field(arr[mid]);
+        var dif = value - mp;
+        if(dif === 0){return mid;}
+        if(dif < 0){end = mid;}//اگر مقدار در سمت چپ است
+        else{start = mid;}//اگر مقدار در سمت راست است
+      }
+      var startDif = Math.abs(field(arr[start]) - value);
+      var endDif = Math.abs(field(arr[end]) - value);
+      if(startDif <= endDif){
+        return startDif <=limit?start:-1;
+      }
+      else{
+        return endDif <=limit?end:-1;
+      }
+    }
+  }
+  
 }
