@@ -11,7 +11,7 @@ var _jquery = _interopRequireDefault(require("jquery"));
 
 require("./index.css");
 
-var _actions = _interopRequireDefault(require("./actions"));
+var _rActions = _interopRequireDefault(require("r-actions"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -43,7 +43,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-var _ref = new _actions.default(),
+var _ref = new _rActions.default(),
     getPercentByValue = _ref.getPercentByValue,
     getClient = _ref.getClient,
     eventHandler = _ref.eventHandler,
@@ -268,15 +268,6 @@ function (_Component2) {
   _createClass(SliderContainer, [{
     key: "render",
     value: function render() {
-      var _this$context = this.context,
-          endRange = _this$context.endRange,
-          points = _this$context.points,
-          pinStep = _this$context.pinStep,
-          start = _this$context.start,
-          end = _this$context.end,
-          labelStep = _this$context.labelStep,
-          labels = _this$context.labels,
-          getValue = _this$context.getValue;
       return _react.default.createElement("div", {
         className: "r-slider-container",
         ref: this.dom
@@ -303,10 +294,10 @@ function (_Component3) {
   _createClass(RSliderPins, [{
     key: "getPins",
     value: function getPins() {
-      var _this$context2 = this.context,
-          start = _this$context2.start,
-          end = _this$context2.end,
-          pin = _this$context2.pin;
+      var _this$context = this.context,
+          start = _this$context.start,
+          end = _this$context.end,
+          pin = _this$context.pin;
       var step = pin.step,
           style = pin.style;
       var value = getStartByStep(start, step);
@@ -366,10 +357,10 @@ function (_Component4) {
   _createClass(RSliderPin, [{
     key: "getStyle",
     value: function getStyle(style) {
-      var _this$context3 = this.context,
-          styleName = _this$context3.styleName,
-          start = _this$context3.start,
-          end = _this$context3.end;
+      var _this$context2 = this.context,
+          styleName = _this$context2.styleName,
+          start = _this$context2.start,
+          end = _this$context2.end;
       var StartSide = styleName.StartSide;
       var value = this.props.value;
       return _jquery.default.extend({}, _defineProperty({}, StartSide, getPercentByValue(value, start, end) + '%'), style);
@@ -406,11 +397,11 @@ function (_Component5) {
   _createClass(RSliderLabels, [{
     key: "getLabelsByStep",
     value: function getLabelsByStep() {
-      var _this$context4 = this.context,
-          start = _this$context4.start,
-          _this$context4$label = _this$context4.label,
-          label = _this$context4$label === void 0 ? {} : _this$context4$label,
-          end = _this$context4.end;
+      var _this$context3 = this.context,
+          start = _this$context3.start,
+          _this$context3$label = _this$context3.label,
+          label = _this$context3$label === void 0 ? {} : _this$context3$label,
+          end = _this$context3.end;
       var _label$items = label.items,
           items = _label$items === void 0 ? [] : _label$items,
           step = label.step,
@@ -451,11 +442,12 @@ function (_Component5) {
   }, {
     key: "getLabels",
     value: function getLabels() {
-      var _this$context5 = this.context,
-          _this$context5$label = _this$context5.label,
-          label = _this$context5$label === void 0 ? {} : _this$context5$label,
-          start = _this$context5.start,
-          end = _this$context5.end;
+      var _this$context4 = this.context,
+          _this$context4$label = _this$context4.label,
+          label = _this$context4$label === void 0 ? {} : _this$context4$label,
+          start = _this$context4.start,
+          end = _this$context4.end,
+          pin = _this$context4.pin;
       var _label$items2 = label.items,
           items = _label$items2 === void 0 ? [] : _label$items2,
           style = label.style;
@@ -477,10 +469,6 @@ function (_Component5) {
           label: item,
           key: item.value + 'label',
           style: Style(item.value)
-        }));
-        Labels.push(_react.default.createElement(RSliderPin, {
-          value: item.value,
-          key: label.value + '-' + i
         }));
       }
 
@@ -519,11 +507,11 @@ function (_Component6) {
     value: function getStyle(style) {
       var _$$extend2;
 
-      var _this$context6 = this.context,
-          styleName = _this$context6.styleName,
-          start = _this$context6.start,
-          end = _this$context6.end,
-          getValue = _this$context6.getValue;
+      var _this$context5 = this.context,
+          styleName = _this$context5.styleName,
+          start = _this$context5.start,
+          end = _this$context5.end,
+          getValue = _this$context5.getValue;
       var StartSide = styleName.StartSide;
       var _this$props$label = this.props.label,
           value = _this$props$label.value,
@@ -533,9 +521,9 @@ function (_Component6) {
   }, {
     key: "click",
     value: function click(e) {
-      var _this$context7 = this.context,
-          points = _this$context7.points,
-          update = _this$context7.update;
+      var _this$context6 = this.context,
+          points = _this$context6.points,
+          update = _this$context6.update;
       var value = this.props.label.value; //get nearest point to this value
 
       var point = points[0];
@@ -549,10 +537,6 @@ function (_Component6) {
 
       point.value = value;
       update(points, true, this.context);
-
-      if (onchange) {
-        onchange(this.context, true);
-      }
     }
   }, {
     key: "render",
@@ -616,9 +600,9 @@ function (_Component8) {
   _createClass(Ranges, [{
     key: "render",
     value: function render() {
-      var _this$context8 = this.context,
-          points = _this$context8.points,
-          styleName = _this$context8.styleName;
+      var _this$context7 = this.context,
+          points = _this$context7.points,
+          styleName = _this$context7.styleName;
       var ranges = points.map(function (value, i) {
         return _react.default.createElement(Range, {
           index: i,
@@ -656,9 +640,9 @@ function (_Component9) {
   _createClass(Range, [{
     key: "render",
     value: function render() {
-      var _this$context9 = this.context,
-          points = _this$context9.points,
-          showPoint = _this$context9.showPoint;
+      var _this$context8 = this.context,
+          points = _this$context8.points,
+          showPoint = _this$context8.showPoint;
       var index = this.props.index;
       var length = points.length;
       return _react.default.createElement(_react.Fragment, null, _react.default.createElement(RSiderSpace, {
@@ -692,14 +676,14 @@ function (_Component10) {
   _createClass(RSiderSpace, [{
     key: "getStyle",
     value: function getStyle() {
-      var _this$context10 = this.context,
-          start = _this$context10.start,
-          _this$context10$min = _this$context10.min,
-          min = _this$context10$min === void 0 ? start : _this$context10$min,
-          end = _this$context10.end,
-          _this$context10$max = _this$context10.max,
-          max = _this$context10$max === void 0 ? end : _this$context10$max,
-          points = _this$context10.points;
+      var _this$context9 = this.context,
+          start = _this$context9.start,
+          _this$context9$min = _this$context9.min,
+          min = _this$context9$min === void 0 ? start : _this$context9$min,
+          end = _this$context9.end,
+          _this$context9$max = _this$context9.max,
+          max = _this$context9$max === void 0 ? end : _this$context9$max,
+          points = _this$context9.points;
       var index = this.props.index;
       var value = index === points.length ? max : points[index].value;
       var beforeValue = index === 0 ? start : points[index - 1].value;
@@ -712,10 +696,10 @@ function (_Component10) {
   }, {
     key: "getFillStyle",
     value: function getFillStyle() {
-      var _this$context11 = this.context,
-          points = _this$context11.points,
-          endRange = _this$context11.endRange,
-          getValue = _this$context11.getValue;
+      var _this$context10 = this.context,
+          points = _this$context10.points,
+          endRange = _this$context10.endRange,
+          getValue = _this$context10.getValue;
       var index = this.props.index;
       var value = index === points.length ? endRange : points[index];
       return {
@@ -725,17 +709,17 @@ function (_Component10) {
   }, {
     key: "mouseDown",
     value: function mouseDown(e) {
-      var _this$context12 = this.context,
-          points = _this$context12.points,
-          showValue = _this$context12.showValue,
-          start = _this$context12.start,
-          end = _this$context12.end,
-          _this$context12$min = _this$context12.min,
-          min = _this$context12$min === void 0 ? start : _this$context12$min,
-          _this$context12$max = _this$context12.max,
-          max = _this$context12$max === void 0 ? end : _this$context12$max,
-          styleName = _this$context12.styleName,
-          changable = _this$context12.changable;
+      var _this$context11 = this.context,
+          points = _this$context11.points,
+          showValue = _this$context11.showValue,
+          start = _this$context11.start,
+          end = _this$context11.end,
+          _this$context11$min = _this$context11.min,
+          min = _this$context11$min === void 0 ? start : _this$context11$min,
+          _this$context11$max = _this$context11.max,
+          max = _this$context11$max === void 0 ? end : _this$context11$max,
+          styleName = _this$context11.styleName,
+          changable = _this$context11.changable;
 
       if (changable === false) {
         return;
@@ -781,10 +765,10 @@ function (_Component10) {
   }, {
     key: "mouseMove",
     value: function mouseMove(e) {
-      var _this$context13 = this.context,
-          points = _this$context13.points,
-          update = _this$context13.update,
-          getOffset = _this$context13.getOffset;
+      var _this$context12 = this.context,
+          points = _this$context12.points,
+          update = _this$context12.update,
+          getOffset = _this$context12.getOffset;
       var _this$startOffset = this.startOffset,
           mousePosition = _this$startOffset.mousePosition,
           index = _this$startOffset.index,
@@ -816,10 +800,10 @@ function (_Component10) {
     value: function mouseUp() {
       eventHandler('window', 'mousemove', this.mouseMove, 'unbind');
       eventHandler('window', 'mouseup', this.mouseUp, 'unbind');
-      var _this$context14 = this.context,
-          update = _this$context14.update,
-          showValue = _this$context14.showValue,
-          points = _this$context14.points;
+      var _this$context13 = this.context,
+          update = _this$context13.update,
+          showValue = _this$context13.showValue,
+          points = _this$context13.points;
 
       if (showValue !== 'fix') {
         var space = (0, _jquery.default)(this.dom.current);
@@ -831,13 +815,13 @@ function (_Component10) {
   }, {
     key: "decreaseAll",
     value: function decreaseAll() {
-      var _this$context15 = this.context,
-          start = _this$context15.start,
-          _this$context15$min = _this$context15.min,
-          min = _this$context15$min === void 0 ? start : _this$context15$min,
-          step = _this$context15.step,
-          points = _this$context15.points,
-          update = _this$context15.update;
+      var _this$context14 = this.context,
+          start = _this$context14.start,
+          _this$context14$min = _this$context14.min,
+          min = _this$context14$min === void 0 ? start : _this$context14$min,
+          step = _this$context14.step,
+          points = _this$context14.points,
+          update = _this$context14.update;
       var offset = Math.min(step, points[0].value - min);
 
       for (var i = 0; i < points.length; i++) {
@@ -849,13 +833,13 @@ function (_Component10) {
   }, {
     key: "increaseAll",
     value: function increaseAll() {
-      var _this$context16 = this.context,
-          end = _this$context16.end,
-          _this$context16$max = _this$context16.max,
-          max = _this$context16$max === void 0 ? end : _this$context16$max,
-          step = _this$context16.step,
-          points = _this$context16.points,
-          update = _this$context16.update;
+      var _this$context15 = this.context,
+          end = _this$context15.end,
+          _this$context15$max = _this$context15.max,
+          max = _this$context15$max === void 0 ? end : _this$context15$max,
+          step = _this$context15.step,
+          points = _this$context15.points,
+          update = _this$context15.update;
       var offset = Math.min(step, max - points[points.length - 1].value);
 
       for (var i = 0; i < points.length; i++) {
@@ -867,11 +851,11 @@ function (_Component10) {
   }, {
     key: "render",
     value: function render() {
-      var _this$context17 = this.context,
-          points = _this$context17.points,
-          showFill = _this$context17.showFill,
-          endRange = _this$context17.endRange,
-          touch = _this$context17.touch;
+      var _this$context16 = this.context,
+          points = _this$context16.points,
+          showFill = _this$context16.showFill,
+          endRange = _this$context16.endRange,
+          touch = _this$context16.touch;
       var index = this.props.index;
       var length = points.length;
       var value = index === length ? endRange : points[index];
@@ -919,11 +903,11 @@ function (_Component11) {
   _createClass(RSliderPoint, [{
     key: "getStyle",
     value: function getStyle() {
-      var _this$context18 = this.context,
-          points = _this$context18.points,
-          styleName = _this$context18.styleName,
-          start = _this$context18.start,
-          end = _this$context18.end;
+      var _this$context17 = this.context,
+          points = _this$context17.points,
+          styleName = _this$context17.styleName,
+          start = _this$context17.start,
+          end = _this$context17.end;
       var index = this.props.index;
       return _defineProperty({}, styleName.StartSide, getPercentByValue(points[index].value, start, end) + '%');
     }
@@ -938,19 +922,19 @@ function (_Component11) {
   }, {
     key: "mouseDown",
     value: function mouseDown(e) {
-      var _this$context19 = this.context,
-          update = _this$context19.update,
-          changable = _this$context19.changable,
-          start = _this$context19.start,
-          end = _this$context19.end,
-          points = _this$context19.points,
-          _this$context19$min = _this$context19.min,
-          min = _this$context19$min === void 0 ? start : _this$context19$min,
-          _this$context19$max = _this$context19.max,
-          max = _this$context19$max === void 0 ? end : _this$context19$max,
-          showValue = _this$context19.showValue,
-          styleName = _this$context19.styleName,
-          onpointmousedown = _this$context19.onpointmousedown;
+      var _this$context18 = this.context,
+          update = _this$context18.update,
+          changable = _this$context18.changable,
+          start = _this$context18.start,
+          end = _this$context18.end,
+          points = _this$context18.points,
+          _this$context18$min = _this$context18.min,
+          min = _this$context18$min === void 0 ? start : _this$context18$min,
+          _this$context18$max = _this$context18.max,
+          max = _this$context18$max === void 0 ? end : _this$context18$max,
+          showValue = _this$context18.showValue,
+          styleName = _this$context18.styleName,
+          onpointmousedown = _this$context18.onpointmousedown;
       var Thickness = styleName.Thickness;
       var index = this.props.index;
 
@@ -997,10 +981,10 @@ function (_Component11) {
   }, {
     key: "mouseMove",
     value: function mouseMove(e) {
-      var _this$context20 = this.context,
-          update = _this$context20.update,
-          points = _this$context20.points,
-          getOffset = _this$context20.getOffset;
+      var _this$context19 = this.context,
+          update = _this$context19.update,
+          points = _this$context19.points,
+          getOffset = _this$context19.getOffset;
       var _this$startOffset2 = this.startOffset,
           mousePosition = _this$startOffset2.mousePosition,
           size = _this$startOffset2.size,
@@ -1031,10 +1015,10 @@ function (_Component11) {
     value: function mouseUp() {
       eventHandler('window', 'mousemove', this.mouseMove, 'unbind');
       eventHandler('window', 'mouseup', this.mouseUp, 'unbind');
-      var _this$context21 = this.context,
-          showValue = _this$context21.showValue,
-          update = _this$context21.update,
-          points = _this$context21.points;
+      var _this$context20 = this.context,
+          showValue = _this$context20.showValue,
+          update = _this$context20.update,
+          points = _this$context20.points;
 
       if (showValue !== 'fix') {
         var button = (0, _jquery.default)(this.dom.current);
@@ -1049,12 +1033,12 @@ function (_Component11) {
       var _props2;
 
       var index = this.props.index;
-      var _this$context22 = this.context,
-          points = _this$context22.points,
-          showValue = _this$context22.showValue,
-          showButton = _this$context22.showButton,
-          getValue = _this$context22.getValue,
-          touch = _this$context22.touch;
+      var _this$context21 = this.context,
+          points = _this$context21.points,
+          showValue = _this$context21.showValue,
+          showButton = _this$context21.showButton,
+          getValue = _this$context21.getValue,
+          touch = _this$context21.touch;
 
       if (showButton === false) {
         return '';

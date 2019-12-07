@@ -1,7 +1,7 @@
 import React, { Component,PureComponent,createRef,Fragment,createContext } from 'react';
 import $ from 'jquery';
 import './index.css';
-import RActions from './actions';
+import RActions from 'r-actions';
 const {getPercentByValue,getClient,eventHandler,getStartByStep} = new RActions();
 const ctx = createContext();
 export default class Slider extends Component {
@@ -100,7 +100,6 @@ class SliderContainer extends Component {
     this.dom = createRef()
   }
   render() {
-    const {endRange,points,pinStep,start,end,labelStep,labels,getValue} = this.context;
     return (
       <div className='r-slider-container' ref={this.dom}>
         <RSliderPins />
@@ -175,7 +174,7 @@ class RSliderLabels extends Component{
     return Labels;
   }
   getLabels(){
-    var {label = {},start,end} = this.context;
+    var {label = {},start,end,pin} = this.context;
     var {items = [],style} = label;
     var Labels = [];
     var Style = typeof style === 'function'?function(val){return style(val)}:function(val){return style}; 
@@ -183,7 +182,6 @@ class RSliderLabels extends Component{
       var item = items[i];
       if(item.value < start || item.value > end){continue;}
       Labels.push(<RSliderLabel label={item} key={item.value + 'label'} style={Style(item.value)}/>);
-      Labels.push(<RSliderPin value={item.value} key={label.value + '-' + i}/>);
     }
     return Labels;
   }
@@ -221,7 +219,6 @@ class RSliderLabel extends Component{
     }
     point.value = value;
     update(points,true,this.context);
-    if(onchange){onchange(this.context,true);}
   }
   render(){
     var {label,style} = this.props;
