@@ -80,7 +80,7 @@ function (_Component) {
 
       if (final && onchange) {
         onchange(context);
-      } else if (!final && ondrag) {
+      } else if (ondrag) {
         ondrag(context);
       } else {
         this.setState({

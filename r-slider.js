@@ -20,7 +20,7 @@ export default class Slider extends Component {
   update(points,final,context){
     var {onchange,ondrag} = this.props;
     if(final && onchange){onchange(context)}
-    else if(!final && ondrag){ondrag(context)}
+    else if(ondrag){ondrag(context)}
     else{
       this.setState({points});
     }
