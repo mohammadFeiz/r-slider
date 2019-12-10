@@ -292,6 +292,7 @@ class RSiderSpace extends Component{
     };
   }
   mouseDown(e){
+    this.moved = false;
     var {points,showValue,start,end,min=start,max=end,styleName,changable} = this.context;
     if(changable === false){return;}
     var {Thickness} = styleName;
@@ -323,14 +324,18 @@ class RSiderSpace extends Component{
         size: container[Thickness]()
       };
       eventHandler('window','mousemove',$.proxy(this.mouseMove,this));
-      eventHandler('window','mouseup',$.proxy(this.mouseUp,this));
+      
     }
+    eventHandler('window','mouseup',$.proxy(this.mouseUp,this));
   }
   mouseMove(e){
     var {points,update,getOffset} = this.context;
     var {mousePosition,index,size,startValue,endValue,startLimit,endLimit} = this.startOffset;
     var offset = getOffset(mousePosition,size,e);
     var lastPoint = points[index - 1],point = points[index];
+    if(lastPoint.value === offset + startValue){return;}
+    if(point.value === offset + endValue){return;}
+    this.moved = true;
     lastPoint.value = offset + startValue;
     point.value = offset + endValue;
     if(lastPoint.value < startLimit){
@@ -341,6 +346,7 @@ class RSiderSpace extends Component{
       point.value = endLimit;
       lastPoint.value = endLimit - (endValue - startValue);
     }
+    console.log('ok')
     update(points,false,this.context);
   }
   mouseUp(){
@@ -351,7 +357,7 @@ class RSiderSpace extends Component{
       var space = $(this.dom.current);
       space.parents('.r-slider-container').find('.r-slider-value').hide();
     }
-    update(points,true,this.context); 
+    if(this.moved){update(points,true,this.context);}
   }
   decreaseAll(){
     var {start,min = start,step,points,update} = this.context;
@@ -359,7 +365,8 @@ class RSiderSpace extends Component{
     for(var i = 0; i < points.length; i++){
       points[i].value -= offset;
     }
-    update(points,true,this.context);
+    this.moved = true;
+    //update(points,true,this.context);
   }
   increaseAll(){
     var {end,max=end,step,points,update} = this.context;
@@ -367,7 +374,8 @@ class RSiderSpace extends Component{
     for(var i = 0; i < points.length; i++){
       points[i].value += offset;
     }
-    update(points,true,this.context);
+    this.moved = true;
+    //update(points,true,this.context);
   }
   render(){
     const {points,showFill,endRange,touch} = this.context;
@@ -406,6 +414,7 @@ class RSliderPoint extends Component{
     };
   }
   mouseDown(e){
+    this.moved = false;
     var {update,changable,start,end,points,min=start,max=end,showValue,styleName,onpointmousedown} = this.context;
     var {Thickness} = styleName;
     var {index} = this.props;
@@ -443,6 +452,7 @@ class RSliderPoint extends Component{
     if(newValue < startLimit){newValue = startLimit;}
     if(newValue > endLimit){newValue = endLimit;}
     if(point.value === newValue){return;}
+    this.moved = true;
     point.value = newValue;
     update(points,false,this.context);
   }
@@ -454,7 +464,9 @@ class RSliderPoint extends Component{
       var button = $(this.dom.current);
       button.parents('.r-slider-container').find('.r-slider-value').hide();
     }
-    update(points,true,this.context);
+    if(this.moved){
+      update(points,true,this.context);
+    }
   }
   render(){
     var {index} = this.props;

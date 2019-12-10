@@ -709,6 +709,7 @@ function (_Component10) {
   }, {
     key: "mouseDown",
     value: function mouseDown(e) {
+      this.moved = false;
       var _this$context11 = this.context,
           points = _this$context11.points,
           showValue = _this$context11.showValue,
@@ -759,8 +760,9 @@ function (_Component10) {
           size: container[Thickness]()
         };
         eventHandler('window', 'mousemove', _jquery.default.proxy(this.mouseMove, this));
-        eventHandler('window', 'mouseup', _jquery.default.proxy(this.mouseUp, this));
       }
+
+      eventHandler('window', 'mouseup', _jquery.default.proxy(this.mouseUp, this));
     }
   }, {
     key: "mouseMove",
@@ -780,6 +782,16 @@ function (_Component10) {
       var offset = getOffset(mousePosition, size, e);
       var lastPoint = points[index - 1],
           point = points[index];
+
+      if (lastPoint.value === offset + startValue) {
+        return;
+      }
+
+      if (point.value === offset + endValue) {
+        return;
+      }
+
+      this.moved = true;
       lastPoint.value = offset + startValue;
       point.value = offset + endValue;
 
@@ -793,6 +805,7 @@ function (_Component10) {
         lastPoint.value = endLimit - (endValue - startValue);
       }
 
+      console.log('ok');
       update(points, false, this.context);
     }
   }, {
@@ -810,7 +823,9 @@ function (_Component10) {
         space.parents('.r-slider-container').find('.r-slider-value').hide();
       }
 
-      update(points, true, this.context);
+      if (this.moved) {
+        update(points, true, this.context);
+      }
     }
   }, {
     key: "decreaseAll",
@@ -828,7 +843,7 @@ function (_Component10) {
         points[i].value -= offset;
       }
 
-      update(points, true, this.context);
+      this.moved = true; //update(points,true,this.context);
     }
   }, {
     key: "increaseAll",
@@ -846,7 +861,7 @@ function (_Component10) {
         points[i].value += offset;
       }
 
-      update(points, true, this.context);
+      this.moved = true; //update(points,true,this.context);
     }
   }, {
     key: "render",
@@ -922,6 +937,7 @@ function (_Component11) {
   }, {
     key: "mouseDown",
     value: function mouseDown(e) {
+      this.moved = false;
       var _this$context18 = this.context,
           update = _this$context18.update,
           changable = _this$context18.changable,
@@ -1007,6 +1023,7 @@ function (_Component11) {
         return;
       }
 
+      this.moved = true;
       point.value = newValue;
       update(points, false, this.context);
     }
@@ -1025,7 +1042,9 @@ function (_Component11) {
         button.parents('.r-slider-container').find('.r-slider-value').hide();
       }
 
-      update(points, true, this.context);
+      if (this.moved) {
+        update(points, true, this.context);
+      }
     }
   }, {
     key: "render",
