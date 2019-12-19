@@ -1,6 +1,6 @@
 {
   "name": "r-range-slider",
-  "version": "2.1.3",
+  "version": "2.1.4",
   "description": "all in one range slider, single range , double range , multi range",
   "main": "index.js",
   "scripts": {

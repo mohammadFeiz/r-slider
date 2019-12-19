@@ -2,7 +2,7 @@ import React, { Component,PureComponent,createRef,Fragment,createContext } from 
 import $ from 'jquery';
 import './index.css';
 import RActions from 'r-actions';
-const {getPercentByValue,getClient,eventHandler,getStartByStep} = new RActions();
+const {getPercentByValue,getClient,eventHandler,getStartByStep,fix} = new RActions();
 const ctx = createContext();
 export default class Slider extends Component {
   constructor(props) {
@@ -12,7 +12,10 @@ export default class Slider extends Component {
     this.styleName = this.getStyleName();
     this.state = {
       points:this.props.points
-    }
+    };
+    var step = this.props.step.toString();
+    var dotPos = step.indexOf('.');
+    this.fixValue = dotPos === -1?0:step.length - dotPos - 1;
   }
   static getDerivedStateFromProps(props,state){
     return {points:props.points}
@@ -340,11 +343,11 @@ class RSiderSpace extends Component{
     point.value = offset + endValue;
     if(lastPoint.value < startLimit){
       lastPoint.value = startLimit;
-      point.value = startLimit + (endValue - startValue);
+      point.value = fix(startLimit + (endValue - startValue),this.fixValue);
     }
     if(point.value > endLimit){
       point.value = endLimit;
-      lastPoint.value = endLimit - (endValue - startValue);
+      lastPoint.value = fix(endLimit - (endValue - startValue),this.fixValue);
     }
     console.log('ok')
     update(points,false,this.context);
@@ -364,6 +367,8 @@ class RSiderSpace extends Component{
     var offset = Math.min(step,points[0].value - min);
     for(var i = 0; i < points.length; i++){
       points[i].value -= offset;
+      points[i].value = fix(points[i].value,this.fixValue)
+
     }
     this.moved = true;
     //update(points,true,this.context);
@@ -373,6 +378,8 @@ class RSiderSpace extends Component{
     var offset = Math.min(step,max - points[points.length - 1].value);
     for(var i = 0; i < points.length; i++){
       points[i].value += offset;
+      points[i].value = fix(points[i].value,this.fixValue)
+
     }
     this.moved = true;
     //update(points,true,this.context);
@@ -453,7 +460,7 @@ class RSliderPoint extends Component{
     if(newValue > endLimit){newValue = endLimit;}
     if(point.value === newValue){return;}
     this.moved = true;
-    point.value = newValue;
+    point.value = fix(newValue,this.fixValue);
     update(points,false,this.context);
   }
   mouseUp(){

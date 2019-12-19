@@ -47,7 +47,8 @@ var _ref = new _rActions.default(),
     getPercentByValue = _ref.getPercentByValue,
     getClient = _ref.getClient,
     eventHandler = _ref.eventHandler,
-    getStartByStep = _ref.getStartByStep;
+    getStartByStep = _ref.getStartByStep,
+    fix = _ref.fix;
 
 var ctx = (0, _react.createContext)();
 
@@ -68,6 +69,11 @@ function (_Component) {
     _this.state = {
       points: _this.props.points
     };
+
+    var step = _this.props.step.toString();
+
+    var dotPos = step.indexOf('.');
+    _this.fixValue = dotPos === -1 ? 0 : step.length - dotPos - 1;
     return _this;
   }
 
@@ -797,12 +803,12 @@ function (_Component10) {
 
       if (lastPoint.value < startLimit) {
         lastPoint.value = startLimit;
-        point.value = startLimit + (endValue - startValue);
+        point.value = fix(startLimit + (endValue - startValue), this.fixValue);
       }
 
       if (point.value > endLimit) {
         point.value = endLimit;
-        lastPoint.value = endLimit - (endValue - startValue);
+        lastPoint.value = fix(endLimit - (endValue - startValue), this.fixValue);
       }
 
       console.log('ok');
@@ -841,6 +847,7 @@ function (_Component10) {
 
       for (var i = 0; i < points.length; i++) {
         points[i].value -= offset;
+        points[i].value = fix(points[i].value, this.fixValue);
       }
 
       this.moved = true; //update(points,true,this.context);
@@ -859,6 +866,7 @@ function (_Component10) {
 
       for (var i = 0; i < points.length; i++) {
         points[i].value += offset;
+        points[i].value = fix(points[i].value, this.fixValue);
       }
 
       this.moved = true; //update(points,true,this.context);
@@ -1024,7 +1032,7 @@ function (_Component11) {
       }
 
       this.moved = true;
-      point.value = newValue;
+      point.value = fix(newValue, this.fixValue);
       update(points, false, this.context);
     }
   }, {
