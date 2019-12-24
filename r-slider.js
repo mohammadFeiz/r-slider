@@ -12,7 +12,7 @@ export default class Slider extends Component {
     this.styleName = this.getStyleName();
     this.state = {
       points:this.props.points
-    };
+    }
     var step = this.props.step.toString();
     var dotPos = step.indexOf('.');
     this.fixValue = dotPos === -1?0:step.length - dotPos - 1;
@@ -241,7 +241,10 @@ class RSliderLabel extends Component{
 
 class Line extends Component{
   static contextType = ctx;
-  render(){return(<div className="r-slider-line"></div>);}
+  render(){
+    var {lineStyle = {}} = this.context
+    return(<div style={lineStyle} className="r-slider-line"></div>);
+  }
 } 
 class Ranges extends Component{
   static contextType = ctx;
@@ -368,7 +371,6 @@ class RSiderSpace extends Component{
     for(var i = 0; i < points.length; i++){
       points[i].value -= offset;
       points[i].value = fix(points[i].value,this.fixValue)
-
     }
     this.moved = true;
     //update(points,true,this.context);
@@ -379,7 +381,6 @@ class RSiderSpace extends Component{
     for(var i = 0; i < points.length; i++){
       points[i].value += offset;
       points[i].value = fix(points[i].value,this.fixValue)
-
     }
     this.moved = true;
     //update(points,true,this.context);

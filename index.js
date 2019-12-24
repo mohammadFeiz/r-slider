@@ -581,7 +581,10 @@ function (_Component7) {
   _createClass(Line, [{
     key: "render",
     value: function render() {
+      var _this$context$lineSty = this.context.lineStyle,
+          lineStyle = _this$context$lineSty === void 0 ? {} : _this$context$lineSty;
       return _react.default.createElement("div", {
+        style: lineStyle,
         className: "r-slider-line"
       });
     }
