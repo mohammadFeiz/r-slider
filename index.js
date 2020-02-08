@@ -66,26 +66,23 @@ function (_Component) {
     _this.dom = (0, _react.createRef)();
     _this.touch = 'ontouchstart' in document.documentElement;
     _this.styleName = _this.getStyleName();
-    var _this$props = _this.props,
-        points = _this$props.points,
-        direction = _this$props.direction,
-        step = _this$props.step;
     _this.state = {
-      points: points
+      points: _this.props.points
     };
-    var Step = step.toString();
-    var dotPos = Step.indexOf('.');
-    _this.fixValue = dotPos === -1 ? 0 : Step.length - dotPos - 1;
-    _this.oriention = direction === "left" || direction === "right" ? "horizontal" : "vertical";
+
+    var step = _this.props.step.toString();
+
+    var dotPos = step.indexOf('.');
+    _this.fixValue = dotPos === -1 ? 0 : step.length - dotPos - 1;
     return _this;
   }
 
   _createClass(Slider, [{
     key: "update",
     value: function update(points, final, context) {
-      var _this$props2 = this.props,
-          onchange = _this$props2.onchange,
-          ondrag = _this$props2.ondrag;
+      var _this$props = this.props,
+          onchange = _this$props.onchange,
+          ondrag = _this$props.ondrag;
 
       if (final && onchange) {
         onchange(context);
@@ -141,11 +138,11 @@ function (_Component) {
   }, {
     key: "getOffset",
     value: function getOffset(mousePosition, size, e) {
-      var _this$props3 = this.props,
-          d = _this$props3.direction,
-          start = _this$props3.start,
-          end = _this$props3.end,
-          step = _this$props3.step,
+      var _this$props2 = this.props,
+          d = _this$props2.direction,
+          start = _this$props2.start,
+          end = _this$props2.end,
+          step = _this$props2.step,
           client = getClient(e),
           offset;
 
@@ -164,7 +161,9 @@ function (_Component) {
   }, {
     key: "getClassName",
     value: function getClassName(className) {
-      return 'r-slider ' + this.oriention + (className && typeof className === 'string' ? ' ' + className : '');
+      var direction = this.props.direction;
+      var oriention = direction === "left" || direction === "right" ? "horizontal" : "vertical";
+      return 'r-slider ' + oriention + (className && typeof className === 'string' ? ' ' + className : '');
     }
   }, {
     key: "getValue",
@@ -174,10 +173,10 @@ function (_Component) {
   }, {
     key: "getStyle",
     value: function getStyle() {
-      var _this$props4 = this.props,
-          _this$props4$style = _this$props4.style,
-          style = _this$props4$style === void 0 ? {} : _this$props4$style,
-          backgroundColor = _this$props4.backgroundColor;
+      var _this$props3 = this.props,
+          _this$props3$style = _this$props3.style,
+          style = _this$props3$style === void 0 ? {} : _this$props3$style,
+          backgroundColor = _this$props3.backgroundColor;
       return _jquery.default.extend({}, {
         background: this.getValue(backgroundColor)
       }, style);
@@ -200,16 +199,15 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this$props5 = this.props,
-          direction = _this$props5.direction,
-          className = _this$props5.className,
-          id = _this$props5.id,
-          start = _this$props5.start,
-          end = _this$props5.end,
-          _this$props5$min = _this$props5.min,
-          min = _this$props5$min === void 0 ? start : _this$props5$min,
-          _this$props5$max = _this$props5.max,
-          max = _this$props5$max === void 0 ? end : _this$props5$max;
+      var _this$props4 = this.props,
+          className = _this$props4.className,
+          id = _this$props4.id,
+          start = _this$props4.start,
+          end = _this$props4.end,
+          _this$props4$min = _this$props4.min,
+          min = _this$props4$min === void 0 ? start : _this$props4$min,
+          _this$props4$max = _this$props4.max,
+          max = _this$props4$max === void 0 ? end : _this$props4$max;
       var points = this.state.points;
       this.getValidPoints(points, min, max);
       var contextValue = { ...this.props
@@ -219,7 +217,6 @@ function (_Component) {
       contextValue.update = this.update.bind(this);
       contextValue.getValue = this.getValue.bind(this);
       contextValue.getOffset = this.getOffset.bind(this);
-      contextValue.oriention = this.oriention;
       contextValue.touch = this.touch;
       return _react.default.createElement(ctx.Provider, {
         value: contextValue
@@ -377,9 +374,9 @@ function (_Component4) {
   }, {
     key: "render",
     value: function render() {
-      var _this$props6 = this.props,
-          value = _this$props6.value,
-          style = _this$props6.style;
+      var _this$props5 = this.props,
+          value = _this$props5.value,
+          style = _this$props5.style;
       return _react.default.createElement("div", {
         className: "r-slider-pin",
         style: this.getStyle(style)
@@ -550,9 +547,9 @@ function (_Component6) {
   }, {
     key: "render",
     value: function render() {
-      var _this$props7 = this.props,
-          label = _this$props7.label,
-          style = _this$props7.style;
+      var _this$props6 = this.props,
+          label = _this$props6.label,
+          style = _this$props6.style;
       var text = label.text,
           id = label.id,
           className = label.className;
@@ -711,24 +708,12 @@ function (_Component10) {
       var _this$context10 = this.context,
           points = _this$context10.points,
           endRange = _this$context10.endRange,
-          getValue = _this$context10.getValue,
-          oriention = _this$context10.oriention;
+          getValue = _this$context10.getValue;
       var index = this.props.index;
       var value = index === points.length ? endRange : points[index];
-      var style = {
-        zIndex: 10,
-        cursor: 'pointer'
+      return {
+        background: value && getValue(value.fillColor)
       };
-
-      if (oriention === 'horizontal') {
-        style.width = '100%';
-        style.height = '3px';
-      } else {
-        style.height = '100%';
-        style.width = '3px';
-      }
-
-      return _jquery.default.extend({}, style, getValue(value ? value.fillStyle : {}));
     }
   }, {
     key: "mouseDown",
@@ -769,53 +754,23 @@ function (_Component10) {
         container.find('.r-slider-value').show();
       }
 
-      if (index === 0 || index === length) {
-        if (index === 0) {
-          this.decreaseAll();
-        } else if (index === length) {
-          this.increaseAll();
-        }
-
-        var startLimit = min,
-            endLimit = max;
-        var startDelta = points[0].value - startLimit;
-        var endDelta = endLimit - points[points.length - 1].value;
-        var points = points.map(function (p) {
-          return {
-            point: p,
-            value: p.value,
-            min: p.value - startDelta,
-            max: p.value + endDelta
-          };
-        });
+      if (index === 0) {
+        this.decreaseAll();
+      } else if (index === length) {
+        this.increaseAll();
       } else {
-        var startLimit = index === 1 ? min : points[index - 2].value;
-        var endLimit = index === length - 1 ? max : points[index + 1].value;
-        var startDelta = points[index - 1].value - startLimit;
-        var endDelta = endLimit - points[index].value;
-        var p1 = points[index - 1],
-            p2 = points[index];
-        var points = [{
-          point: p1,
-          value: p1.value,
-          min: p1.value - startDelta,
-          max: p1.value + endDelta
-        }, {
-          point: p2,
-          value: p2.value,
-          min: p2.value - startDelta,
-          max: p2.value + endDelta
-        }];
+        this.startOffset = {
+          mousePosition: getClient(e),
+          startLimit: index === 1 ? min : points[index - 2].value,
+          endLimit: index === length - 1 ? max : points[index + 1].value,
+          index: index,
+          startValue: points[index - 1].value,
+          endValue: points[index].value,
+          size: container[Thickness]()
+        };
+        eventHandler('window', 'mousemove', _jquery.default.proxy(this.mouseMove, this));
       }
 
-      this.startOffset = {
-        mousePosition: getClient(e),
-        startLimit: startLimit,
-        endLimit: endLimit,
-        points: points,
-        size: container[Thickness]()
-      };
-      eventHandler('window', 'mousemove', _jquery.default.proxy(this.mouseMove, this));
       eventHandler('window', 'mouseup', _jquery.default.proxy(this.mouseUp, this));
     }
   }, {
@@ -827,31 +782,39 @@ function (_Component10) {
           getOffset = _this$context12.getOffset;
       var _this$startOffset = this.startOffset,
           mousePosition = _this$startOffset.mousePosition,
-          ps = _this$startOffset.points,
+          index = _this$startOffset.index,
           size = _this$startOffset.size,
           startValue = _this$startOffset.startValue,
           endValue = _this$startOffset.endValue,
           startLimit = _this$startOffset.startLimit,
           endLimit = _this$startOffset.endLimit;
       var offset = getOffset(mousePosition, size, e);
+      var lastPoint = points[index - 1],
+          point = points[index];
 
-      if (ps[0].point.value === offset + ps[0].value) {
+      if (lastPoint.value === offset + startValue) {
+        return;
+      }
+
+      if (point.value === offset + endValue) {
         return;
       }
 
       this.moved = true;
+      lastPoint.value = offset + startValue;
+      point.value = offset + endValue;
 
-      for (var i = 0; i < ps.length; i++) {
-        var _ps$i = ps[i],
-            point = _ps$i.point,
-            min = _ps$i.min,
-            max = _ps$i.max,
-            value = _ps$i.value;
-        point.value = fix(offset + value, this.fixValue);
-        point.value = point.value < min ? min : point.value;
-        point.value = point.value > max ? max : point.value;
+      if (lastPoint.value < startLimit) {
+        lastPoint.value = startLimit;
+        point.value = fix(startLimit + (endValue - startValue), this.fixValue);
       }
 
+      if (point.value > endLimit) {
+        point.value = endLimit;
+        lastPoint.value = fix(endLimit - (endValue - startValue), this.fixValue);
+      }
+
+      console.log('ok');
       update(points, false, this.context);
     }
   }, {
@@ -927,9 +890,6 @@ function (_Component10) {
         return '';
       }
 
-      var text = value && value.text !== undefined ? value.text : '';
-      text = typeof text === 'function' ? text(this.context) : text;
-
       var props = _defineProperty({}, touch ? 'onTouchStart' : 'onMouseDown', this.mouseDown.bind(this));
 
       return _react.default.createElement("div", _extends({
@@ -942,7 +902,7 @@ function (_Component10) {
         style: this.getFillStyle()
       }), _react.default.createElement("div", {
         className: "r-slider-text"
-      }, text));
+      }, value && value.text ? value.text : ''));
     }
   }]);
 
@@ -1121,7 +1081,7 @@ function (_Component11) {
         style: this.getStyle()
       }, props), _react.default.createElement("div", {
         className: "r-slider-point".concat(value.className ? ' ' + value.className : ''),
-        style: typeof value.pointStyle === 'function' ? value.pointStyle(value) : value.pointStyle
+        style: typeof value.style === 'function' ? value.style(value) : value.style
       }, showValue !== false && _react.default.createElement("div", {
         style: this.getNumberStyle(),
         className: "r-slider-value"

@@ -10,13 +10,12 @@ export default class Slider extends Component {
     this.dom = createRef();
     this.touch = 'ontouchstart' in document.documentElement;
     this.styleName = this.getStyleName();
-    const {points,direction,step} = this.props;
-    this.state = {points}
-    var Step = step.toString();
-    var dotPos = Step.indexOf('.');
-    this.fixValue = dotPos === -1?0:Step.length - dotPos - 1;
-    this.oriention = direction==="left" || direction === "right" ? "horizontal" : "vertical";
-    
+    this.state = {
+      points:this.props.points
+    }
+    var step = this.props.step.toString();
+    var dotPos = step.indexOf('.');
+    this.fixValue = dotPos === -1?0:step.length - dotPos - 1;
   }
   static getDerivedStateFromProps(props,state){
     return {points:props.points}
@@ -57,7 +56,9 @@ export default class Slider extends Component {
     return  Math.round((end - start) * offset / size / step) * step;
   }
   getClassName(className){
-    return 'r-slider ' + this.oriention + (className && typeof className === 'string'?' ' + className:'')
+    var {direction} = this.props;
+    var oriention = direction==="left" || direction === "right" ? "horizontal" : "vertical";
+    return 'r-slider ' + oriention + (className && typeof className === 'string'?' ' + className:'')
   }
   getValue(value){return typeof value === 'function'?value(this.props):value; }
   getStyle(){
@@ -72,7 +73,7 @@ export default class Slider extends Component {
     }
   }
   render() {
-    var {direction,className,id,start,end,min = start,max = end} = this.props;
+    var {className,id,start,end,min = start,max = end} = this.props;
     var {points} = this.state;
     this.getValidPoints(points,min,max);
     var contextValue = {...this.props};
@@ -81,7 +82,6 @@ export default class Slider extends Component {
     contextValue.update = this.update.bind(this);
     contextValue.getValue = this.getValue.bind(this);
     contextValue.getOffset = this.getOffset.bind(this);
-    contextValue.oriention = this.oriention;
     contextValue.touch = this.touch;
       return (
         <ctx.Provider value={contextValue}>
@@ -287,16 +287,15 @@ class RSiderSpace extends Component{
     var beforeValue = index === 0?start:points[index - 1].value ;
     var percent = getPercentByValue(value,start,end);
     var beforePercent = getPercentByValue(beforeValue,start,end);
-    return {flexGrow:(percent - beforePercent)};
+    return {flexGrow:(percent - beforePercent),};
   }
   getFillStyle() {
-    var {points,endRange,getValue,oriention} = this.context;
+    var {points,endRange,getValue} = this.context;
     var {index} = this.props;
     var value = index === points.length?endRange:points[index];
-    var style = {zIndex:10,cursor:'pointer'};
-    if(oriention === 'horizontal'){style.width = '100%'; style.height = '3px';}
-    else{style.height = '100%'; style.width = '3px';}
-    return $.extend({},style,getValue(value?value.fillStyle:{}))
+    return {
+      background:value && getValue(value.fillColor)
+    };
   }
   mouseDown(e){
     this.moved = false;
@@ -314,47 +313,46 @@ class RSiderSpace extends Component{
     if(showValue !== false){
       container.find('.r-slider-value').show();
     }
-    if(index === 0 || index === length){
-      if(index === 0){this.decreaseAll();}
-      else if(index === length){this.increaseAll();}
-      var startLimit = min,endLimit = max;
-      var startDelta = points[0].value - startLimit;
-      var endDelta = endLimit - points[points.length - 1].value;
-      var points = points.map((p)=>{
-        return {point:p,value:p.value,min:p.value - startDelta,max:p.value + endDelta}
-      })
+    if(index === 0){
+      this.decreaseAll();
+    }
+    else if(index === length){
+      this.increaseAll();
     }
     else{
-      var startLimit = index === 1?min:points[index - 2].value;
-      var endLimit = index === length - 1?max:points[index + 1].value;
-      var startDelta = points[index - 1].value - startLimit;
-      var endDelta = endLimit - points[index].value;
-      var p1 = points[index - 1],p2 = points[index];
-      var points = [ 
-        {point:p1,value:p1.value,min:p1.value - startDelta,max:p1.value + endDelta},
-        {point:p2,value:p2.value,min:p2.value - startDelta,max:p2.value + endDelta}
-      ]
+      this.startOffset = {
+        mousePosition:getClient(e),
+        startLimit:index === 1?min:points[index - 2].value,
+        endLimit:index === length - 1?max:points[index + 1].value,
+        index,
+        startValue:points[index - 1].value,
+        endValue:points[index].value,
+        size: container[Thickness]()
+      };
+      eventHandler('window','mousemove',$.proxy(this.mouseMove,this));
+      
     }
-    this.startOffset = {
-      mousePosition:getClient(e),
-      startLimit,endLimit,points,
-      size: container[Thickness]()
-    };
-    eventHandler('window','mousemove',$.proxy(this.mouseMove,this));
     eventHandler('window','mouseup',$.proxy(this.mouseUp,this));
   }
   mouseMove(e){
     var {points,update,getOffset} = this.context;
-    var {mousePosition,points:ps,size,startValue,endValue,startLimit,endLimit} = this.startOffset;
+    var {mousePosition,index,size,startValue,endValue,startLimit,endLimit} = this.startOffset;
     var offset = getOffset(mousePosition,size,e);
-    if(ps[0].point.value === offset + ps[0].value){return;}
+    var lastPoint = points[index - 1],point = points[index];
+    if(lastPoint.value === offset + startValue){return;}
+    if(point.value === offset + endValue){return;}
     this.moved = true;
-    for(var i = 0; i < ps.length; i++){ 
-      let {point,min,max,value} = ps[i];
-      point.value = fix(offset + value,this.fixValue);
-      point.value = point.value < min?min:point.value;
-      point.value = point.value > max?max:point.value;
+    lastPoint.value = offset + startValue;
+    point.value = offset + endValue;
+    if(lastPoint.value < startLimit){
+      lastPoint.value = startLimit;
+      point.value = fix(startLimit + (endValue - startValue),this.fixValue);
     }
+    if(point.value > endLimit){
+      point.value = endLimit;
+      lastPoint.value = fix(endLimit - (endValue - startValue),this.fixValue);
+    }
+    console.log('ok')
     update(points,false,this.context);
   }
   mouseUp(){
@@ -393,14 +391,12 @@ class RSiderSpace extends Component{
     var length = points.length;
     var value = index === length?endRange:points[index];
     if(showFill === false){return '';}
-    var text = value && value.text !== undefined?value.text:'';
-    text = typeof text === 'function'?text(this.context):text;
     var props = {[touch?'onTouchStart':'onMouseDown']:this.mouseDown.bind(this)}
     return(
       <div ref={this.dom} className="r-slider-space" style={this.getStyle()} {...props}>
         <div className="r-slider-fill" data-index={index} style={this.getFillStyle()}>
         </div>
-        <div className="r-slider-text">{text}</div>
+        <div className="r-slider-text">{value && value.text?value.text:''}</div>
       </div>
     );
   } 
@@ -488,7 +484,7 @@ class RSliderPoint extends Component{
     var props = {[touch?'onTouchStart':'onMouseDown']:this.mouseDown.bind(this),className:"r-slider-point-container"};
     return(
       <div ref={this.dom} style={this.getStyle()} {...props}>
-        <div className={`r-slider-point${value.className?' ' + value.className:''}`} style={typeof value.pointStyle === 'function'?value.pointStyle(value):value.pointStyle}>
+        <div className={`r-slider-point${value.className?' ' + value.className:''}`} style={typeof value.style === 'function'?value.style(value):value.style}>
           {
           showValue !== false && 
           <div style={this.getNumberStyle()} className="r-slider-value">{value.value}</div>

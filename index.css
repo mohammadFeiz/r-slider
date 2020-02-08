@@ -1,3 +1,5 @@
+
+
 .r-slider{
   width:100%;
   font-size:12px;
@@ -59,7 +61,7 @@
     position:absolute;
   }
 .r-slider-line{
-  background:#aaa;   
+  background:#ddd;   
   position:absolute;
 }
 .r-slider.horizontal .r-slider-line{
@@ -98,7 +100,7 @@
   border-left:4px solid transparent;
 }
 .r-slider-pin{
-  background:#aaa;
+  background:#ddd;
   position:absolute;
 }
 .r-slider.horizontal .r-slider-pin{
@@ -135,9 +137,11 @@
 }
 .r-slider.horizontal .r-slider-fill{
   width:100%;
+  height:3px; 
 }
 .r-slider.vertical .r-slider-fill{
   height:100%;
+  width:3px;
 }
 .r-slider-ranges{
   position: absolute;
