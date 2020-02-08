@@ -1,10 +1,22 @@
 {
   "name": "r-range-slider",
-  "version": "2.1.5",
+  "version": "2.2.1",
   "description": "all in one range slider, single range , double range , multi range",
   "main": "index.js",
+  "dependencies": {
+    "jquery": "^3.4.1",
+    "r-actions": "^1.0.15",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "react-scripts": "latest"
   },
   "keywords": ["slider","range","rangeslider","dragable"],
   "author": "mohamad sharif feiz",
