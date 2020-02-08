@@ -27,8 +27,6 @@ function _instanceof(left, right) { if (right != null && typeof Symbol !== "unde
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only"); }
-
 function _classCallCheck(instance, Constructor) { if (!_instanceof(instance, Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -75,9 +73,9 @@ function (_Component) {
     _this.state = {
       points: points
     };
-    step = (_readOnlyError("step"), step.toString());
-    var dotPos = step.indexOf('.');
-    _this.fixValue = dotPos === -1 ? 0 : step.length - dotPos - 1;
+    var Step = step.toString();
+    var dotPos = Step.indexOf('.');
+    _this.fixValue = dotPos === -1 ? 0 : Step.length - dotPos - 1;
     _this.oriention = direction === "left" || direction === "right" ? "horizontal" : "vertical";
     return _this;
   }

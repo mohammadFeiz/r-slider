@@ -12,9 +12,9 @@ export default class Slider extends Component {
     this.styleName = this.getStyleName();
     const {points,direction,step} = this.props;
     this.state = {points}
-    step = step.toString();
-    var dotPos = step.indexOf('.');
-    this.fixValue = dotPos === -1?0:step.length - dotPos - 1;
+    var Step = step.toString();
+    var dotPos = Step.indexOf('.');
+    this.fixValue = dotPos === -1?0:Step.length - dotPos - 1;
     this.oriention = direction==="left" || direction === "right" ? "horizontal" : "vertical";
     
   }
