@@ -1,8 +1,12 @@
 
 # r-slider <br>
-a reactjs plugin for all in one sliders <br>
-r-slider is a multi-purpose, highly customizable slider control plugin that helps users select a single value or a range of values in an elegant way.
-Also can be used to create toggle switch, progress bar, step based form wizard with your own styles. Check out the examples in the zip for more information.
+r-range-slider is a range slider created by reactjs.
+- Unlimit Styling.
+- Single point , double points and multi points support. 
+- Change points in wonderfull ways.
+- Mobile Support(good for using in mobile browsers ,phonegap ,cordova or other hybrid frameworks).
+- Responsive.
+- right , left ,top ,botton direction support.
 
 <h3>Advantages of r-slider</h3>
 <ul>
