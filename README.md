@@ -1,5 +1,5 @@
 
-# r-slider <br>
+# r-range-slider <br>
 r-range-slider is a range slider created by reactjs.
 - Unlimit Styling.
 - Single point , double points and multi points support. 
@@ -11,9 +11,8 @@ r-range-slider is a range slider created by reactjs.
 ### Images
 
 <h3>Usage</h3>
-npm install @mohamadfeiz/r-slider <br/>
-es5: var Slider = require("@mohamadfeiz/r-slider"); <br/>
-es6: import Slider from "@mohamadfeiz/r-slider";
+    npm install r-range-slider <br/>
+    import Slider from "@mohamadfeiz/r-slider";
 <h3>props list</h3>
 <table>
   <tr>
