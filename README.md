@@ -17,20 +17,8 @@ r-range-slider is a range slider created by reactjs.
 <h3>props list</h3>
 Prop | Description | Type | Default
 -----|-------------|------|--------
-start|Start of slider range|number|---
-end|End of slider range|number|---
-step|Step of change slider|number|1
-points|Set Slider Points|array of objects|required
-changable|This allows us to change the slider with mouse|boolean|true
-showValue|Makes the point value appear on the point.if false , never show value, and if 'fix' alwais show value|boolean(false or true) or 'fix'
-min|Set Minimum amount allowed|number|optional
-max|Set Maximum amount allowed(optional)|number|optional
-label|Labeling slider based on number of steps or custom labels|object|optional
-onchange|callback function that is to be executed in end of changing point(s) of slider. this function get all props of slider as parameter|function
-ondrag|callback function that is to be executed while draging point(s) of slider. this function get all props of slider as parameter.|function
-direction|Set direction of slider("left","right","top","bottom")|string|"right"
-className|Set className of slider|string|optional
-id|Set id of slider|string|optional
+start|Start of slider range|number| msf
+
 <ul>
       <li>1- value:value of point in range(number).</li>
       <li>2- fillColor: set color of range line in slider.(string or function that receives the point object as parameter).(default is 'blue')</li>
