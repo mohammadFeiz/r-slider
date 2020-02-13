@@ -1,163 +1,322 @@
-import React, { Component,PureComponent,createRef,Fragment,createContext } from 'react';
+import React ,{Component,createContext,createRef}from 'react';
 import $ from 'jquery';
 import './index.css';
-import RActions from 'r-actions';
-const {getPercentByValue,getClient,eventHandler,getStartByStep,fix} = new RActions();
-const ctx = createContext();
-export default class Slider extends Component {
-  constructor(props) {
+var RRangeSliderContext = createContext();
+export default class RRangeSlider extends Component{
+  constructor(props){
     super(props);
+    var {direction,points,htmlStyle} = this.props;
+    
+    //direction requirments
+    if(direction === 'left'){this.getDiff = function (x,y,client){return x - client.x;}; this.oriention = 'horizontal';}
+    else if(direction === 'right'){this.getDiff = function (x,y,client){return client.x - x;}; this.oriention = 'horizontal';}
+    else if(direction === 'top'){this.getDiff = function (x,y,client){return y - client.y;}; this.oriention = 'vertical'; this.flexDirection = 'column-reverse';}
+    else{this.getDiff = function (x,y,client){return client.y - y;}; this.oriention = 'vertical'; this.flexDirection = 'column';}
+    
+    this.htmlStyle = $.extend({},{
+      display:'flex',justifyContent:'center',alignItems:'center'
+    },htmlStyle);
+    this.touch = this.isMobile();
     this.dom = createRef();
-    this.touch = 'ontouchstart' in document.documentElement;
-    this.styleName = this.getStyleName();
-    this.state = {
-      points:this.props.points
-    }
+    this.state = {isDown:false,points:this.getValidPoints(points),getValidPoints:this.getValidPoints.bind(this)} 
     var step = this.props.step.toString();
     var dotPos = step.indexOf('.');
     this.fixValue = dotPos === -1?0:step.length - dotPos - 1;
   }
+  isMobile(){return 'ontouchstart' in document.documentElement;}
+  getClient(e){return this.touch?{x: e.changedTouches[0].clientX,y:e.changedTouches[0].clientY }:{x:e.clientX,y:e.clientY}}
+  getPercentByValue(value,start,end){return 100 * (value - start) / (end - start);} //getPercentByValue
+  fix(number,a = 6){return parseFloat((number).toFixed(a));}
+  getStartByStep(start,step){
+    var a = Math.round((start - step) / step) * step; 
+    while(a < start){a += step;} return a;
+  }
+  eventHandler(selector, event, action,type = 'bind'){
+    var me = { mousedown: "touchstart", mousemove: "touchmove", mouseup: "touchend" };
+    event = this.touch ? me[event] : event;
+    var element = typeof selector === "string"? (selector === "window"?$(window):$(selector)):selector; 
+    element.unbind(event, action); 
+    if(type === 'bind'){element.bind(event, action)}
+  }
   static getDerivedStateFromProps(props,state){
-    return {points:props.points}
+    return {points:state.getValidPoints(props.points)}
   }
-  update(points,final,context){
-    var {onchange,ondrag} = this.props;
-    if(final && onchange){onchange(context)}
-    else if(ondrag){ondrag(context)}
-    else{
-      this.setState({points});
-    }
-  } 
-  componentDidMount(){
-    var position = $(this.dom.current).css('position');
-    if(position === 'static'){$(this.dom.current).css('position','relative');}
-  }
-  getStyleName() {
-    var {direction='right'} = this.props;
-    if (direction === "right") { 
-      return{Thickness:'width',StartSide:'left',direction:'row'};
-    }
-    else if (direction === "left") { 
-      return{Thickness:'width',StartSide:'right',direction:'row-reverse'}; 
-    }
-    else if (direction === "down") { 
-      return{Thickness:'height',StartSide:'top',direction:'column'};
-    }
-    else if (direction === "up") { 
-      return{Thickness:'height',StartSide:'bottom',direction:'column-reverse'};
-    }
-  } 
-  getOffset(mousePosition,size,e){
-    var {direction:d,start,end,step} = this.props,client = getClient(e),offset;
-    if(d === 'left'){offset = mousePosition.x - client.x;}
-    else if(d === 'right'){offset = client.x - mousePosition.x;}
-    else if(d === 'up'){offset = mousePosition.y - client.y;}
-    else if(d === 'down'){offset = client.y - mousePosition.y;}
-    return  Math.round((end - start) * offset / size / step) * step;
-  }
-  getClassName(className){
-    var {direction} = this.props;
-    var oriention = direction==="left" || direction === "right" ? "horizontal" : "vertical";
-    return 'r-slider ' + oriention + (className && typeof className === 'string'?' ' + className:'')
-  }
-  getValue(value){return typeof value === 'function'?value(this.props):value; }
-  getStyle(){
-    var {style = {},backgroundColor} = this.props;
-    return $.extend({},{background:this.getValue(backgroundColor)},style);
-  }
-  getValidPoints(points,min,max){
+  getValidPoints(points){
+    var {start,end,min = start,max = end,step} = this.props;
     for(var i = 0; i < points.length; i++){
       var point = points[i];
+      point.value = Math.round((point.value - start)/step) * step + start;
       if(point.value < min){point.value = min;}
       if(point.value > max){point.value = max;}
     }
+    return points
   }
-  render() {
-    var {className,id,start,end,min = start,max = end} = this.props;
+  update(points,final,context){
+    var {onchange,ondrag} = this.props; 
+    if(final && onchange){onchange(context)}
+    else if(ondrag){ondrag(context)}
+    else{this.setState({points});}
+  } 
+  
+  getOffset(x,y,size,e){
+    var {start,end,step} = this.props,client = this.getClient(e);
+    return  Math.round((end - start) * this.getDiff(x,y,client) / size / step) * step;
+  }
+  getValue(value,param = this.props){return typeof value === 'function'?value(param):value;}
+  getPercents(){
+    var {start,end} = this.props,{points} = this.state;
+    var percents = points.map((p,i)=>[
+      this.getPercentByValue(i?points[i - 1].value:start,start,end),
+      this.getPercentByValue(p.value,start,end)
+    ]);
+    percents.push([percents[percents.length - 1][1],100])
+    return percents;
+  }
+  decreaseAll(value = this.props.step){
+    var {start,min = start} = this.props;
     var {points} = this.state;
-    this.getValidPoints(points,min,max);
-    var contextValue = {...this.props};
-    contextValue.points = points;
-    contextValue.styleName = this.styleName; 
-    contextValue.update = this.update.bind(this);
-    contextValue.getValue = this.getValue.bind(this);
-    contextValue.getOffset = this.getOffset.bind(this);
-    contextValue.touch = this.touch;
-      return (
-        <ctx.Provider value={contextValue}>
-          <div style={this.getStyle()} className={this.getClassName(className)} ref={this.dom} id={id}>
-            <SliderContainer />
-          </div>
-        </ctx.Provider>
-      );
+    var offset = Math.min(value,points[0].value - this.getValue(min));
+    for(var i = 0; i < points.length; i++){
+      points[i].value -= offset;
+      points[i].value = this.fix(points[i].value,this.fixValue)
+    }
+    this.moved = true;
   }
-}
-Slider.defaultProps = {
-  start:0,step:1,end:100,points:[{value:0}],direction:'right',labels:[],
-  margin:0,labelPosition:{x:0,y:0}
-}
-class SliderContainer extends Component { 
-  static contextType = ctx;
-  constructor(props) {
-    super(props);
-    this.dom = createRef()
+  increaseAll(value = this.props.step){
+    var {end,max=end} = this.props;
+    var {points} = this.state;
+    var offset = Math.min(value,this.getValue(max) - points[points.length - 1].value);
+    for(var i = 0; i < points.length; i++){
+      points[i].value += offset;
+      points[i].value = this.fix(points[i].value,this.fixValue)
+    }
+    this.moved = true;
+    //update(points,true,this.context);
   }
-  render() {
+  mouseDown(e,index,type){
+    e.preventDefault();
+    var {points} = this.state,{start,end,min = start,max = end,onmousedown} = this.props;
+    if(onmousedown){onmousedown(this.props)}
+    var {x,y} = this.getClient(e),dom = $(this.dom.current);
+    var pointContainers = dom.find('.r-range-slider-point-container');
+    var size = dom.find('.r-range-slider-line')[this.oriention === 'horizontal'?'width':'height']();
+    var length = points.length;
+    
+    this.eventHandler('window','mousemove',$.proxy(this.mouseMove,this));
+    this.eventHandler('window','mouseup',$.proxy(this.mouseUp,this));
+    
+    this.moved = false;
+    this.setState({isDown:true});
+    pointContainers.css({zIndex:10}); 
+    
+    if(type === 'point'){
+      let pointContainer = pointContainers.eq(index);
+      pointContainer.css({zIndex:100});
+      pointContainer.find('.r-range-slider-point').addClass('active');
+      var current = points[index].value;
+      var before = index === 0?min:points[index - 1].value;
+      var after = index === points.length - 1?max:points[index + 1].value 
+      this.startOffset = {
+        x,y,size,index:[index],value:[current], 
+        startLimit:before - current,endLimit:after - current,
+      }
+    }
+    else{
+      let pointContainer1 = pointContainers.eq(index - 1);
+      let pointContainer2 = pointContainers.eq(index);
+      pointContainer1.css({zIndex:100});
+      pointContainer2.css({zIndex:100});
+      let p1 = pointContainer1.find('.r-range-slider-point');
+      let p2 = pointContainer2.find('.r-range-slider-point');
+      p1.addClass('active');
+      p2.addClass('active');
+
+      if(index === 0){this.decreaseAll();}else if(index === length){this.increaseAll();}
+      if(index === 0 || index === length){
+        this.startOffset = {
+          x,y,size,
+          index:points.map((p,i)=>i),value:points.map((p)=>p.value), 
+          startLimit:min - points[0].value,endLimit:max - points[length - 1].value,
+        }
+      }
+      else{
+        var point1 = points[index - 1].value,point2 = points[index].value;
+        var before = index === 1?min:points[index - 2];//مقدار قبلی رنج
+        var after = index === length - 1?max:points[index + 1].value; //مقدار بعدی رنج
+        this.startOffset = {
+          x,y,size,index:[index - 1,index],
+          value:[point1,point2],startLimit:before - point1,endLimit:after - point2,
+        }
+      }
+    }
+  }
+  mouseMove(e){
+    var {points} = this.state;
+    var {x,y,size,value,startLimit,endLimit,index} = this.startOffset;
+    var offset = this.getOffset(x,y,size,e);
+    if(offset < startLimit){offset = startLimit;}
+    else if(offset > endLimit){offset = endLimit;}
+    for(var i = 0; i < value.length; i++){
+      var Index = index[i],Value = value[i],point = points[Index],newValue = parseFloat(Value) + offset;
+      if(point.value === newValue){return;}
+      point.value = this.fix(newValue,this.fixValue);
+    }
+    this.moved = true;
+    this.update(points,false,this.context);
+  }
+  mouseUp(){
+    this.eventHandler('window','mousemove',this.mouseMove,'unbind');
+    this.eventHandler('window','mouseup',this.mouseUp,'unbind');
+    var points = $(this.dom.current).find('.r-range-slider-point');
+    points.removeClass('active');
+    this.setState({isDown:false});
+    if(this.moved){this.update(this.state.points,true,this.context);}
+    if(this.props.onmouseup){this.props.onmouseup(this.props);}
+  }
+  getContext(){
+    var context = {...this.props}; 
+    context.oriention = this.oriention;
+    context.getValue = this.getValue.bind(this); 
+    context.isDown = this.state.isDown;
+    context.mouseDown = this.mouseDown.bind(this);
+    context.getStartByStep = this.getStartByStep.bind(this);
+    context.getPercentByValue = this.getPercentByValue.bind(this);
+    context.touch = this.touch;
+    context.update = this.update.bind(this);
+    context.points = this.state.points;
+    return context;
+  }
+  getStyle(){
+    var obj = this.getValue(this.props.style) || {};
+    obj = {...obj};
+    obj.direction = 'ltr';
+    obj.flexDirection = this.flexDirection;
+    return obj
+  }
+  render(){
+    var {points} = this.state;
+    this.context = this.getContext();
+    var {startHtml,endHtml,className,id} = this.props;
+    var percents = this.getPercents();
     return (
-      <div className='r-slider-container' ref={this.dom}>
-        <RSliderPins />
-        <RSliderLabels />
-        <Line />
-        <Ranges />
+      <RRangeSliderContext.Provider value={this.context}>
+        <div ref={this.dom} id={id} className={`r-range-slider ${this.context.oriention}${className?' ' + className:''}`} style={this.getStyle()}>
+          {startHtml && <div style={this.htmlStyle}>{this.getValue(startHtml)}</div>}
+          <div style={{display:'flex',height:'100%',width:'100%',alignItems:'center',justifyContent:'center',position:'relative'}}>
+            <RRangeSliderLine />
+            <RRangeSliderLabels />
+            <RRangeSliderPins />
+            {points.map((p,i)=><RRangeSliderFill key={i} index={i} percent={percents[i]}/>)}
+            <RRangeSliderFill key={points.length} index={points.length} percent={percents[points.length]}/>
+            {points.map((p,i)=><RRangeSliderPoint key={i} index={i} percent={percents[i]}/>)}
+          </div>
+          {endHtml && <div style={this.htmlStyle}>{this.getValue(endHtml)}</div>}
+          
+        </div>
+      </RRangeSliderContext.Provider>
+    );
+  }
+}
+RRangeSlider.defaultProps = {
+  direction:'right',
+  points:[{value:0}],
+  start:-50,end:50,step:1,endRange:{},style:{},activePointStyle:{},
+  pointStyle:{},lineStyle:{},fillStyle:{},valueStyle:{},style:{},textStyle:{},showValue:true,
+}
+
+class RRangeSliderLine extends Component{
+  static contextType = RRangeSliderContext;
+  render(){
+    var {oriention,lineStyle} = this.context;
+    return (<div className='r-range-slider-line' style={lineStyle}></div>)
+  }
+}
+
+class RRangeSliderFill extends Component{ 
+  static contextType = RRangeSliderContext;
+  getFillStyle(){
+    var {getValue,points,fillStyle,endRange} = this.context,{index} = this.props;
+    var point = index === points.length?endRange:points[index];
+    return $.extend({},getValue(fillStyle),getValue(point.fillStyle || {})); 
+  }
+  getContainerStyle(){
+    var {oriention,direction} = this.context,{percent} = this.props;
+    var obj = {}; 
+    obj[{right:'left',left:'right',top:'bottom',bottom:'top'}[direction]] = percent[0] + '%';
+    if(oriention === 'horizontal'){obj.width = (percent[1] - percent[0]) + '%';} 
+    else{obj.height = (percent[1] - percent[0]) + '%';}
+    return obj;
+  }
+   
+  render(){
+    var {touch,mouseDown,points,endRange,getValue,endRange} = this.context;
+    var {index} = this.props;
+    var point = index === points.length?endRange:points[index];
+    var containerProps = {
+      'data-index':index,className:'r-range-slider-fill-container',
+      [touch?'onTouchStart':'onMouseDown']:(e)=>{mouseDown(e,index,'fill')},
+      style:this.getContainerStyle()
+    }
+    return (
+      <div {...containerProps}> 
+        <div className='r-range-slider-fill' style={this.getFillStyle()}></div>
+        {point.text && <div>{getValue(point.text)}</div>}
       </div>
     );
   }
 }
-class RSliderPins extends Component{
-  static contextType = ctx;
-  getPins(){
-    var {start,end,pin} = this.context;
-    var {step,style} = pin;
-    var value = getStartByStep(start,step);
-    var key = 0;
-    var pins = [];
-    var Style = typeof style === 'function'?function(val){return style(val)}:function(val){return style}; 
-    while (value <= end) {
-      pins.push(<RSliderPin value={value} key={key} style={Style(value)}/>);
-      value += step;
-      key++;
+
+class RRangeSliderPoint extends Component{ 
+  static contextType = RRangeSliderContext;
+  getPointStyle(){
+    var {getValue,points,pointStyle} = this.context,{index} = this.props;
+    return $.extend({},getValue(pointStyle),getValue(points[index].pointStyle));
+  }
+  getContainerStyle(){
+    var {direction} = this.context,{percent} = this.props;
+    return {
+      [{right:'left',left:'right',top:'bottom',bottom:'top'}[direction]]:percent[1] + '%'};
+  }
+  getValueStyle(){
+    var {points,showValue,isDown,getValue,valueStyle} = this.context;
+    var {index} = this.props;
+    var point = points[index];
+    if(showValue === false){return {display:'none'};}
+    else if(showValue === 'fixed'){
+      return $.extend({},getValue(valueStyle,point.value),getValue(point.valueStyle,point.value));
     }
-    return pins;
+    else if(isDown){return $.extend({},getValue(valueStyle,point.value),getValue(point.valueStyle,point.value));}
+    else{return {display:'none'};}
   }
   render(){
-    var {pin = {}} = this.context;
-    var {step} = pin;
-    if(!step){return '';}
-    return(<div className='r-slider-pins'>{this.getPins()}</div>);
-  }
-}
-class RSliderPin extends Component{
-  static contextType = ctx;
-  getStyle(style){
-    var {styleName,start,end} = this.context;
-    var {StartSide} = styleName;
-    var {value} = this.props;
-    return $.extend({},{
-      [StartSide]:getPercentByValue(value,start,end) + '%',
-    },style);
-  }
-  render(){
-    var {value,style} = this.props;
+    var {points,touch,mouseDown,editValue} = this.context;
+    var {index} = this.props;
+    var point = points[index];
+    var props = {
+      style:this.getContainerStyle(),'data-index':index,
+      className:'r-range-slider-point-container', 
+      [touch?'onTouchStart':'onMouseDown']:(e)=>{mouseDown(e,index,'point')},
+    };
+    var pointProps = {className:'r-range-slider-point',style:this.getPointStyle()};
+    var valueProps = {
+      style:this.getValueStyle(),
+      className:'r-range-slider-value'
+    };
     return (
-      <div className="r-slider-pin" style={this.getStyle(style)}></div>
+      <div {...props}>
+        <div {...pointProps}>{point.html && point.html}</div>
+        <div {...valueProps}>{editValue?editValue(point,index):point.value}</div>
+      </div>
+      
     );
   }
 }
-class RSliderLabels extends Component{
-  static contextType = ctx;
+
+class RRangeSliderLabels extends Component{
+  static contextType = RRangeSliderContext;
   getLabelsByStep(){
-    var {start,label = {},end} = this.context;
-    var {items = [],step,style} = label;
+    var {start,label = {},end,getStartByStep} = this.context;
+    var {items = [],step,style,edit,rotate} = label;
     var customLabels = items.map((item)=>{return item.value});
     var Style = typeof style === 'function'?function(val){return style(val)}:function(val){return style}; 
     var Labels = [];
@@ -167,32 +326,33 @@ class RSliderLabels extends Component{
       var index = customLabels.indexOf(value);
       if(index === -1){
         Labels.push(
-          <RSliderLabel key={key} label={{value,text:value}} style={Style(value)}/>
+          <RRangeSliderLabel key={key} label={{value,text:value,edit}} rotate={rotate} style={Style(value)} type='step'/>
         );
       }
       value += step;
       value = parseFloat(value.toFixed(6))
       key++;
-    }
+    } 
     return Labels;
   }
   getLabels(){
-    var {label = {},start,end,pin} = this.context;
-    var {items = [],style} = label;
+    var {label = {},start,end} = this.context;
+    var {items = [],style,rotate} = label;
     var Labels = [];
     var Style = typeof style === 'function'?function(val){return style(val)}:function(val){return style}; 
     for(var i = 0; i < items.length; i++){
       var item = items[i];
       if(item.value < start || item.value > end){continue;}
-      Labels.push(<RSliderLabel label={item} key={item.value + 'label'} style={Style(item.value)}/>);
+      Labels.push(<RRangeSliderLabel rotate={rotate} label={item} key={item.value + 'label'} style={$.extend({},Style(item.value),item.style)} type='list'/>);
     }
     return Labels;
   }
   render(){
-    var {label = {}} = this.context;
+    var {label} = this.context; 
+    if(!label){return null;}
     var {step} = label;
     return (
-      <div className='r-slider-labels'>
+      <div className='r-range-slider-labels'>
         {step && this.getLabelsByStep()}
         {this.getLabels()}
       </div>
@@ -200,17 +360,20 @@ class RSliderLabels extends Component{
   }
 }
 
-class RSliderLabel extends Component{
-  static contextType = ctx;
-  getStyle(style){
-    var {styleName,start,end,getValue} = this.context;
-    var {StartSide} = styleName;
-    var {value,color} = this.props.label;
-    return $.extend({},{
-      [StartSide]:getPercentByValue(value,start,end) + '%',
-      color:getValue(color)
-    },style);
-  }
+class RRangeSliderLabel extends Component{
+  static contextType = RRangeSliderContext;
+  getStyle(){
+    var {start,end,getPercentByValue,direction,style} = this.context;
+    var {label,rotate,style} = this.props;
+    var {value} = label;
+    var obj = {...style};
+    obj[{right:'left',left:'right',top:'bottom',bottom:'top'}[direction]] = getPercentByValue(value,start,end) + '%';
+    if(rotate){
+      obj.transform = `rotate(${rotate + 'deg'})`;
+      obj.justifyContent = rotate > 0?'flex-start':'flex-end' 
+    }
+    return obj; 
+  } 
   click(e){
     var {points,update} = this.context;
     var {value} = this.props.label;
@@ -224,274 +387,69 @@ class RSliderLabel extends Component{
     update(points,true,this.context);
   }
   render(){
-    var {label,style} = this.props;
-    var {text,id,className} = label;
+    var {label,type} = this.props;
+    var {text,id,className,edit} = label;
     return (
       <div
         id={id} 
-        className={`r-slider-label${className?' ' + className:''}`} 
-        style={this.getStyle(style)} 
+        className={`r-range-slider-label${className?' ' + className:''}`} 
+        style={this.getStyle()} 
         onClick={this.click.bind(this)} 
       >
-        {text}
+        {edit && type === 'step'?edit(text):text}
       </div>
     );
   }
 }
 
-class Line extends Component{
-  static contextType = ctx;
-  render(){
-    var {lineStyle = {}} = this.context
-    return(<div style={lineStyle} className="r-slider-line"></div>);
+class RRangeSliderPins extends Component{
+  static contextType = RRangeSliderContext;
+  getPinsByStep(){
+    var {start,end,pin,getStartByStep} = this.context,{step,style = {}} = pin;
+    var value = getStartByStep(start,step);
+    var key = 0,pins = []; 
+    var Style = typeof style === 'function'?(val)=>style(val):()=>style; 
+    while (value <= end) {
+      pins.push(<RRangeSliderPin value={value} key={key} style={Style(value)}/>);
+      value += step;
+      key++;
+    }
+    return pins;
   }
-} 
-class Ranges extends Component{
-  static contextType = ctx;
+  getPins(){
+    var {pin = {},start,end} = this.context;
+    var {items = [],style} = pin;
+    var Pins = [];
+    var Style = typeof style === 'function'?function(val){return style(val)}:function(val){return style}; 
+    for(var i = 0; i < items.length; i++){
+      var item = items[i];
+      if(item.value < start || item.value > end){continue;}
+      Pins.push(<RRangeSliderPin value={item.value} key={item.value + 'pin'} style={$.extend({},Style(item.value),item.style)}/>);
+    }
+    return Pins;
+  }
   render(){
-    const {points,styleName} = this.context;
-    var ranges = points.map((value,i)=>{return <Range index={i} key={i}/>});
+    var {pin = {}} = this.context;
+    var {step,items} = pin;
     return(
-      <div className="r-slider-ranges" style={{flexDirection:styleName.direction}}>
-        {ranges}
-        <Range key={points.length} index={points.length}/>
+      <div className='r-range-slider-pins'>
+        {step && this.getPinsByStep()}
+        {items && this.getPins()}
       </div>
     );
   }
 }
-class Range extends Component{
-  static contextType = ctx;
-  
-  render(){
-    var {points,showPoint} = this.context;
-    var {index} = this.props;
-    var length = points.length; 
-    return(
-      <Fragment>
-        <RSiderSpace index={index} />
-        {index < length && showPoint !== false && <RSliderPoint index={index} />}
-      </Fragment>
-    );
-  }
-} 
-class RSiderSpace extends Component{
-  static contextType = ctx;
-  constructor(props){
-    super(props);
-    this.dom = createRef();
-  }
+class RRangeSliderPin extends Component{
+  static contextType = RRangeSliderContext;
   getStyle(){
-    var {start,min = start,end,max = end,points} = this.context;
-    var {index} = this.props;
-    var value = index === points.length?max:points[index].value;
-    var beforeValue = index === 0?start:points[index - 1].value ;
-    var percent = getPercentByValue(value,start,end);
-    var beforePercent = getPercentByValue(beforeValue,start,end);
-    return {flexGrow:(percent - beforePercent),};
-  }
-  getFillStyle() {
-    var {points,endRange,getValue} = this.context;
-    var {index} = this.props;
-    var value = index === points.length?endRange:points[index];
-    return {
-      background:value && getValue(value.fillColor)
-    };
-  }
-  mouseDown(e){
-    this.moved = false;
-    var {points,showValue,start,end,min=start,max=end,styleName,changable} = this.context;
-    if(changable === false){return;}
-    var {Thickness} = styleName;
-    var length = points.length;
-    var space = $(this.dom.current);
-    var container = space.parents('.r-slider-container');
-    var {index} = this.props;
-    $('.r-slider-point-container').css({zIndex:10});
-    space.next('.r-slider-point-container').css({zIndex:100});
-    space.prev('.r-slider-point-container').css({zIndex:100});
-    
-    if(showValue !== false){
-      container.find('.r-slider-value').show();
-    }
-    if(index === 0){
-      this.decreaseAll();
-    }
-    else if(index === length){
-      this.increaseAll();
-    }
-    else{
-      this.startOffset = {
-        mousePosition:getClient(e),
-        startLimit:index === 1?min:points[index - 2].value,
-        endLimit:index === length - 1?max:points[index + 1].value,
-        index,
-        startValue:points[index - 1].value,
-        endValue:points[index].value,
-        size: container[Thickness]()
-      };
-      eventHandler('window','mousemove',$.proxy(this.mouseMove,this));
-      
-    }
-    eventHandler('window','mouseup',$.proxy(this.mouseUp,this));
-  }
-  mouseMove(e){
-    var {points,update,getOffset} = this.context;
-    var {mousePosition,index,size,startValue,endValue,startLimit,endLimit} = this.startOffset;
-    var offset = getOffset(mousePosition,size,e);
-    var lastPoint = points[index - 1],point = points[index];
-    if(lastPoint.value === offset + startValue){return;}
-    if(point.value === offset + endValue){return;}
-    this.moved = true;
-    lastPoint.value = offset + startValue;
-    point.value = offset + endValue;
-    if(lastPoint.value < startLimit){
-      lastPoint.value = startLimit;
-      point.value = fix(startLimit + (endValue - startValue),this.fixValue);
-    }
-    if(point.value > endLimit){
-      point.value = endLimit;
-      lastPoint.value = fix(endLimit - (endValue - startValue),this.fixValue);
-    }
-    console.log('ok')
-    update(points,false,this.context);
-  }
-  mouseUp(){
-    eventHandler('window','mousemove',this.mouseMove,'unbind');
-    eventHandler('window','mouseup',this.mouseUp,'unbind');
-    var {update,showValue,points} = this.context;
-    if(showValue !== 'fix'){
-      var space = $(this.dom.current);
-      space.parents('.r-slider-container').find('.r-slider-value').hide();
-    }
-    if(this.moved){update(points,true,this.context);}
-  }
-  decreaseAll(){
-    var {start,min = start,step,points,update} = this.context;
-    var offset = Math.min(step,points[0].value - min);
-    for(var i = 0; i < points.length; i++){
-      points[i].value -= offset;
-      points[i].value = fix(points[i].value,this.fixValue)
-    }
-    this.moved = true;
-    //update(points,true,this.context);
-  }
-  increaseAll(){
-    var {end,max=end,step,points,update} = this.context;
-    var offset = Math.min(step,max - points[points.length - 1].value);
-    for(var i = 0; i < points.length; i++){
-      points[i].value += offset;
-      points[i].value = fix(points[i].value,this.fixValue)
-    }
-    this.moved = true;
-    //update(points,true,this.context);
+    var {start,end,direction,getPercentByValue} = this.context,{value,style} = this.props;
+    var obj = {...style};
+    obj[{right:'left',left:'right',top:'bottom',bottom:'top'}[direction]] = getPercentByValue(value,start,end) + '%';
+    return obj;
   }
   render(){
-    const {points,showFill,endRange,touch} = this.context;
-    var {index} = this.props;
-    var length = points.length;
-    var value = index === length?endRange:points[index];
-    if(showFill === false){return '';}
-    var props = {[touch?'onTouchStart':'onMouseDown']:this.mouseDown.bind(this)}
-    return(
-      <div ref={this.dom} className="r-slider-space" style={this.getStyle()} {...props}>
-        <div className="r-slider-fill" data-index={index} style={this.getFillStyle()}>
-        </div>
-        <div className="r-slider-text">{value && value.text?value.text:''}</div>
-      </div>
-    );
-  } 
-} 
-
-class RSliderPoint extends Component{
-  static contextType = ctx;
-  constructor(props){
-    super(props);
-    this.dom = createRef();
-  }
-  getStyle() {
-    const {points,styleName,start,end} = this.context;
-    var {index} = this.props;
-    return {
-      [styleName.StartSide]:getPercentByValue(points[index].value,start,end) + '%',
-    };
-  }
-  getNumberStyle(){
-    const {showValue} = this.context;
-    return {
-      display:showValue !== 'fix'?'none':'block',
-    };
-  }
-  mouseDown(e){
-    this.moved = false;
-    var {update,changable,start,end,points,min=start,max=end,showValue,styleName,onpointmousedown} = this.context;
-    var {Thickness} = styleName;
-    var {index} = this.props;
-    if(changable === false){return;} 
-    var button = $(this.dom.current);
-    $('.r-slider-point-container').css({zIndex:10});
-    button.css({zIndex:100});
-    var container = button.parents('.r-slider-container');
-    if(showValue !== false){
-      container.find('.r-slider-value').show();
-    }
-    var value = points[index].value;
-    this.startOffset = {
-      mousePosition:getClient(e),
-      startLimit:index === 0?min:points[index - 1].value,
-      endLimit:index === points.length - 1?max:points[index + 1].value, 
-      index,value,
-      size: container[Thickness]()
-    };
-    if(onpointmousedown){onpointmousedown(this.context)}
-    if(points.length === 1 && start === 0 && end === 1){
-      points[0].value = points[0].value === 0?1:0;
-      update(points,true,this.context);
-    }
-    else{
-      eventHandler('window','mousemove',$.proxy(this.mouseMove,this));
-    }
-    eventHandler('window','mouseup',$.proxy(this.mouseUp,this));
-  }
-  mouseMove(e){
-    var {update,points,getOffset} = this.context;
-    var {mousePosition,size,value,startLimit,endLimit,index} = this.startOffset;
-    var point = points[index];
-    var newValue = parseFloat(value) + getOffset(mousePosition,size,e);
-    if(newValue < startLimit){newValue = startLimit;}
-    if(newValue > endLimit){newValue = endLimit;}
-    if(point.value === newValue){return;}
-    this.moved = true;
-    point.value = fix(newValue,this.fixValue);
-    update(points,false,this.context);
-  }
-  mouseUp(){
-    eventHandler('window','mousemove',this.mouseMove,'unbind');
-    eventHandler('window','mouseup',this.mouseUp,'unbind');
-    var {showValue,update,points} = this.context;
-    if(showValue !== 'fix'){
-      var button = $(this.dom.current);
-      button.parents('.r-slider-container').find('.r-slider-value').hide();
-    }
-    if(this.moved){
-      update(points,true,this.context);
-    }
-  }
-  render(){
-    var {index} = this.props;
-    var {points,showValue,showButton,getValue,touch} = this.context;
-    if(showButton === false){return '';}
-    var value = points[index]; 
-    var props = {[touch?'onTouchStart':'onMouseDown']:this.mouseDown.bind(this),className:"r-slider-point-container"};
-    return(
-      <div ref={this.dom} style={this.getStyle()} {...props}>
-        <div className={`r-slider-point${value.className?' ' + value.className:''}`} style={typeof value.style === 'function'?value.style(value):value.style}>
-          {
-          showValue !== false && 
-          <div style={this.getNumberStyle()} className="r-slider-value">{value.value}</div>
-        }
-        {getValue(value.html) || ''}
-        </div>
-      </div>
+    return (
+      <div className="r-range-slider-pin" style={this.getStyle()}></div>
     );
   }
-} 
+}

@@ -1,13 +1,12 @@
 {
   "name": "r-range-slider",
-  "version": "2.2.3",
+  "version": "3.0.1",
   "description": "all in one range slider, single range , double range , multi range",
   "main": "index.js",
   "dependencies": {
     "jquery": "^3.4.1",
-    "r-actions": "^1.0.15",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0"
   },
   "scripts": {
     "start": "react-scripts start",
