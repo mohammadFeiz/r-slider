@@ -8,30 +8,8 @@ r-range-slider is a range slider created by reactjs.
 - Responsive.
 - right , left ,top ,botton direction support.
 
-<h3>Advantages of r-slider</h3>
-<ul>
-<li>
-easy to use.
-</li>
-  <li>
-customizable.
-</li>
-  <li>
-unlimit style.
-</li>
-  <li>
-responsive.
-</li>
-  <li>
-use in many ui controls like:switch,slider,wizard,progressbar,games and other.
-</li>
-  <li>
-rtl,ltr and vertical slider support.
-</li>
-<li>
-mobile support(mobile browser,phonegap,cordova and ....).
-</li>
-</ul>
+### Images
+
 <h3>Usage</h3>
 npm install @mohamadfeiz/r-slider <br/>
 es5: var Slider = require("@mohamadfeiz/r-slider"); <br/>
