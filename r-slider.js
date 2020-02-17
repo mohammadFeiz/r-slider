@@ -6,7 +6,7 @@ export default class RRangeSlider extends Component{
   constructor(props){
     super(props);
     var {direction,points,htmlStyle} = this.props;
-    
+    if(['left','right','top','bottom'].indexOf(direction) === -1){console.error('r-range-slider direction props is not valid')}
     //direction requirments
     if(direction === 'left'){this.getDiff = function (x,y,client){return x - client.x;}; this.oriention = 'horizontal';}
     else if(direction === 'right'){this.getDiff = function (x,y,client){return client.x - x;}; this.oriention = 'horizontal';}
@@ -18,7 +18,11 @@ export default class RRangeSlider extends Component{
     },htmlStyle);
     this.touch = this.isMobile();
     this.dom = createRef();
-    this.state = {isDown:false,points:this.getValidPoints(points),getValidPoints:this.getValidPoints.bind(this)} 
+    this.state = {
+      isDown:false,
+      points:this.getValidPoints(points),
+      getValidPoints:this.getValidPoints.bind(this)
+    } 
     var step = this.props.step.toString();
     var dotPos = step.indexOf('.');
     this.fixValue = dotPos === -1?0:step.length - dotPos - 1;
@@ -42,12 +46,13 @@ export default class RRangeSlider extends Component{
     return {points:state.getValidPoints(props.points)}
   }
   getValidPoints(points){
+    if(this.props.values){return points;}
     var {start,end,min = start,max = end,step} = this.props;
     for(var i = 0; i < points.length; i++){
       var point = points[i];
       point.value = Math.round((point.value - start)/step) * step + start;
       if(point.value < min){point.value = min;}
-      if(point.value > max){point.value = max;}
+      if(point.value > max){point.value = max;} 
     }
     return points
   }
@@ -59,12 +64,23 @@ export default class RRangeSlider extends Component{
   } 
   
   getOffset(x,y,size,e){
-    var {start,end,step} = this.props,client = this.getClient(e);
+    var {start,end,step,values} = this.props,client = this.getClient(e);
+    if(values){start = 0; end = values.length - 1;}
     return  Math.round((end - start) * this.getDiff(x,y,client) / size / step) * step;
   }
   getValue(value,param = this.props){return typeof value === 'function'?value(param):value;}
   getPercents(){
-    var {start,end} = this.props,{points} = this.state;
+    var {start,end,values} = this.props,{points} = this.state;      
+    if(values){
+      start = 0; end = values.length - 1;
+      var indexes = points.map((p,i)=>values.indexOf(p.value));
+      var percents = indexes.map((index,i)=>[
+        this.getPercentByValue(i?indexes[i - 1]:start,start,end),
+        this.getPercentByValue(index,start,end)
+      ]);
+      percents.push([percents[percents.length - 1][1],100]);
+      return percents;  
+    }
     var percents = points.map((p,i)=>[
       this.getPercentByValue(i?points[i - 1].value:start,start,end),
       this.getPercentByValue(p.value,start,end)
@@ -73,22 +89,50 @@ export default class RRangeSlider extends Component{
     return percents;
   }
   decreaseAll(value = this.props.step){
-    var {start,min = start} = this.props;
     var {points} = this.state;
-    var offset = Math.min(value,points[0].value - this.getValue(min));
-    for(var i = 0; i < points.length; i++){
-      points[i].value -= offset;
-      points[i].value = this.fix(points[i].value,this.fixValue)
+    var {values} = this.props;
+    
+    if(values){
+      var start = 0;
+      var {min = start} = this.props;
+      var offset = values.indexOf(points[0].value) === values.indexOf(min)?0:1; 
+      for(var i = 0; i < points.length; i++){
+        var index = values.indexOf(points[i].value);
+        points[i].value = values[index - offset];
+      }
     }
+    else{
+      var start = this.props.start;
+      var {min = start} = this.props;
+      var offset = Math.min(value,points[0].value - this.getValue(min));
+      for(var i = 0; i < points.length; i++){
+        points[i].value -= offset;
+        points[i].value = this.fix(points[i].value,this.fixValue)
+      }
+    }
+    
     this.moved = true;
   }
   increaseAll(value = this.props.step){
-    var {end,max=end} = this.props;
     var {points} = this.state;
-    var offset = Math.min(value,this.getValue(max) - points[points.length - 1].value);
-    for(var i = 0; i < points.length; i++){
-      points[i].value += offset;
-      points[i].value = this.fix(points[i].value,this.fixValue)
+    var {values} = this.props;
+    if(values){
+      var end = points.length - 1;
+      var {max = end} = this.props;
+      var offset = values.indexOf(points[points.length - 1].value) === values.indexOf(max)?0:1;
+      for(var i = 0; i < points.length; i++){
+        var index = values.indexOf(points[i].value);
+        points[i].value = values[index + offset];
+      }
+    }
+    else{
+      var end = this.props.end;
+      var {max = end} = this.props;
+      var offset = Math.min(value,this.getValue(max) - points[points.length - 1].value);
+      for(var i = 0; i < points.length; i++){
+        points[i].value += offset;
+        points[i].value = this.fix(points[i].value,this.fixValue)
+      }
     }
     this.moved = true;
     //update(points,true,this.context);
@@ -150,6 +194,64 @@ export default class RRangeSlider extends Component{
       }
     }
   }
+  mouseDownByValues(e,index,type){
+    e.preventDefault();
+    var {points} = this.state,{values} = this.props,start = values[0],end = values[values.length - 1],{min = start,max = end,onmousedown} = this.props;
+    if(onmousedown){onmousedown(this.props)}
+    var {x,y} = this.getClient(e),dom = $(this.dom.current);
+    var pointContainers = dom.find('.r-range-slider-point-container');
+    var size = dom.find('.r-range-slider-line')[this.oriention === 'horizontal'?'width':'height']();
+    var length = points.length;
+    
+    this.eventHandler('window','mousemove',$.proxy(this.mouseMoveByValues,this));
+    this.eventHandler('window','mouseup',$.proxy(this.mouseUp,this));
+    
+    this.moved = false;
+    this.setState({isDown:true});
+    pointContainers.css({zIndex:10}); 
+    min = values.indexOf(min);
+    max = values.indexOf(max);
+    if(type === 'point'){
+      let pointContainer = pointContainers.eq(index);
+      pointContainer.css({zIndex:100});
+      pointContainer.find('.r-range-slider-point').addClass('active');
+      var current = values.indexOf(points[index].value);
+      var before = index === 0?min:values.indexOf(points[index - 1].value);
+      var after = index === points.length - 1?max:values.indexOf(points[index + 1].value); 
+      this.startOffset = {
+        x,y,size,index:[index],value:[current], 
+        startLimit:before - current,endLimit:after - current,
+      }
+    }
+    else{
+      let pointContainer1 = pointContainers.eq(index - 1);
+      let pointContainer2 = pointContainers.eq(index);
+      pointContainer1.css({zIndex:100});
+      pointContainer2.css({zIndex:100});
+      let p1 = pointContainer1.find('.r-range-slider-point');
+      let p2 = pointContainer2.find('.r-range-slider-point');
+      p1.addClass('active');
+      p2.addClass('active');  
+
+      if(index === 0){this.decreaseAll();}else if(index === length){this.increaseAll();}
+      if(index === 0 || index === length){ 
+        this.startOffset = {
+          x,y,size,
+          index:points.map((p,i)=>i),value:points.map((p)=>values.indexOf(p.value)), 
+          startLimit:min - values.indexOf(points[0].value),endLimit:max - values.indexOf(points[length - 1].value),
+        }
+      }
+      else{
+        var point1 = values.indexOf(points[index - 1].value),point2 = values.indexOf(points[index].value);
+        var before = index === 1?min:values.indexOf(points[index - 2].value);//مقدار قبلی رنج
+        var after = index === length - 1?max:values.indexOf(points[index + 1].value); //مقدار بعدی رنج
+        this.startOffset = {
+          x,y,size,index:[index - 1,index],
+          value:[point1,point2],startLimit:before - point1,endLimit:after - point2,
+        }
+      }
+    }
+  }
   mouseMove(e){
     var {points} = this.state;
     var {x,y,size,value,startLimit,endLimit,index} = this.startOffset;
@@ -160,12 +262,27 @@ export default class RRangeSlider extends Component{
       var Index = index[i],Value = value[i],point = points[Index],newValue = parseFloat(Value) + offset;
       if(point.value === newValue){return;}
       point.value = this.fix(newValue,this.fixValue);
+    } 
+    this.moved = true;
+    this.update(points,false,this.context);
+  }
+  mouseMoveByValues(e){
+    var {points} = this.state,{values} = this.props;
+    var {x,y,size,value,startLimit,endLimit,index} = this.startOffset;
+    var offset = this.getOffset(x,y,size,e);
+    if(offset < startLimit){offset = startLimit;}
+    else if(offset > endLimit){offset = endLimit;}
+    for(var i = 0; i < value.length; i++){
+      var Index = index[i],Value = value[i],point = points[Index],newValue = Value + offset;
+      if(point.value === values[newValue]){return;}
+      point.value = values[newValue];
     }
     this.moved = true;
     this.update(points,false,this.context);
   }
   mouseUp(){
     this.eventHandler('window','mousemove',this.mouseMove,'unbind');
+    this.eventHandler('window','mousemove',this.mouseMoveByValues,'unbind');
     this.eventHandler('window','mouseup',this.mouseUp,'unbind');
     var points = $(this.dom.current).find('.r-range-slider-point');
     points.removeClass('active');
@@ -179,6 +296,7 @@ export default class RRangeSlider extends Component{
     context.getValue = this.getValue.bind(this); 
     context.isDown = this.state.isDown;
     context.mouseDown = this.mouseDown.bind(this);
+    context.mouseDownByValues = this.mouseDownByValues.bind(this);
     context.getStartByStep = this.getStartByStep.bind(this);
     context.getPercentByValue = this.getPercentByValue.bind(this);
     context.touch = this.touch;
@@ -249,12 +367,15 @@ class RRangeSliderFill extends Component{
   }
    
   render(){
-    var {touch,mouseDown,points,endRange,getValue,endRange} = this.context;
+    var {touch,mouseDown,mouseDownByValues,points,endRange,getValue,endRange,values} = this.context;
     var {index} = this.props;
     var point = index === points.length?endRange:points[index];
     var containerProps = {
       'data-index':index,className:'r-range-slider-fill-container',
-      [touch?'onTouchStart':'onMouseDown']:(e)=>{mouseDown(e,index,'fill')},
+      [touch?'onTouchStart':'onMouseDown']:(e)=>{
+        if(values){mouseDownByValues(e,index,'fill')}
+        else{mouseDown(e,index,'fill')}
+      },
       style:this.getContainerStyle()
     }
     return (
@@ -289,13 +410,16 @@ class RRangeSliderPoint extends Component{
     else{return {display:'none'};}
   }
   render(){
-    var {points,touch,mouseDown,editValue} = this.context;
+    var {points,touch,mouseDown,mouseDownByValues,editValue,values} = this.context;
     var {index} = this.props;
     var point = points[index];
     var props = {
       style:this.getContainerStyle(),'data-index':index,
       className:'r-range-slider-point-container', 
-      [touch?'onTouchStart':'onMouseDown']:(e)=>{mouseDown(e,index,'point')},
+      [touch?'onTouchStart':'onMouseDown']:(e)=>{
+        if(values){mouseDownByValues(e,index,'point')}
+        else{mouseDown(e,index,'point')}
+      },
     };
     var pointProps = {className:'r-range-slider-point',style:this.getPointStyle()};
     var valueProps = {
@@ -315,9 +439,13 @@ class RRangeSliderPoint extends Component{
 class RRangeSliderLabels extends Component{
   static contextType = RRangeSliderContext;
   getLabelsByStep(){
-    var {start,label = {},end,getStartByStep} = this.context;
+    var {start,label = {},end,getStartByStep,values} = this.context;
+    if(values){
+      start = 0; 
+      end = values.length - 1;
+    }
     var {items = [],step,style,edit,rotate} = label;
-    var customLabels = items.map((item)=>{return item.value});
+    var customLabels = values?items.map((item)=>values.indexOf(item.value)):items.map((item)=>item.value);
     var Style = typeof style === 'function'?function(val){return style(val)}:function(val){return style}; 
     var Labels = [];
     var value = getStartByStep(start,step); 
@@ -326,7 +454,7 @@ class RRangeSliderLabels extends Component{
       var index = customLabels.indexOf(value);
       if(index === -1){
         Labels.push(
-          <RRangeSliderLabel key={key} label={{value,text:value,edit}} rotate={rotate} style={Style(value)} type='step'/>
+          <RRangeSliderLabel key={key} label={{value,text:values?values[value]:value,edit}} rotate={rotate} style={Style(value)} type='step'/>
         );
       }
       value += step;
@@ -336,14 +464,24 @@ class RRangeSliderLabels extends Component{
     return Labels;
   }
   getLabels(){
-    var {label = {},start,end} = this.context;
-    var {items = [],style,rotate} = label;
-    var Labels = [];
+    var {label = {},values} = this.context,Labels = [],{items = [],style,rotate} = label;
     var Style = typeof style === 'function'?function(val){return style(val)}:function(val){return style}; 
-    for(var i = 0; i < items.length; i++){
-      var item = items[i];
-      if(item.value < start || item.value > end){continue;}
-      Labels.push(<RRangeSliderLabel rotate={rotate} label={item} key={item.value + 'label'} style={$.extend({},Style(item.value),item.style)} type='list'/>);
+    if(values){
+      var start = 0,end = values.length - 1;
+      for(var i = 0; i < items.length; i++){
+        var item = items[i];
+        var index = values.indexOf(item.value);
+        if(index === -1){continue;}
+        Labels.push(<RRangeSliderLabel rotate={rotate} label={{value:index,text:item.text}} key={item.value + 'label'} style={$.extend({},Style(item.value),item.style)} type='list'/>);
+      }
+    }
+    else{
+      var {start,end} = this.context;
+      for(var i = 0; i < items.length; i++){
+        var item = items[i];
+        if(item.value < start || item.value > end){continue;}
+        Labels.push(<RRangeSliderLabel rotate={rotate} label={item} key={item.value + 'label'} style={$.extend({},Style(item.value),item.style)} type='list'/>);
+      }
     }
     return Labels;
   }
@@ -363,7 +501,8 @@ class RRangeSliderLabels extends Component{
 class RRangeSliderLabel extends Component{
   static contextType = RRangeSliderContext;
   getStyle(){
-    var {start,end,getPercentByValue,direction,style} = this.context;
+    var {start,end,getPercentByValue,direction,style,values} = this.context;
+    if(values){start = 0; end = values.length - 1;}
     var {label,rotate,style} = this.props;
     var {value} = label;
     var obj = {...style};
@@ -390,14 +529,13 @@ class RRangeSliderLabel extends Component{
     var {label,type} = this.props;
     var {text,id,className,edit} = label;
     return (
-      <div
-        id={id} 
-        className={`r-range-slider-label${className?' ' + className:''}`} 
-        style={this.getStyle()} 
-        onClick={this.click.bind(this)} 
-      >
-        {edit && type === 'step'?edit(text):text}
-      </div>
+        <div
+          id={id} onClick={this.click.bind(this)} style={this.getStyle()} 
+          className={`r-range-slider-label${className?' ' + className:''}`} 
+        >
+          {edit && type === 'step'?edit(text):text}
+        </div>
+      
     );
   }
 }
@@ -405,7 +543,8 @@ class RRangeSliderLabel extends Component{
 class RRangeSliderPins extends Component{
   static contextType = RRangeSliderContext;
   getPinsByStep(){
-    var {start,end,pin,getStartByStep} = this.context,{step,style = {}} = pin;
+    var {start,end,pin,getStartByStep,values} = this.context,{step,style = {}} = pin;
+    if(values){start = 0; end = values.length - 1;}
     var value = getStartByStep(start,step);
     var key = 0,pins = []; 
     var Style = typeof style === 'function'?(val)=>style(val):()=>style; 
@@ -442,7 +581,8 @@ class RRangeSliderPins extends Component{
 class RRangeSliderPin extends Component{
   static contextType = RRangeSliderContext;
   getStyle(){
-    var {start,end,direction,getPercentByValue} = this.context,{value,style} = this.props;
+    var {start,end,direction,getPercentByValue,values} = this.context,{value,style} = this.props;
+    if(values){start = 0; end = values.length - 1;}
     var obj = {...style};
     obj[{right:'left',left:'right',top:'bottom',bottom:'top'}[direction]] = getPercentByValue(value,start,end) + '%';
     return obj;
