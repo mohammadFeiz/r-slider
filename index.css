@@ -68,6 +68,7 @@
 }
 .r-range-slider-fill{
   position:absolute;
+  
 }
 .r-range-slider.horizontal .r-range-slider-fill{
   width:100%;
@@ -87,7 +88,10 @@
   height:0;
   font-size:10px;
   white-space:nowrap;
+  z-index:100;
+  
 }
+
 .r-range-slider.horizontal .r-range-slider-label{
   top:34px;
 }
@@ -106,3 +110,4 @@
   width:10px;
   height:1px;
 }
+
