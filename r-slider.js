@@ -43,11 +43,13 @@ export default class RRangeSlider extends Component{
     if(type === 'bind'){element.bind(event, action)}
   }
   static getDerivedStateFromProps(props,state){
-    return {points:state.getValidPoints(props.points)}
+    var {start,end,min = start,max = end} = props;
+    var points = state.getValidPoints(props.points,min,max);
+    return {points}
   }
-  getValidPoints(points){
+  getValidPoints(points,start = this.props.start,end = this.props.end){
     if(this.props.values){return points;}
-    var {start,end,min = start,max = end,step} = this.props;
+    var {min = start,max = end,step} = this.props;
     for(var i = 0; i < points.length; i++){
       var point = points[i];
       point.value = Math.round((point.value - start)/step) * step + start;
