@@ -18,9 +18,9 @@ export default class RRangeSlider extends Component{
     },htmlStyle);
     this.touch = this.isMobile();
     this.dom = createRef();
-    this.state = {
+    this.state = { 
       isDown:false,
-      points:this.getValidPoints(points),
+      points:this.getValidPoints(points), 
       getValidPoints:this.getValidPoints.bind(this)
     } 
     var step = this.props.step.toString();
@@ -44,12 +44,12 @@ export default class RRangeSlider extends Component{
   }
   static getDerivedStateFromProps(props,state){
     var {start,end,min = start,max = end} = props;
-    var points = state.getValidPoints(props.points,min,max);
+    var points = state.getValidPoints(props.points);
     return {points}
   }
-  getValidPoints(points,start = this.props.start,end = this.props.end){
+  getValidPoints(points){
     if(this.props.values){return points;}
-    var {min = start,max = end,step} = this.props;
+    var {start,end,min = start,max = end,step} = this.props;
     for(var i = 0; i < points.length; i++){
       var point = points[i];
       point.value = Math.round((point.value - start)/step) * step + start;
@@ -448,7 +448,7 @@ class RRangeSliderLabels extends Component{
     }
     var {items = [],step,style,edit,rotate} = label;
     var customLabels = values?items.map((item)=>values.indexOf(item.value)):items.map((item)=>item.value);
-    var Style = typeof style === 'function'?function(val){return style(val)}:function(val){return style}; 
+    var Style = typeof style === 'function'?(val)=>{return style(val,this.context)}:function(val){return style}; 
     var Labels = [];
     var value = getStartByStep(start,step); 
     var key = 0;
@@ -467,7 +467,7 @@ class RRangeSliderLabels extends Component{
   }
   getLabels(){
     var {label = {},values} = this.context,Labels = [],{items = [],style,rotate} = label;
-    var Style = typeof style === 'function'?function(val){return style(val)}:function(val){return style}; 
+    var Style = typeof style === 'function'?(val)=>{return style(val,this.context)}:function(val){return style}; 
     if(values){
       var start = 0,end = values.length - 1;
       for(var i = 0; i < items.length; i++){
@@ -549,7 +549,7 @@ class RRangeSliderPins extends Component{
     if(values){start = 0; end = values.length - 1;}
     var value = getStartByStep(start,step);
     var key = 0,pins = []; 
-    var Style = typeof style === 'function'?(val)=>style(val):()=>style; 
+    var Style = typeof style === 'function'?(val)=>style(val,this.context):()=>style; 
     while (value <= end) {
       pins.push(<RRangeSliderPin value={value} key={key} style={Style(value)}/>);
       value += step;

@@ -43,9 +43,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 var RRangeSliderContext = (0, _react.createContext)();
 
-var RRangeSlider =
-/*#__PURE__*/
-function (_Component) {
+var RRangeSlider = /*#__PURE__*/function (_Component) {
   _inherits(RRangeSlider, _Component);
 
   function RRangeSlider(props) {
@@ -171,14 +169,13 @@ function (_Component) {
   }, {
     key: "getValidPoints",
     value: function getValidPoints(points) {
-      var start = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.props.start;
-      var end = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.props.end;
-
       if (this.props.values) {
         return points;
       }
 
       var _this$props2 = this.props,
+          start = _this$props2.start,
+          end = _this$props2.end,
           _this$props2$min = _this$props2.min,
           min = _this$props2$min === void 0 ? start : _this$props2$min,
           _this$props2$max = _this$props2.max,
@@ -727,7 +724,7 @@ function (_Component) {
           min = _props$min === void 0 ? start : _props$min,
           _props$max = props.max,
           max = _props$max === void 0 ? end : _props$max;
-      var points = state.getValidPoints(props.points, min, max);
+      var points = state.getValidPoints(props.points);
       return {
         points: points
       };
@@ -755,9 +752,7 @@ RRangeSlider.defaultProps = (_RRangeSlider$default = {
   valueStyle: {}
 }, _defineProperty(_RRangeSlider$default, "style", {}), _defineProperty(_RRangeSlider$default, "textStyle", {}), _defineProperty(_RRangeSlider$default, "showValue", true), _RRangeSlider$default);
 
-var RRangeSliderLine =
-/*#__PURE__*/
-function (_Component2) {
+var RRangeSliderLine = /*#__PURE__*/function (_Component2) {
   _inherits(RRangeSliderLine, _Component2);
 
   function RRangeSliderLine() {
@@ -784,9 +779,7 @@ function (_Component2) {
 
 _defineProperty(RRangeSliderLine, "contextType", RRangeSliderContext);
 
-var RRangeSliderFill =
-/*#__PURE__*/
-function (_Component3) {
+var RRangeSliderFill = /*#__PURE__*/function (_Component3) {
   _inherits(RRangeSliderFill, _Component3);
 
   function RRangeSliderFill() {
@@ -868,9 +861,7 @@ function (_Component3) {
 
 _defineProperty(RRangeSliderFill, "contextType", RRangeSliderContext);
 
-var RRangeSliderPoint =
-/*#__PURE__*/
-function (_Component4) {
+var RRangeSliderPoint = /*#__PURE__*/function (_Component4) {
   _inherits(RRangeSliderPoint, _Component4);
 
   function RRangeSliderPoint() {
@@ -969,9 +960,7 @@ function (_Component4) {
 
 _defineProperty(RRangeSliderPoint, "contextType", RRangeSliderContext);
 
-var RRangeSliderLabels =
-/*#__PURE__*/
-function (_Component5) {
+var RRangeSliderLabels = /*#__PURE__*/function (_Component5) {
   _inherits(RRangeSliderLabels, _Component5);
 
   function RRangeSliderLabels() {
@@ -983,6 +972,8 @@ function (_Component5) {
   _createClass(RRangeSliderLabels, [{
     key: "getLabelsByStep",
     value: function getLabelsByStep() {
+      var _this3 = this;
+
       var _this$context8 = this.context,
           start = _this$context8.start,
           _this$context8$label = _this$context8.label,
@@ -1008,7 +999,7 @@ function (_Component5) {
         return item.value;
       });
       var Style = typeof style === 'function' ? function (val) {
-        return style(val);
+        return style(val, _this3.context);
       } : function (val) {
         return style;
       };
@@ -1043,6 +1034,8 @@ function (_Component5) {
   }, {
     key: "getLabels",
     value: function getLabels() {
+      var _this4 = this;
+
       var _this$context9 = this.context,
           _this$context9$label = _this$context9.label,
           label = _this$context9$label === void 0 ? {} : _this$context9$label,
@@ -1053,7 +1046,7 @@ function (_Component5) {
           style = label.style,
           rotate = label.rotate;
       var Style = typeof style === 'function' ? function (val) {
-        return style(val);
+        return style(val, _this4.context);
       } : function (val) {
         return style;
       };
@@ -1126,9 +1119,7 @@ function (_Component5) {
 
 _defineProperty(RRangeSliderLabels, "contextType", RRangeSliderContext);
 
-var RRangeSliderLabel =
-/*#__PURE__*/
-function (_Component6) {
+var RRangeSliderLabel = /*#__PURE__*/function (_Component6) {
   _inherits(RRangeSliderLabel, _Component6);
 
   function RRangeSliderLabel() {
@@ -1219,9 +1210,7 @@ function (_Component6) {
 
 _defineProperty(RRangeSliderLabel, "contextType", RRangeSliderContext);
 
-var RRangeSliderPins =
-/*#__PURE__*/
-function (_Component7) {
+var RRangeSliderPins = /*#__PURE__*/function (_Component7) {
   _inherits(RRangeSliderPins, _Component7);
 
   function RRangeSliderPins() {
@@ -1233,6 +1222,8 @@ function (_Component7) {
   _createClass(RRangeSliderPins, [{
     key: "getPinsByStep",
     value: function getPinsByStep() {
+      var _this5 = this;
+
       var _this$context13 = this.context,
           start = _this$context13.start,
           end = _this$context13.end,
@@ -1252,7 +1243,7 @@ function (_Component7) {
       var key = 0,
           pins = [];
       var Style = typeof style === 'function' ? function (val) {
-        return style(val);
+        return style(val, _this5.context);
       } : function () {
         return style;
       };
@@ -1321,9 +1312,7 @@ function (_Component7) {
 
 _defineProperty(RRangeSliderPins, "contextType", RRangeSliderContext);
 
-var RRangeSliderPin =
-/*#__PURE__*/
-function (_Component8) {
+var RRangeSliderPin = /*#__PURE__*/function (_Component8) {
   _inherits(RRangeSliderPin, _Component8);
 
   function RRangeSliderPin() {
