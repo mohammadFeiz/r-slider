@@ -341,10 +341,15 @@ var RRangeSlider = /*#__PURE__*/function (_Component) {
           min = _this$props6$min === void 0 ? start : _this$props6$min,
           _this$props6$max = _this$props6.max,
           max = _this$props6$max === void 0 ? end : _this$props6$max,
-          onmousedown = _this$props6.onmousedown;
+          onmousedown = _this$props6.onmousedown,
+          editable = _this$props6.editable;
 
       if (onmousedown) {
-        onmousedown(this.props);
+        onmousedown(this.props, index);
+      }
+
+      if (!editable) {
+        return;
       }
 
       var _this$getClient = this.getClient(e),
@@ -750,7 +755,7 @@ RRangeSlider.defaultProps = (_RRangeSlider$default = {
   lineStyle: {},
   fillStyle: {},
   valueStyle: {}
-}, _defineProperty(_RRangeSlider$default, "style", {}), _defineProperty(_RRangeSlider$default, "textStyle", {}), _defineProperty(_RRangeSlider$default, "showValue", true), _RRangeSlider$default);
+}, _defineProperty(_RRangeSlider$default, "style", {}), _defineProperty(_RRangeSlider$default, "textStyle", {}), _defineProperty(_RRangeSlider$default, "showValue", true), _defineProperty(_RRangeSlider$default, "editable", true), _RRangeSlider$default);
 
 var RRangeSliderLine = /*#__PURE__*/function (_Component2) {
   _inherits(RRangeSliderLine, _Component2);
@@ -1171,7 +1176,13 @@ var RRangeSliderLabel = /*#__PURE__*/function (_Component6) {
     value: function click(e) {
       var _this$context12 = this.context,
           points = _this$context12.points,
-          update = _this$context12.update;
+          update = _this$context12.update,
+          editable = _this$context12.editable;
+
+      if (!editable) {
+        return;
+      }
+
       var value = this.props.label.value; //get nearest point to this value
 
       var point = points[0];

@@ -141,8 +141,9 @@ export default class RRangeSlider extends Component{
   }
   mouseDown(e,index,type){
     e.preventDefault();
-    var {points} = this.state,{start,end,min = start,max = end,onmousedown} = this.props;
-    if(onmousedown){onmousedown(this.props)}
+    var {points} = this.state,{start,end,min = start,max = end,onmousedown,editable} = this.props;
+    if(onmousedown){onmousedown(this.props,index)}
+    if(!editable){return}
     var {x,y} = this.getClient(e),dom = $(this.dom.current);
     var pointContainers = dom.find('.r-range-slider-point-container');
     var size = dom.find('.r-range-slider-line')[this.oriention === 'horizontal'?'width':'height']();
@@ -341,7 +342,7 @@ RRangeSlider.defaultProps = {
   direction:'right',
   points:[{value:0}],
   start:-50,end:50,step:1,endRange:{},style:{},activePointStyle:{},
-  pointStyle:{},lineStyle:{},fillStyle:{},valueStyle:{},style:{},textStyle:{},showValue:true,
+  pointStyle:{},lineStyle:{},fillStyle:{},valueStyle:{},style:{},textStyle:{},showValue:true,editable:true
 }
 
 class RRangeSliderLine extends Component{
@@ -516,7 +517,8 @@ class RRangeSliderLabel extends Component{
     return obj; 
   } 
   click(e){
-    var {points,update} = this.context;
+    var {points,update,editable} = this.context;
+    if(!editable){return}
     var {value} = this.props.label;
     //get nearest point to this value
     var point = points[0];
