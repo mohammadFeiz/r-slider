@@ -551,6 +551,15 @@ var RRangeSlider = /*#__PURE__*/function (_Component) {
       }
     }
   }, {
+    key: "sliderMouseMove",
+    value: function sliderMouseMove(e, index) {
+      var mouseMove = this.props.mouseMove;
+
+      if (mouseMove) {
+        mouseMove(e, index);
+      }
+    }
+  }, {
     key: "mouseMove",
     value: function mouseMove(e) {
       var points = this.state.points;
@@ -652,6 +661,7 @@ var RRangeSlider = /*#__PURE__*/function (_Component) {
       context.getValue = this.getValue.bind(this);
       context.isDown = this.state.isDown;
       context.mouseDown = this.mouseDown.bind(this);
+      context.mouseMove = this.sliderMouseMove.bind(this);
       context.mouseDownByValues = this.mouseDownByValues.bind(this);
       context.getStartByStep = this.getStartByStep.bind(this);
       context.getPercentByValue = this.getPercentByValue.bind(this);
@@ -836,6 +846,7 @@ var RRangeSliderFill = /*#__PURE__*/function (_Component3) {
       var _this$context4 = this.context,
           touch = _this$context4.touch,
           mouseDown = _this$context4.mouseDown,
+          mouseMove = _this$context4.mouseMove,
           mouseDownByValues = _this$context4.mouseDownByValues,
           points = _this$context4.points,
           endRange = _this$context4.endRange,
@@ -853,6 +864,8 @@ var RRangeSliderFill = /*#__PURE__*/function (_Component3) {
         } else {
           mouseDown(e, index, 'fill');
         }
+      }), _defineProperty(_containerProps, "onMouseMove", function onMouseMove(e) {
+        return mouseMove(e, index);
       }), _defineProperty(_containerProps, "style", this.getContainerStyle()), _containerProps);
       return _react.default.createElement("div", containerProps, _react.default.createElement("div", {
         className: "r-range-slider-fill",
@@ -926,28 +939,31 @@ var RRangeSliderPoint = /*#__PURE__*/function (_Component4) {
   }, {
     key: "render",
     value: function render() {
+      var _props;
+
       var _this$context7 = this.context,
           points = _this$context7.points,
           touch = _this$context7.touch,
           mouseDown = _this$context7.mouseDown,
+          mouseMove = _this$context7.mouseMove,
           mouseDownByValues = _this$context7.mouseDownByValues,
           editValue = _this$context7.editValue,
           values = _this$context7.values;
       var index = this.props.index;
       var point = points[index];
-
-      var props = _defineProperty({
+      var props = (_props = {
         style: this.getContainerStyle(),
         'data-index': index,
         className: 'r-range-slider-point-container'
-      }, touch ? 'onTouchStart' : 'onMouseDown', function (e) {
+      }, _defineProperty(_props, touch ? 'onTouchStart' : 'onMouseDown', function (e) {
         if (values) {
           mouseDownByValues(e, index, 'point');
         } else {
           mouseDown(e, index, 'point');
         }
-      });
-
+      }), _defineProperty(_props, "onMouseMove", function onMouseMove(e) {
+        return mouseMove(e, index);
+      }), _props);
       var pointProps = {
         className: 'r-range-slider-point',
         style: this.getPointStyle()

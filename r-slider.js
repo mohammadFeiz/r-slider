@@ -255,6 +255,10 @@ export default class RRangeSlider extends Component{
       }
     }
   }
+  sliderMouseMove(e,index){
+    var {mouseMove} = this.props;
+    if(mouseMove){mouseMove(e,index)}
+  }
   mouseMove(e){
     var {points} = this.state;
     var {x,y,size,value,startLimit,endLimit,index} = this.startOffset;
@@ -299,6 +303,7 @@ export default class RRangeSlider extends Component{
     context.getValue = this.getValue.bind(this); 
     context.isDown = this.state.isDown;
     context.mouseDown = this.mouseDown.bind(this);
+    context.mouseMove = this.sliderMouseMove.bind(this);
     context.mouseDownByValues = this.mouseDownByValues.bind(this);
     context.getStartByStep = this.getStartByStep.bind(this);
     context.getPercentByValue = this.getPercentByValue.bind(this);
@@ -370,7 +375,7 @@ class RRangeSliderFill extends Component{
   }
    
   render(){
-    var {touch,mouseDown,mouseDownByValues,points,endRange,getValue,endRange,values} = this.context;
+    var {touch,mouseDown,mouseMove,mouseDownByValues,points,endRange,getValue,endRange,values} = this.context;
     var {index} = this.props;
     var point = index === points.length?endRange:points[index];
     var containerProps = {
@@ -379,6 +384,7 @@ class RRangeSliderFill extends Component{
         if(values){mouseDownByValues(e,index,'fill')}
         else{mouseDown(e,index,'fill')}
       },
+      onMouseMove:(e)=>mouseMove(e,index),
       style:this.getContainerStyle()
     }
     return (
@@ -413,7 +419,7 @@ class RRangeSliderPoint extends Component{
     else{return {display:'none'};}
   }
   render(){
-    var {points,touch,mouseDown,mouseDownByValues,editValue,values} = this.context;
+    var {points,touch,mouseDown,mouseMove,mouseDownByValues,editValue,values} = this.context;
     var {index} = this.props;
     var point = points[index];
     var props = {
@@ -423,6 +429,7 @@ class RRangeSliderPoint extends Component{
         if(values){mouseDownByValues(e,index,'point')}
         else{mouseDown(e,index,'point')}
       },
+      onMouseMove:(e)=>mouseMove(e,index)
     };
     var pointProps = {className:'r-range-slider-point',style:this.getPointStyle()};
     var valueProps = {
