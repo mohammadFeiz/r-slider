@@ -256,8 +256,8 @@ export default class RRangeSlider extends Component{
     }
   }
   sliderMouseMove(e,index){
-    var {mouseMove} = this.props;
-    if(mouseMove){mouseMove(e,index)}
+    var {onmousemove} = this.props;
+    if(onmousemove){onmousemove(e,index)}
   }
   mouseMove(e){
     var {points} = this.state;

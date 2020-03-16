@@ -553,10 +553,10 @@ var RRangeSlider = /*#__PURE__*/function (_Component) {
   }, {
     key: "sliderMouseMove",
     value: function sliderMouseMove(e, index) {
-      var mouseMove = this.props.mouseMove;
+      var onmousemove = this.props.onmousemove;
 
-      if (mouseMove) {
-        mouseMove(e, index);
+      if (onmousemove) {
+        onmousemove(e, index);
       }
     }
   }, {
