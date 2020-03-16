@@ -97,9 +97,17 @@ var RRangeSlider = /*#__PURE__*/function (_Component) {
     }, htmlStyle);
     _this.touch = _this.isMobile();
     _this.dom = (0, _react.createRef)();
+    var _this$props2 = _this.props,
+        start = _this$props2.start,
+        end = _this$props2.end,
+        _this$props2$min = _this$props2.min,
+        min = _this$props2$min === void 0 ? start : _this$props2$min,
+        _this$props2$max = _this$props2.max,
+        max = _this$props2$max === void 0 ? end : _this$props2$max,
+        step = _this$props2.step;
     _this.state = {
       isDown: false,
-      points: _this.getValidPoints(points),
+      points: _this.getValidPoints(points, start, end, min, max, step),
       getValidPoints: _this.getValidPoints.bind(_assertThisInitialized(_this))
     };
 
@@ -168,19 +176,10 @@ var RRangeSlider = /*#__PURE__*/function (_Component) {
     }
   }, {
     key: "getValidPoints",
-    value: function getValidPoints(points) {
+    value: function getValidPoints(points, start, end, min, max, step) {
       if (this.props.values) {
         return points;
       }
-
-      var _this$props2 = this.props,
-          start = _this$props2.start,
-          end = _this$props2.end,
-          _this$props2$min = _this$props2.min,
-          min = _this$props2$min === void 0 ? start : _this$props2$min,
-          _this$props2$max = _this$props2.max,
-          max = _this$props2$max === void 0 ? end : _this$props2$max,
-          step = _this$props2.step;
 
       for (var i = 0; i < points.length; i++) {
         var point = points[i];
@@ -728,8 +727,9 @@ var RRangeSlider = /*#__PURE__*/function (_Component) {
           _props$min = props.min,
           min = _props$min === void 0 ? start : _props$min,
           _props$max = props.max,
-          max = _props$max === void 0 ? end : _props$max;
-      var points = state.getValidPoints(props.points);
+          max = _props$max === void 0 ? end : _props$max,
+          step = props.step;
+      var points = state.getValidPoints(props.points, start, end, min, max, step);
       return {
         points: points
       };
