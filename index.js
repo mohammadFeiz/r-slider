@@ -344,7 +344,7 @@ var RRangeSlider = /*#__PURE__*/function (_Component) {
           editable = _this$props6.editable;
 
       if (onmousedown) {
-        onmousedown(this.props, index);
+        onmousedown(e,index,this.props);
       }
 
       if (!editable) {
