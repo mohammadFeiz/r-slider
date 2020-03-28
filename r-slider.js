@@ -454,7 +454,7 @@ class RRangeSliderLabels extends Component{
       start = 0; 
       end = values.length - 1;
     }
-    var {items = [],step,style,edit,rotate} = label;
+    var {items = [],step,style,edit,rotate,ignoreStep} = label;
     var customLabels = values?items.map((item)=>values.indexOf(item.value)):items.map((item)=>item.value);
     var Style = typeof style === 'function'?(val)=>{return style(val,this.context)}:function(val){return style}; 
     var Labels = [];
@@ -474,10 +474,10 @@ class RRangeSliderLabels extends Component{
     return Labels;
   }
   getLabels(){
-    var {label = {},values} = this.context,Labels = [],{items = [],style,rotate} = label;
+    var {label = {},values} = this.context,Labels = [],{items = [],style,rotate,ignoreStep} = label;
     var Style = typeof style === 'function'?(val)=>{return style(val,this.context)}:function(val){return style}; 
     if(values){
-      var start = 0,end = values.length - 1;
+      var start = 0,end = values.length - 1; 
       for(var i = 0; i < items.length; i++){
         var item = items[i];
         var index = values.indexOf(item.value);
@@ -488,6 +488,7 @@ class RRangeSliderLabels extends Component{
     else{
       var {start,end} = this.context;
       for(var i = 0; i < items.length; i++){
+        if(ignoreStep && i % igonreStep !== 0){continue}
         var item = items[i];
         if(item.value < start || item.value > end){continue;}
         Labels.push(<RRangeSliderLabel rotate={rotate} label={item} key={item.value + 'label'} style={$.extend({},Style(item.value),item.style)} type='list'/>);

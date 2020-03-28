@@ -1027,7 +1027,8 @@ var RRangeSliderLabels = /*#__PURE__*/function (_Component5) {
           step = label.step,
           style = label.style,
           edit = label.edit,
-          rotate = label.rotate;
+          rotate = label.rotate,
+          ignoreStep = label.ignoreStep;
       var customLabels = values ? items.map(function (item) {
         return values.indexOf(item.value);
       }) : items.map(function (item) {
@@ -1079,7 +1080,8 @@ var RRangeSliderLabels = /*#__PURE__*/function (_Component5) {
           _label$items2 = label.items,
           items = _label$items2 === void 0 ? [] : _label$items2,
           style = label.style,
-          rotate = label.rotate;
+          rotate = label.rotate,
+          ignoreStep = label.ignoreStep;
       var Style = typeof style === 'function' ? function (val) {
         return style(val, _this4.context);
       } : function (val) {
@@ -1115,6 +1117,10 @@ var RRangeSliderLabels = /*#__PURE__*/function (_Component5) {
             end = _this$context10.end;
 
         for (var i = 0; i < items.length; i++) {
+          if (ignoreStep && i % igonreStep !== 0) {
+            continue;
+          }
+
           var item = items[i];
 
           if (item.value < start || item.value > end) {
