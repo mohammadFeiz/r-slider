@@ -544,7 +544,9 @@ class RRangeSliderLabel extends Component{
           id={id} onClick={this.click.bind(this)} style={this.getStyle()} 
           className={`r-range-slider-label${className?' ' + className:''}`} 
         >
+        <div className='r-range-slider-label-text'>
           {edit && type === 'step'?edit(text):text}
+        </div>
         </div>
       
     );

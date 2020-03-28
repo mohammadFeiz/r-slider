@@ -31,11 +31,15 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -46,12 +50,14 @@ var RRangeSliderContext = (0, _react.createContext)();
 var RRangeSlider = /*#__PURE__*/function (_Component) {
   _inherits(RRangeSlider, _Component);
 
+  var _super = _createSuper(RRangeSlider);
+
   function RRangeSlider(props) {
     var _this;
 
     _classCallCheck(this, RRangeSlider);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(RRangeSlider).call(this, props));
+    _this = _super.call(this, props);
     var _this$props = _this.props,
         direction = _this$props.direction,
         points = _this$props.points,
@@ -344,7 +350,7 @@ var RRangeSlider = /*#__PURE__*/function (_Component) {
           editable = _this$props6.editable;
 
       if (onmousedown) {
-        onmousedown(e,index,this.props);
+        onmousedown(e, index, this.props);
       }
 
       if (!editable) {
@@ -691,16 +697,16 @@ var RRangeSlider = /*#__PURE__*/function (_Component) {
           className = _this$props8.className,
           id = _this$props8.id;
       var percents = this.getPercents();
-      return _react.default.createElement(RRangeSliderContext.Provider, {
+      return /*#__PURE__*/_react.default.createElement(RRangeSliderContext.Provider, {
         value: this.context
-      }, _react.default.createElement("div", {
+      }, /*#__PURE__*/_react.default.createElement("div", {
         ref: this.dom,
         id: id,
         className: "r-range-slider ".concat(this.context.oriention).concat(className ? ' ' + className : ''),
         style: this.getStyle()
-      }, startHtml && _react.default.createElement("div", {
+      }, startHtml && /*#__PURE__*/_react.default.createElement("div", {
         style: this.htmlStyle
-      }, this.getValue(startHtml)), _react.default.createElement("div", {
+      }, this.getValue(startHtml)), /*#__PURE__*/_react.default.createElement("div", {
         style: {
           display: 'flex',
           height: '100%',
@@ -709,23 +715,23 @@ var RRangeSlider = /*#__PURE__*/function (_Component) {
           justifyContent: 'center',
           position: 'relative'
         }
-      }, _react.default.createElement(RRangeSliderLine, null), _react.default.createElement(RRangeSliderLabels, null), _react.default.createElement(RRangeSliderPins, null), points.map(function (p, i) {
-        return _react.default.createElement(RRangeSliderFill, {
+      }, /*#__PURE__*/_react.default.createElement(RRangeSliderLine, null), /*#__PURE__*/_react.default.createElement(RRangeSliderLabels, null), /*#__PURE__*/_react.default.createElement(RRangeSliderPins, null), points.map(function (p, i) {
+        return /*#__PURE__*/_react.default.createElement(RRangeSliderFill, {
           key: i,
           index: i,
           percent: percents[i]
         });
-      }), _react.default.createElement(RRangeSliderFill, {
+      }), /*#__PURE__*/_react.default.createElement(RRangeSliderFill, {
         key: points.length,
         index: points.length,
         percent: percents[points.length]
       }), points.map(function (p, i) {
-        return _react.default.createElement(RRangeSliderPoint, {
+        return /*#__PURE__*/_react.default.createElement(RRangeSliderPoint, {
           key: i,
           index: i,
           percent: percents[i]
         });
-      })), endHtml && _react.default.createElement("div", {
+      })), endHtml && /*#__PURE__*/_react.default.createElement("div", {
         style: this.htmlStyle
       }, this.getValue(endHtml))));
     }
@@ -770,10 +776,12 @@ RRangeSlider.defaultProps = (_RRangeSlider$default = {
 var RRangeSliderLine = /*#__PURE__*/function (_Component2) {
   _inherits(RRangeSliderLine, _Component2);
 
+  var _super2 = _createSuper(RRangeSliderLine);
+
   function RRangeSliderLine() {
     _classCallCheck(this, RRangeSliderLine);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(RRangeSliderLine).apply(this, arguments));
+    return _super2.apply(this, arguments);
   }
 
   _createClass(RRangeSliderLine, [{
@@ -782,7 +790,7 @@ var RRangeSliderLine = /*#__PURE__*/function (_Component2) {
       var _this$context = this.context,
           oriention = _this$context.oriention,
           lineStyle = _this$context.lineStyle;
-      return _react.default.createElement("div", {
+      return /*#__PURE__*/_react.default.createElement("div", {
         className: "r-range-slider-line",
         style: lineStyle
       });
@@ -797,10 +805,12 @@ _defineProperty(RRangeSliderLine, "contextType", RRangeSliderContext);
 var RRangeSliderFill = /*#__PURE__*/function (_Component3) {
   _inherits(RRangeSliderFill, _Component3);
 
+  var _super3 = _createSuper(RRangeSliderFill);
+
   function RRangeSliderFill() {
     _classCallCheck(this, RRangeSliderFill);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(RRangeSliderFill).apply(this, arguments));
+    return _super3.apply(this, arguments);
   }
 
   _createClass(RRangeSliderFill, [{
@@ -867,10 +877,10 @@ var RRangeSliderFill = /*#__PURE__*/function (_Component3) {
       }), _defineProperty(_containerProps, "onMouseMove", function onMouseMove(e) {
         return mouseMove(e, index);
       }), _defineProperty(_containerProps, "style", this.getContainerStyle()), _containerProps);
-      return _react.default.createElement("div", containerProps, _react.default.createElement("div", {
+      return /*#__PURE__*/_react.default.createElement("div", containerProps, /*#__PURE__*/_react.default.createElement("div", {
         className: "r-range-slider-fill",
         style: this.getFillStyle()
-      }), point.text && _react.default.createElement("div", null, getValue(point.text)));
+      }), point.text && /*#__PURE__*/_react.default.createElement("div", null, getValue(point.text)));
     }
   }]);
 
@@ -882,10 +892,12 @@ _defineProperty(RRangeSliderFill, "contextType", RRangeSliderContext);
 var RRangeSliderPoint = /*#__PURE__*/function (_Component4) {
   _inherits(RRangeSliderPoint, _Component4);
 
+  var _super4 = _createSuper(RRangeSliderPoint);
+
   function RRangeSliderPoint() {
     _classCallCheck(this, RRangeSliderPoint);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(RRangeSliderPoint).apply(this, arguments));
+    return _super4.apply(this, arguments);
   }
 
   _createClass(RRangeSliderPoint, [{
@@ -972,7 +984,7 @@ var RRangeSliderPoint = /*#__PURE__*/function (_Component4) {
         style: this.getValueStyle(),
         className: 'r-range-slider-value'
       };
-      return _react.default.createElement("div", props, _react.default.createElement("div", pointProps, point.html && point.html), _react.default.createElement("div", valueProps, editValue ? editValue(point, index) : point.value));
+      return /*#__PURE__*/_react.default.createElement("div", props, /*#__PURE__*/_react.default.createElement("div", pointProps, point.html && point.html), /*#__PURE__*/_react.default.createElement("div", valueProps, editValue ? editValue(point, index) : point.value));
     }
   }]);
 
@@ -984,10 +996,12 @@ _defineProperty(RRangeSliderPoint, "contextType", RRangeSliderContext);
 var RRangeSliderLabels = /*#__PURE__*/function (_Component5) {
   _inherits(RRangeSliderLabels, _Component5);
 
+  var _super5 = _createSuper(RRangeSliderLabels);
+
   function RRangeSliderLabels() {
     _classCallCheck(this, RRangeSliderLabels);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(RRangeSliderLabels).apply(this, arguments));
+    return _super5.apply(this, arguments);
   }
 
   _createClass(RRangeSliderLabels, [{
@@ -1032,7 +1046,7 @@ var RRangeSliderLabels = /*#__PURE__*/function (_Component5) {
         var index = customLabels.indexOf(value);
 
         if (index === -1) {
-          Labels.push(_react.default.createElement(RRangeSliderLabel, {
+          Labels.push( /*#__PURE__*/_react.default.createElement(RRangeSliderLabel, {
             key: key,
             label: {
               value: value,
@@ -1084,7 +1098,7 @@ var RRangeSliderLabels = /*#__PURE__*/function (_Component5) {
             continue;
           }
 
-          Labels.push(_react.default.createElement(RRangeSliderLabel, {
+          Labels.push( /*#__PURE__*/_react.default.createElement(RRangeSliderLabel, {
             rotate: rotate,
             label: {
               value: index,
@@ -1107,7 +1121,7 @@ var RRangeSliderLabels = /*#__PURE__*/function (_Component5) {
             continue;
           }
 
-          Labels.push(_react.default.createElement(RRangeSliderLabel, {
+          Labels.push( /*#__PURE__*/_react.default.createElement(RRangeSliderLabel, {
             rotate: rotate,
             label: item,
             key: item.value + 'label',
@@ -1129,7 +1143,7 @@ var RRangeSliderLabels = /*#__PURE__*/function (_Component5) {
       }
 
       var step = label.step;
-      return _react.default.createElement("div", {
+      return /*#__PURE__*/_react.default.createElement("div", {
         className: "r-range-slider-labels"
       }, step && this.getLabelsByStep(), this.getLabels());
     }
@@ -1143,10 +1157,12 @@ _defineProperty(RRangeSliderLabels, "contextType", RRangeSliderContext);
 var RRangeSliderLabel = /*#__PURE__*/function (_Component6) {
   _inherits(RRangeSliderLabel, _Component6);
 
+  var _super6 = _createSuper(RRangeSliderLabel);
+
   function RRangeSliderLabel() {
     _classCallCheck(this, RRangeSliderLabel);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(RRangeSliderLabel).apply(this, arguments));
+    return _super6.apply(this, arguments);
   }
 
   _createClass(RRangeSliderLabel, [{
@@ -1223,12 +1239,14 @@ var RRangeSliderLabel = /*#__PURE__*/function (_Component6) {
           id = label.id,
           className = label.className,
           edit = label.edit;
-      return _react.default.createElement("div", {
+      return /*#__PURE__*/_react.default.createElement("div", {
         id: id,
         onClick: this.click.bind(this),
         style: this.getStyle(),
         className: "r-range-slider-label".concat(className ? ' ' + className : '')
-      }, edit && type === 'step' ? edit(text) : text);
+      }, /*#__PURE__*/_react.default.createElement("div", {
+        className: "r-range-slider-label-text"
+      }, edit && type === 'step' ? edit(text) : text));
     }
   }]);
 
@@ -1240,10 +1258,12 @@ _defineProperty(RRangeSliderLabel, "contextType", RRangeSliderContext);
 var RRangeSliderPins = /*#__PURE__*/function (_Component7) {
   _inherits(RRangeSliderPins, _Component7);
 
+  var _super7 = _createSuper(RRangeSliderPins);
+
   function RRangeSliderPins() {
     _classCallCheck(this, RRangeSliderPins);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(RRangeSliderPins).apply(this, arguments));
+    return _super7.apply(this, arguments);
   }
 
   _createClass(RRangeSliderPins, [{
@@ -1276,7 +1296,7 @@ var RRangeSliderPins = /*#__PURE__*/function (_Component7) {
       };
 
       while (value <= end) {
-        pins.push(_react.default.createElement(RRangeSliderPin, {
+        pins.push( /*#__PURE__*/_react.default.createElement(RRangeSliderPin, {
           value: value,
           key: key,
           style: Style(value)
@@ -1312,7 +1332,7 @@ var RRangeSliderPins = /*#__PURE__*/function (_Component7) {
           continue;
         }
 
-        Pins.push(_react.default.createElement(RRangeSliderPin, {
+        Pins.push( /*#__PURE__*/_react.default.createElement(RRangeSliderPin, {
           value: item.value,
           key: item.value + 'pin',
           style: _jquery.default.extend({}, Style(item.value), item.style)
@@ -1328,7 +1348,7 @@ var RRangeSliderPins = /*#__PURE__*/function (_Component7) {
           pin = _this$context$pin === void 0 ? {} : _this$context$pin;
       var step = pin.step,
           items = pin.items;
-      return _react.default.createElement("div", {
+      return /*#__PURE__*/_react.default.createElement("div", {
         className: "r-range-slider-pins"
       }, step && this.getPinsByStep(), items && this.getPins());
     }
@@ -1342,10 +1362,12 @@ _defineProperty(RRangeSliderPins, "contextType", RRangeSliderContext);
 var RRangeSliderPin = /*#__PURE__*/function (_Component8) {
   _inherits(RRangeSliderPin, _Component8);
 
+  var _super8 = _createSuper(RRangeSliderPin);
+
   function RRangeSliderPin() {
     _classCallCheck(this, RRangeSliderPin);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(RRangeSliderPin).apply(this, arguments));
+    return _super8.apply(this, arguments);
   }
 
   _createClass(RRangeSliderPin, [{
@@ -1379,7 +1401,7 @@ var RRangeSliderPin = /*#__PURE__*/function (_Component8) {
   }, {
     key: "render",
     value: function render() {
-      return _react.default.createElement("div", {
+      return /*#__PURE__*/_react.default.createElement("div", {
         className: "r-range-slider-pin",
         style: this.getStyle()
       });
