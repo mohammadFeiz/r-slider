@@ -488,7 +488,7 @@ class RRangeSliderLabels extends Component{
     else{
       var {start,end} = this.context;
       for(var i = 0; i < items.length; i++){
-        if(ignoreStep && i % igonreStep !== 0){continue}
+        if(ignoreStep && i % ignoreStep !== 0){continue}
         var item = items[i];
         if(item.value < start || item.value > end){continue;}
         Labels.push(<RRangeSliderLabel rotate={rotate} label={item} key={item.value + 'label'} style={$.extend({},Style(item.value),item.style)} type='list'/>);

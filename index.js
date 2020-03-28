@@ -1117,7 +1117,7 @@ var RRangeSliderLabels = /*#__PURE__*/function (_Component5) {
             end = _this$context10.end;
 
         for (var i = 0; i < items.length; i++) {
-          if (ignoreStep && i % igonreStep !== 0) {
+          if (ignoreStep && i % ignoreStep !== 0) {
             continue;
           }
 
