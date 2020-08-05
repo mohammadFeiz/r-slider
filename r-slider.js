@@ -375,7 +375,7 @@ class RRangeSliderFill extends Component{
   }
    
   render(){
-    var {touch,mouseDown,mouseMove,mouseDownByValues,points,endRange,getValue,endRange,values} = this.context;
+    var {touch,mouseDown,mouseMove,mouseDownByValues,points,endRange,getValue,endRange,values,rangeEvents = {}} = this.context;
     var {index} = this.props;
     var point = index === points.length?endRange:points[index];
     var containerProps = {
@@ -386,6 +386,9 @@ class RRangeSliderFill extends Component{
       },
       onMouseMove:(e)=>mouseMove(e,index),
       style:this.getContainerStyle()
+    }
+    for(let prop in rangeEvents){
+      containerProps[prop] = ()=>rangeEvents[prop](index)
     }
     return (
       <div {...containerProps}> 
@@ -419,7 +422,7 @@ class RRangeSliderPoint extends Component{
     else{return {display:'none'};}
   }
   render(){
-    var {points,touch,mouseDown,mouseMove,mouseDownByValues,editValue,values} = this.context;
+    var {points,touch,mouseDown,mouseMove,mouseDownByValues,editValue,values,pointEvents} = this.context;
     var {index} = this.props;
     var point = points[index];
     var props = {
@@ -431,6 +434,9 @@ class RRangeSliderPoint extends Component{
       },
       onMouseMove:(e)=>mouseMove(e,index)
     };
+    for(let prop in pointEvents){
+      props[prop] = ()=>pointEvents[prop](index)
+    }
     var pointProps = {className:'r-range-slider-point',style:this.getPointStyle()};
     var valueProps = {
       style:this.getValueStyle(),
@@ -488,7 +494,7 @@ class RRangeSliderLabels extends Component{
     else{
       var {start,end} = this.context;
       for(var i = 0; i < items.length; i++){
-        if(ignoreStep && i % ignoreStep !== 0){continue}
+        if(ignoreStep && i % igonreStep !== 0){continue}
         var item = items[i];
         if(item.value < start || item.value > end){continue;}
         Labels.push(<RRangeSliderLabel rotate={rotate} label={item} key={item.value + 'label'} style={$.extend({},Style(item.value),item.style)} type='list'/>);
