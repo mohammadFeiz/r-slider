@@ -12,10 +12,7 @@ export default class RRangeSlider extends Component{
     else if(direction === 'right'){this.getDiff = function (x,y,client){return client.x - x;}; this.oriention = 'horizontal';}
     else if(direction === 'top'){this.getDiff = function (x,y,client){return y - client.y;}; this.oriention = 'vertical'; this.flexDirection = 'column-reverse';}
     else{this.getDiff = function (x,y,client){return client.y - y;}; this.oriention = 'vertical'; this.flexDirection = 'column';}
-    
-    this.htmlStyle = $.extend({},{
-      display:'flex',justifyContent:'center',alignItems:'center'
-    },htmlStyle);
+    this.htmlStyle = {display:'flex',justifyContent:'center',alignItems:'center',...htmlStyle};
     this.dom = createRef();
     var {start,end,min = start,max = end,step}=this.props;
     this.state = { 
@@ -360,7 +357,7 @@ class RRangeSliderFill extends Component{
   getFillStyle(){
     var {getValue,points,fillStyle,endRange} = this.context,{index} = this.props;
     var point = index === points.length?endRange:points[index];
-    return $.extend({},getValue(fillStyle),getValue(point.fillStyle || {})); 
+    return {...getValue(fillStyle),...getValue(point.fillStyle || {})}; 
   }
   getContainerStyle(){
     var {oriention,direction} = this.context,{percent} = this.props;
@@ -400,7 +397,7 @@ class RRangeSliderPoint extends Component{
   static contextType = RRangeSliderContext;
   getPointStyle(){
     var {getValue,points,pointStyle} = this.context,{index} = this.props;
-    return $.extend({},getValue(pointStyle),getValue(points[index].pointStyle));
+    return {...getValue(pointStyle),...getValue(points[index].pointStyle)};
   }
   getContainerStyle(){
     var {direction} = this.context,{percent} = this.props;
@@ -412,10 +409,9 @@ class RRangeSliderPoint extends Component{
     var {index} = this.props;
     var point = points[index];
     if(showValue === false){return {display:'none'};}
-    else if(showValue === 'fixed'){
-      return $.extend({},getValue(valueStyle,point.value),getValue(point.valueStyle,point.value));
+    else if(showValue === 'fixed' || isDown){
+      return {...getValue(valueStyle,point.value),...getValue(point.valueStyle,point.value)};
     }
-    else if(isDown){return $.extend({},getValue(valueStyle,point.value),getValue(point.valueStyle,point.value));}
     else{return {display:'none'};}
   }
   render(){
@@ -482,25 +478,38 @@ class RRangeSliderLabels extends Component{
     return Labels;
   }
   update(){
+    var {direction} = this.context;
     var container = $(this.dom.current);
     var labels = container.find('.r-range-slider-label div');
     var firstLabel = labels.eq(0);
-    firstLabel.css({display:'block'})
-    var firstLeft = firstLabel.offset().left;
-    var firstWidth = firstLabel.width();
-    var end = firstLeft + firstWidth;
-    for(var i = 1; i < labels.length; i++){
-      var label = labels.eq(i);
-      label.css({display:'block'})
-      var left = label.offset().left
-      var width = label.width();
-      if(left < end + 5){
-        label.css({display:'none'})
+    if(direction === 'right'){
+      var end = firstLabel.offset().left + firstLabel.width();
+      for(var i = 1; i < labels.length; i++){
+        var label = labels.eq(i);
+        label.css({display:'block'})
+        var left = label.offset().left
+        var width = label.width();
+        if(left < end + 5){
+          label.css({display:'none'})
+        }
+        else{end = left + width;} 
       }
-      else{end = left + width;}
-      
     }
-    
+    else if(direction === 'left'){
+      var end = firstLabel.offset().left;
+      for(var i = 1; i < labels.length; i++){
+        var label = labels.eq(i);
+        label.css({display:'block'})
+        var left = label.offset().left
+        var width = label.width();
+        var right = left + width;
+        if(right > end - 5){
+          label.css({display:'none'})
+        }
+        else{end = left;} 
+      }
+    }
+     
   }
   componentDidMount(){
     this.update()
@@ -517,7 +526,7 @@ class RRangeSliderLabels extends Component{
         var item = items[i];
         var index = values.indexOf(item.value);
         if(index === -1){continue;}
-        Labels.push(<RRangeSliderLabel rotate={rotate} label={{value:index,text:item.text}} key={item.value + 'label'} style={$.extend({},Style(item.value),item.style)} type='list'/>);
+        Labels.push(<RRangeSliderLabel rotate={rotate} label={{value:index,text:item.text}} key={item.value + 'label'} style={{...Style(item.value),...item.style}} type='list'/>);
       }
     }
     else{
@@ -526,7 +535,7 @@ class RRangeSliderLabels extends Component{
         if(ignoreStep && i % igonreStep !== 0){continue}
         var item = items[i];
         if(item.value < start || item.value > end){continue;}
-        Labels.push(<RRangeSliderLabel rotate={rotate} label={item} key={item.value + 'label'} style={$.extend({},Style(item.value),item.style)} type='list'/>);
+        Labels.push(<RRangeSliderLabel rotate={rotate} label={item} key={item.value + 'label'} style={{...Style(item.value),...item.style}} type='list'/>);
       }
     }
     return Labels;
@@ -612,7 +621,7 @@ class RRangeSliderPins extends Component{
     for(var i = 0; i < items.length; i++){
       var item = items[i];
       if(item.value < start || item.value > end){continue;}
-      Pins.push(<RRangeSliderPin value={item.value} key={item.value + 'pin'} style={$.extend({},Style(item.value),item.style)}/>);
+      Pins.push(<RRangeSliderPin value={item.value} key={item.value + 'pin'} style={{...Style(item.value),...item.style}}/>);
     }
     return Pins;
   }

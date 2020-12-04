@@ -96,11 +96,12 @@ var RRangeSlider = /*#__PURE__*/function (_Component) {
       _this.flexDirection = 'column';
     }
 
-    _this.htmlStyle = _jquery.default.extend({}, {
+    _this.htmlStyle = {
       display: 'flex',
       justifyContent: 'center',
-      alignItems: 'center'
-    }, htmlStyle);
+      alignItems: 'center',
+      ...htmlStyle
+    };
     _this.dom = /*#__PURE__*/(0, _react.createRef)();
     var _this$props2 = _this.props,
         start = _this$props2.start,
@@ -816,7 +817,9 @@ var RRangeSliderFill = /*#__PURE__*/function (_Component3) {
           endRange = _this$context2.endRange,
           index = this.props.index;
       var point = index === points.length ? endRange : points[index];
-      return _jquery.default.extend({}, getValue(fillStyle), getValue(point.fillStyle || {}));
+      return { ...getValue(fillStyle),
+        ...getValue(point.fillStyle || {})
+      };
     }
   }, {
     key: "getContainerStyle",
@@ -913,7 +916,9 @@ var RRangeSliderPoint = /*#__PURE__*/function (_Component4) {
           points = _this$context5.points,
           pointStyle = _this$context5.pointStyle,
           index = this.props.index;
-      return _jquery.default.extend({}, getValue(pointStyle), getValue(points[index].pointStyle));
+      return { ...getValue(pointStyle),
+        ...getValue(points[index].pointStyle)
+      };
     }
   }, {
     key: "getContainerStyle",
@@ -943,10 +948,10 @@ var RRangeSliderPoint = /*#__PURE__*/function (_Component4) {
         return {
           display: 'none'
         };
-      } else if (showValue === 'fixed') {
-        return _jquery.default.extend({}, getValue(valueStyle, point.value), getValue(point.valueStyle, point.value));
-      } else if (isDown) {
-        return _jquery.default.extend({}, getValue(valueStyle, point.value), getValue(point.valueStyle, point.value));
+      } else if (showValue === 'fixed' || isDown) {
+        return { ...getValue(valueStyle, point.value),
+          ...getValue(point.valueStyle, point.value)
+        };
       } else {
         return {
           display: 'none'
@@ -1091,30 +1096,49 @@ var RRangeSliderLabels = /*#__PURE__*/function (_Component5) {
   }, {
     key: "update",
     value: function update() {
+      var direction = this.context.direction;
       var container = (0, _jquery.default)(this.dom.current);
       var labels = container.find('.r-range-slider-label div');
       var firstLabel = labels.eq(0);
-      firstLabel.css({
-        display: 'block'
-      });
-      var firstLeft = firstLabel.offset().left;
-      var firstWidth = firstLabel.width();
-      var end = firstLeft + firstWidth;
 
-      for (var i = 1; i < labels.length; i++) {
-        var label = labels.eq(i);
-        label.css({
-          display: 'block'
-        });
-        var left = label.offset().left;
-        var width = label.width();
+      if (direction === 'right') {
+        var end = firstLabel.offset().left + firstLabel.width();
 
-        if (left < end + 5) {
+        for (var i = 1; i < labels.length; i++) {
+          var label = labels.eq(i);
           label.css({
-            display: 'none'
+            display: 'block'
           });
-        } else {
-          end = left + width;
+          var left = label.offset().left;
+          var width = label.width();
+
+          if (left < end + 5) {
+            label.css({
+              display: 'none'
+            });
+          } else {
+            end = left + width;
+          }
+        }
+      } else if (direction === 'left') {
+        var end = firstLabel.offset().left;
+
+        for (var i = 1; i < labels.length; i++) {
+          var label = labels.eq(i);
+          label.css({
+            display: 'block'
+          });
+          var left = label.offset().left;
+          var width = label.width();
+          var right = left + width;
+
+          if (right > end - 5) {
+            label.css({
+              display: 'none'
+            });
+          } else {
+            end = left;
+          }
         }
       }
     }
@@ -1168,7 +1192,9 @@ var RRangeSliderLabels = /*#__PURE__*/function (_Component5) {
               text: item.text
             },
             key: item.value + 'label',
-            style: _jquery.default.extend({}, Style(item.value), item.style),
+            style: { ...Style(item.value),
+              ...item.style
+            },
             type: "list"
           }));
         }
@@ -1192,7 +1218,9 @@ var RRangeSliderLabels = /*#__PURE__*/function (_Component5) {
             rotate: rotate,
             label: item,
             key: item.value + 'label',
-            style: _jquery.default.extend({}, Style(item.value), item.style),
+            style: { ...Style(item.value),
+              ...item.style
+            },
             type: "list"
           }));
         }
@@ -1403,7 +1431,9 @@ var RRangeSliderPins = /*#__PURE__*/function (_Component7) {
         Pins.push( /*#__PURE__*/_react.default.createElement(RRangeSliderPin, {
           value: item.value,
           key: item.value + 'pin',
-          style: _jquery.default.extend({}, Style(item.value), item.style)
+          style: { ...Style(item.value),
+            ...item.style
+          }
         }));
       }
 
