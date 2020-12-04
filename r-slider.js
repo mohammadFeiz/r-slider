@@ -16,7 +16,6 @@ export default class RRangeSlider extends Component{
     this.htmlStyle = $.extend({},{
       display:'flex',justifyContent:'center',alignItems:'center'
     },htmlStyle);
-    this.touch = this.isMobile();
     this.dom = createRef();
     var {start,end,min = start,max = end,step}=this.props;
     this.state = { 
@@ -28,8 +27,7 @@ export default class RRangeSlider extends Component{
     var dotPos = step.indexOf('.');
     this.fixValue = dotPos === -1?0:step.length - dotPos - 1;
   }
-  isMobile(){return 'ontouchstart' in document.documentElement;}
-  getClient(e){return this.touch?{x: e.changedTouches[0].clientX,y:e.changedTouches[0].clientY }:{x:e.clientX,y:e.clientY}}
+  getClient(e){return 'ontouchstart' in document.documentElement?{x: e.changedTouches[0].clientX,y:e.changedTouches[0].clientY }:{x:e.clientX,y:e.clientY}}
   getPercentByValue(value,start,end){return 100 * (value - start) / (end - start);} //getPercentByValue
   fix(number,a = 6){return parseFloat((number).toFixed(a));}
   getStartByStep(start,step){
@@ -38,7 +36,7 @@ export default class RRangeSlider extends Component{
   }
   eventHandler(selector, event, action,type = 'bind'){
     var me = { mousedown: "touchstart", mousemove: "touchmove", mouseup: "touchend" };
-    event = this.touch ? me[event] : event;
+    event = 'ontouchstart' in document.documentElement ? me[event] : event;
     var element = typeof selector === "string"? (selector === "window"?$(window):$(selector)):selector; 
     element.unbind(event, action); 
     if(type === 'bind'){element.bind(event, action)}
@@ -307,7 +305,6 @@ export default class RRangeSlider extends Component{
     context.mouseDownByValues = this.mouseDownByValues.bind(this);
     context.getStartByStep = this.getStartByStep.bind(this);
     context.getPercentByValue = this.getPercentByValue.bind(this);
-    context.touch = this.touch;
     context.update = this.update.bind(this);
     context.points = this.state.points;
     return context;
@@ -375,12 +372,12 @@ class RRangeSliderFill extends Component{
   }
    
   render(){
-    var {touch,mouseDown,mouseMove,mouseDownByValues,points,endRange,getValue,endRange,values,rangeEvents = {}} = this.context;
+    var {mouseDown,mouseMove,mouseDownByValues,points,endRange,getValue,endRange,values,rangeEvents = {}} = this.context;
     var {index} = this.props;
     var point = index === points.length?endRange:points[index];
     var containerProps = {
       'data-index':index,className:'r-range-slider-fill-container',
-      [touch?'onTouchStart':'onMouseDown']:(e)=>{
+      ['ontouchstart' in document.documentElement?'onTouchStart':'onMouseDown']:(e)=>{
         if(values){mouseDownByValues(e,index,'fill')}
         else{mouseDown(e,index,'fill')}
       },
@@ -422,13 +419,13 @@ class RRangeSliderPoint extends Component{
     else{return {display:'none'};}
   }
   render(){
-    var {points,touch,mouseDown,mouseMove,mouseDownByValues,editValue,values,pointEvents} = this.context;
+    var {points,mouseDown,mouseMove,mouseDownByValues,editValue,values,pointEvents} = this.context;
     var {index} = this.props;
     var point = points[index];
     var props = {
       style:this.getContainerStyle(),'data-index':index,
       className:'r-range-slider-point-container', 
-      [touch?'onTouchStart':'onMouseDown']:(e)=>{
+      ['ontouchstart' in document.documentElement?'onTouchStart':'onMouseDown']:(e)=>{
         if(values){mouseDownByValues(e,index,'point')}
         else{mouseDown(e,index,'point')}
       },
@@ -454,6 +451,11 @@ class RRangeSliderPoint extends Component{
 
 class RRangeSliderLabels extends Component{
   static contextType = RRangeSliderContext;
+  constructor(props){
+    super(props);
+    this.dom = createRef();
+    $(window).on('resize',this.update.bind(this))
+  }
   getLabelsByStep(){
     var {start,label = {},end,getStartByStep,values} = this.context;
     if(values){
@@ -478,6 +480,33 @@ class RRangeSliderLabels extends Component{
       key++;
     } 
     return Labels;
+  }
+  update(){
+    var container = $(this.dom.current);
+    var labels = container.find('.r-range-slider-label div');
+    var firstLabel = labels.eq(0);
+    firstLabel.css({display:'block'})
+    var firstLeft = firstLabel.offset().left;
+    var firstWidth = firstLabel.width();
+    var end = firstLeft + firstWidth;
+    for(var i = 1; i < labels.length; i++){
+      var label = labels.eq(i);
+      label.css({display:'block'})
+      var left = label.offset().left
+      var width = label.width();
+      if(left < end + 5){
+        label.css({display:'none'})
+      }
+      else{end = left + width;}
+      
+    }
+    
+  }
+  componentDidMount(){
+    this.update()
+  }
+  componentDidUpdate(){
+    this.update()
   }
   getLabels(){
     var {label = {},values} = this.context,Labels = [],{items = [],style,rotate,ignoreStep} = label;
@@ -507,7 +536,7 @@ class RRangeSliderLabels extends Component{
     if(!label){return null;}
     var {step} = label;
     return (
-      <div className='r-range-slider-labels'>
+      <div className='r-range-slider-labels' ref={this.dom}>
         {step && this.getLabelsByStep()}
         {this.getLabels()}
       </div>
