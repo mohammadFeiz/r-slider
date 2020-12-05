@@ -1096,13 +1096,19 @@ var RRangeSliderLabels = /*#__PURE__*/function (_Component5) {
   }, {
     key: "update",
     value: function update() {
-      var direction = this.context.direction;
+      var _this$context9 = this.context,
+          direction = _this$context9.direction,
+          _this$context9$label = _this$context9.label,
+          label = _this$context9$label === void 0 ? {} : _this$context9$label;
+      var _label = label,
+          rotate = _label.rotate;
+      var thickness = rotate ? 'height' : 'width';
       var container = (0, _jquery.default)(this.dom.current);
       var labels = container.find('.r-range-slider-label div');
       var firstLabel = labels.eq(0);
 
       if (direction === 'right') {
-        var end = firstLabel.offset().left + firstLabel.width();
+        var end = firstLabel.offset().left + firstLabel[thickness]();
 
         for (var i = 1; i < labels.length; i++) {
           var label = labels.eq(i);
@@ -1110,7 +1116,7 @@ var RRangeSliderLabels = /*#__PURE__*/function (_Component5) {
             display: 'block'
           });
           var left = label.offset().left;
-          var width = label.width();
+          var width = label[thickness]();
 
           if (left < end + 5) {
             label.css({
@@ -1129,7 +1135,7 @@ var RRangeSliderLabels = /*#__PURE__*/function (_Component5) {
             display: 'block'
           });
           var left = label.offset().left;
-          var width = label.width();
+          var width = label[thickness]();
           var right = left + width;
 
           if (right > end - 5) {
@@ -1157,10 +1163,10 @@ var RRangeSliderLabels = /*#__PURE__*/function (_Component5) {
     value: function getLabels() {
       var _this5 = this;
 
-      var _this$context9 = this.context,
-          _this$context9$label = _this$context9.label,
-          label = _this$context9$label === void 0 ? {} : _this$context9$label,
-          values = _this$context9.values,
+      var _this$context10 = this.context,
+          _this$context10$label = _this$context10.label,
+          label = _this$context10$label === void 0 ? {} : _this$context10$label,
+          values = _this$context10.values,
           Labels = [],
           _label$items2 = label.items,
           items = _label$items2 === void 0 ? [] : _label$items2,
@@ -1199,9 +1205,9 @@ var RRangeSliderLabels = /*#__PURE__*/function (_Component5) {
           }));
         }
       } else {
-        var _this$context10 = this.context,
-            start = _this$context10.start,
-            end = _this$context10.end;
+        var _this$context11 = this.context,
+            start = _this$context11.start,
+            end = _this$context11.end;
 
         for (var i = 0; i < items.length; i++) {
           if (ignoreStep && i % igonreStep !== 0) {
@@ -1264,13 +1270,13 @@ var RRangeSliderLabel = /*#__PURE__*/function (_Component6) {
   _createClass(RRangeSliderLabel, [{
     key: "getStyle",
     value: function getStyle() {
-      var _this$context11 = this.context,
-          start = _this$context11.start,
-          end = _this$context11.end,
-          getPercentByValue = _this$context11.getPercentByValue,
-          direction = _this$context11.direction,
-          style = _this$context11.style,
-          values = _this$context11.values;
+      var _this$context12 = this.context,
+          start = _this$context12.start,
+          end = _this$context12.end,
+          getPercentByValue = _this$context12.getPercentByValue,
+          direction = _this$context12.direction,
+          style = _this$context12.style,
+          values = _this$context12.values;
 
       if (values) {
         start = 0;
@@ -1281,8 +1287,8 @@ var RRangeSliderLabel = /*#__PURE__*/function (_Component6) {
           label = _this$props9.label,
           rotate = _this$props9.rotate,
           style = _this$props9.style;
-      var _label = label,
-          value = _label.value;
+      var _label2 = label,
+          value = _label2.value;
       var obj = { ...style
       };
       obj[{
@@ -1302,10 +1308,10 @@ var RRangeSliderLabel = /*#__PURE__*/function (_Component6) {
   }, {
     key: "click",
     value: function click(e) {
-      var _this$context12 = this.context,
-          points = _this$context12.points,
-          update = _this$context12.update,
-          editable = _this$context12.editable;
+      var _this$context13 = this.context,
+          points = _this$context13.points,
+          update = _this$context13.update,
+          editable = _this$context13.editable;
 
       if (!editable) {
         return;
@@ -1367,12 +1373,12 @@ var RRangeSliderPins = /*#__PURE__*/function (_Component7) {
     value: function getPinsByStep() {
       var _this6 = this;
 
-      var _this$context13 = this.context,
-          start = _this$context13.start,
-          end = _this$context13.end,
-          pin = _this$context13.pin,
-          getStartByStep = _this$context13.getStartByStep,
-          values = _this$context13.values,
+      var _this$context14 = this.context,
+          start = _this$context14.start,
+          end = _this$context14.end,
+          pin = _this$context14.pin,
+          getStartByStep = _this$context14.getStartByStep,
+          values = _this$context14.values,
           step = pin.step,
           _pin$style = pin.style,
           style = _pin$style === void 0 ? {} : _pin$style;
@@ -1406,11 +1412,11 @@ var RRangeSliderPins = /*#__PURE__*/function (_Component7) {
   }, {
     key: "getPins",
     value: function getPins() {
-      var _this$context14 = this.context,
-          _this$context14$pin = _this$context14.pin,
-          pin = _this$context14$pin === void 0 ? {} : _this$context14$pin,
-          start = _this$context14.start,
-          end = _this$context14.end;
+      var _this$context15 = this.context,
+          _this$context15$pin = _this$context15.pin,
+          pin = _this$context15$pin === void 0 ? {} : _this$context15$pin,
+          start = _this$context15.start,
+          end = _this$context15.end;
       var _pin$items = pin.items,
           items = _pin$items === void 0 ? [] : _pin$items,
           style = pin.style;
@@ -1471,12 +1477,12 @@ var RRangeSliderPin = /*#__PURE__*/function (_Component8) {
   _createClass(RRangeSliderPin, [{
     key: "getStyle",
     value: function getStyle() {
-      var _this$context15 = this.context,
-          start = _this$context15.start,
-          end = _this$context15.end,
-          direction = _this$context15.direction,
-          getPercentByValue = _this$context15.getPercentByValue,
-          values = _this$context15.values,
+      var _this$context16 = this.context,
+          start = _this$context16.start,
+          end = _this$context16.end,
+          direction = _this$context16.direction,
+          getPercentByValue = _this$context16.getPercentByValue,
+          values = _this$context16.values,
           _this$props11 = this.props,
           value = _this$props11.value,
           style = _this$props11.style;
