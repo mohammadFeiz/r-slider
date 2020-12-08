@@ -477,21 +477,22 @@ class RRangeSliderLabels extends Component{
     } 
     return Labels;
   }
-  update(){
+  update(){ 
+    var container = $(this.dom.current); 
+    var labels = container.find('.r-range-slider-label div'); 
+    if(!labels.length){return;}
     var {direction,label = {}} = this.context;
-    var {rotate} = label;
-    var thickness = rotate?'height':'width';
-    var container = $(this.dom.current);
-    var labels = container.find('.r-range-slider-label div');
+    var {rotate} = label; 
+    var thickness = rotate?'height':'width'; 
     var firstLabel = labels.eq(0);
     if(direction === 'right'){
       var end = firstLabel.offset().left + firstLabel[thickness]();
       for(var i = 1; i < labels.length; i++){
         var label = labels.eq(i);
-        label.css({display:'block'})
+        label.css({display:'block'}) 
         var left = label.offset().left
         var width = label[thickness]();
-        if(left < end + 5){
+        if(left < end + 5){ 
           label.css({display:'none'})
         }
         else{end = left + width;} 

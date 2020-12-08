@@ -1096,6 +1096,13 @@ var RRangeSliderLabels = /*#__PURE__*/function (_Component5) {
   }, {
     key: "update",
     value: function update() {
+      var container = (0, _jquery.default)(this.dom.current);
+      var labels = container.find('.r-range-slider-label div');
+
+      if (!labels.length) {
+        return;
+      }
+
       var _this$context9 = this.context,
           direction = _this$context9.direction,
           _this$context9$label = _this$context9.label,
@@ -1103,8 +1110,6 @@ var RRangeSliderLabels = /*#__PURE__*/function (_Component5) {
       var _label = label,
           rotate = _label.rotate;
       var thickness = rotate ? 'height' : 'width';
-      var container = (0, _jquery.default)(this.dom.current);
-      var labels = container.find('.r-range-slider-label div');
       var firstLabel = labels.eq(0);
 
       if (direction === 'right') {
