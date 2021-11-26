@@ -82,6 +82,22 @@ id|Set id of slider|string|optional
 />
 ```
 ![alt text](/images/showvalue-false.gif)
+##### valueStyle:
+```javascript
+<Slider 
+   points={[30]}
+   showValue={true}
+   valueStyle={()=>{
+     return {
+        background:'orange',
+        fontSize:16,
+        top:'-30px'
+     }
+   }}
+/>
+```
+![alt text](/images/valuestyle1.jpg)
+
 ### fillStyle
 ```javascript
 <Slider 
