@@ -203,53 +203,53 @@ id|Set id of slider|string|optional
 ### awesome slider configuration1
 ```javascript
 <div className='slider-container'>   
-         <Slider
-                  points={[30]}
-                  labelStep={10}
-                  scaleStep={10}
-                  style={()=>{
-                           return {
-                                    background:'#666',
-                                    padding:'0 12px',
-                                    height:24,
-                                    borderRadius:40,
-                                    boxShadow:'inset 0 1px 4px 0px'
-                           }
-                  }}
-                  pointStyle={()=>{
-                        return {
-                          width:40,
-                          height:40,
-                          background:'#aaa',
-                          border:'3px solid #666',
-                          boxShadow:'4px 4px 8px 0px rgba(0,0,0,.5)'
-                        }
-                  }}
-                  labelStyle={()=>{
-                           return {top:63,color:'#666'}
-                  }}
-                  scaleStyle={()=>{
-                        return {
-                          width:6,
-                          height:6,
-                          top:48,
-                          background:'#666',
-                          borderRadius:'100%',
-                          transform:'translateX(-3px)'
-                        }
-                  }}
-                  lineStyle={()=>{
-                           return {background:'#777'}
-                  }}
-                  showValue={true}
-                  valueStyle={()=>{
-                        return {
-                          background:'none',
-                          top:-8,
-                          color:'#666'
-                        }
-                  }}
-         />
+<Slider
+   points={[30]}
+   labelStep={10}
+   scaleStep={10}
+   style={()=>{
+      return {
+         background:'#666',
+         padding:'0 12px',
+         height:24,
+         borderRadius:40,
+         boxShadow:'inset 0 1px 4px 0px'
+      }
+   }}
+   pointStyle={()=>{
+      return {
+        width:40,
+        height:40,
+        background:'#aaa',
+        border:'3px solid #666',
+        boxShadow:'4px 4px 8px 0px rgba(0,0,0,.5)'
+      }
+   }}
+   labelStyle={()=>{
+      return {top:63,color:'#666'}
+   }}      
+   scaleStyle={()=>{
+      return {
+        width:6,
+        height:6,
+        top:48,
+        background:'#666',
+        borderRadius:'100%',
+        transform:'translateX(-3px)'
+      }
+   }}
+   lineStyle={()=>{
+      return {background:'#777'}
+   }}
+   showValue={true}
+   valueStyle={()=>{
+      return {
+        background:'none',
+        top:-8,
+        color:'#666'
+      }
+   }}
+/>
 </div>
 ```
 css
