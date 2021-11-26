@@ -146,4 +146,31 @@ id|Set id of slider|string|optional
 />
 ```
 ![alt text](/images/label1.jpg)
+### scaling
+```javascript
+<Slider 
+    start={-500}
+    end={500}
+    points={[-500]}
+    scaleStep={10}
+    scaleStyle={(value)=>{
+      if(value % 100 === 0){return {height:'16px'}}
+      if(value % 50 === 0){return {height:'8px'}}
+      return {height:'5px'} 
+    }}
+    labelStep={100}
+    editLabel={(value)=>{
+      if(value === -300){return 'min'}
+      if(value === 300){return 'max'}
+      return value;      
+    }}
+    getLabelStyle={(value)=>{
+      if(value === -300 || value === 300){
+        return {color:'red',fontWeight:'bold',fontSize:12}
+      }
+    }}
+/>
+```
+![alt text](/images/scale1.jpg)
+
 
