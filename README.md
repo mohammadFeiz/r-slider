@@ -64,13 +64,13 @@ id|Set id of slider|string|optional
 ```javascript
 <Slider />
 ```
-![alt text](/images/showvalue-undefined.jpg)
+![alt text](/images/showvalue-undefined.gif)
 ##### showValue as true:
 ###### if you set showValue={true}, value of points alwais will be visible. 
-![alt text](/images/showvalue-true.jpg)
+![alt text](/images/showvalue-true.gif)
 ##### showValue as false:
 ###### if you set showValue={false}, value of points alwais will be invisible. 
-![alt text](/images/showvalue-false.jpg)
+![alt text](/images/showvalue-false.gif)
 ### fillStyle
 ```javascript
 <Slider 
