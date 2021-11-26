@@ -111,6 +111,7 @@ or styling by css:
 ### fillStyle
 ```javascript
 <Slider 
+      className='my-slider'
       points={[20]} 
       start={0} 
       end={100}
@@ -119,20 +120,34 @@ or styling by css:
       }}
 />
 ```
+or styling by css:
+```javascript
+.my-slider .r-range-slider-fill{
+   background:dodgerblue;
+}
+```
 ![alt text](/images/getfillstyle1.jpg)
 
 ```javascript
 <Slider 
-      points={[20]} 
-      start={0} 
-      end={100}
-      fillStyle={(index)=>{
-            if(index === 0){
-                  return {background:'dodgerblue'}
-            }
-      }}
+   className='my-slider'
+   points={[20]} 
+   start={0} 
+   end={100}
+   fillStyle={(index)=>{
+      if(index === 0){
+         return {background:'dodgerblue'}
+      }
+   }}
 />
 ```
+or styling by css:
+```javascript
+.my-slider .r-range-slider-fill[data-index=1]{
+   background:dodgerblue;
+}
+```
+
 ![alt text](/images/getfillstyle2.jpg)
 
 ```javascript
@@ -147,6 +162,13 @@ or styling by css:
       }}
 />
 ```
+or styling by css:
+```javascript
+.my-slider .r-range-slider-fill[data-index=1]{
+   background:dodgerblue;
+}
+```
+
 ![alt text](/images/getfillstyle3.jpg)
 
 ### pointStyle (function)
