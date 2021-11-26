@@ -22,12 +22,14 @@ import React from 'react';
 ### props list
 Prop | Description | Type | Default
 ---- | ----------- | ---- | -------
-start | Start of slider range | number |  
-end | End of slider range | number | 
+start | Start of slider range | number | 0 
+end | End of slider range | number | 100
 step | Step of change slider | number | 1
 min | Set Minimum amount allowed | number | optional
 max | Set Maximum amount allowed(optional) | number | optional
-points | Set Slider Points | array of objects| 
+points | Slider Points value | array of numbers| [0] 
+getFillStyle | get fill index as parameter and should returns fill css object | function | optional
+getPointStyle | get point index as parameter and should returns point css object | function | optional
 changable | This allows us to change the slider with mouse | boolean | true
 showValue | Makes the point value appear on the point.if false , never show value, and if 'fixed' alwais show value |boolean or 'fixed'
 label | Labeling slider based on number of steps or custom labels | object | optional
@@ -37,19 +39,111 @@ direction|Set direction of slider("left","right","top","bottom")|string|"right"
 className|Set className of slider|string|optional
 id|Set id of slider|string|optional
 
-<ul>
-      <li>1- value:value of point in range(number).</li>
-      <li>2- fillColor: set color of range line in slider.(string or function that receives the point object as parameter).(default is 'blue')</li>
-      <li>3- text: this text will be rendered in center of range line.(string or function that receives the point object as parameter).</li>
-      <li>4- className:set className for point.useful in set style of point.(string)</li>
-      <li>5- style:set inline css for point.(object or function that receives the point object as parameter)</li>
-      </ul>
-<a href="https://stackblitz.com/edit/r-slider-demo1?file=style.css">Single range width Label Demo</a><br/>
-<a href="https://stackblitz.com/edit/r-slider-demo2?file=index.js">use custome style and range text</a><br/>
-<a href="https://stackblitz.com/edit/react-9tuesa">Use slider as switch</a><br/>
-<a href="https://stackblitz.com/edit/r-slider-triple-mode-switch?file=index.js">Use slider as triple mode switch</a><br/>
-<a href="https://stackblitz.com/edit/awesome-sliders?file=index.js">Awesome Demos</a><br/>
-
-
+### Basic (one point)
+```javascript
+<Slider points={[20]} start={0} end={100}/>
+```
+![alt text](/images/basic.jpg)
          
-         
+### 2 points
+```javascript
+<Slider points={[20,60]} start={0} end={100}/>
+```
+![alt text](/images/2-points.jpg)
+
+### multi points
+```javascript
+<Slider points={[20,60,80,100]} start={0} end={100}/>
+```
+![alt text](/images/multi-points.jpg)
+
+### getFillStyle
+```javascript
+<Slider 
+      points={[20]} 
+      start={0} 
+      end={100}
+      getFillStyle={()=>{
+            return {background:'dodgerblue'}
+      }}
+/>
+```
+![alt text](/images/getfillstyle1.jpg)
+
+```javascript
+<Slider 
+      points={[20]} 
+      start={0} 
+      end={100}
+      getFillStyle={(index)=>{
+            if(index === 0){
+                  return {background:'dodgerblue'}
+            }
+      }}
+/>
+```
+![alt text](/images/getfillstyle2.jpg)
+
+```javascript
+<Slider 
+      start={0} 
+      end={100}
+      points={[20,50]}
+      getFillStyle={(index)=>{
+            if(index === 1){
+                  return {background:'dodgerblue'}
+            }
+      }}
+/>
+```
+![alt text](/images/getfillstyle3.jpg)
+
+### getPointStyle (function)
+```javascript
+<Slider 
+      start={0} 
+      end={100}
+      points={[20,60]}
+      getPointStyle={(index)=>{
+            if(index === 0){
+                  return {background:'orange',borderRadius:0}
+            }
+            else {
+                  return {background:'pink'}
+            }
+      }}
+/>
+```
+![alt text](/images/getpointstyle1.jpg)
+
+### getLineStyle (function)
+```javascript
+<Slider 
+      start={0} 
+      end={100}
+      points={[20]}
+      getLineStyle:()=>{
+            return {height:12,background:'lightblue'}
+      },
+/>
+```
+![alt text](/images/getlinestyle1.jpg)
+
+### labeling
+```javascript
+<Slider 
+      start={0}
+      end={11}
+      step={1}
+      labelStep={1}
+      editLabel={(value)=>{
+            return ['January','February','March','April','May','June','July','August','September','October','November','December'][value].slice(0,3)
+      }}
+      getLabelStyle={(value)=>{
+            if(value === 6){return {fontSize:12,color:'red',fontWeight:'bold'}}
+            return {fontSize:10,color:'dodgerblue'}
+      }}
+/>
+```
+![alt text](/images/label1.jpg)
+
