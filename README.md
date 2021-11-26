@@ -38,27 +38,26 @@ ondrag|callback function that is to be executed while draging point(s) of slider
 direction|Set direction of slider("left","right","top","bottom")|string|"right"
 className|Set className of slider|string|optional
 id|Set id of slider|string|optional
-
-### Basic (one point)
+-------------------------------------------------------
+- ## Basic (one point)
 ```javascript
 <Slider points={[20]} start={0} end={100}/>
 ```
 ![alt text](/images/basic.jpg)
-         
-### 2 points
+-------------------------------------------------------   
+- ## 2 points
 ```javascript
 <Slider points={[20,60]} start={0} end={100}/>
 ```
 ![alt text](/images/2-points.jpg)
-
-### multi points
+-------------------------------------------------------
+- ## multi points
 ```javascript
 <Slider points={[20,60,80,100]} start={0} end={100}/>
 ```
 ![alt text](/images/multi-points.jpg)
-
-## showValue(props):
-
+-------------------------------------------------------
+- ## showValue(props):
 ##### showValue as undefined:
 ###### if you not set showValue, value of points will be visible when you mousedown on points. 
 ```javascript
@@ -72,7 +71,6 @@ id|Set id of slider|string|optional
    showValue={true}
 />
 ```
-
 ![alt text](/images/showvalue-true.gif)
 ##### showValue as false:
 ###### if you set showValue={false}, value of points alwais will be invisible. 
@@ -82,7 +80,8 @@ id|Set id of slider|string|optional
 />
 ```
 ![alt text](/images/showvalue-false.gif)
-## valueStyle(props):
+-----------------------------------------------------------
+- ## valueStyle(props):
 ```javascript
 <Slider 
    className='my-slider'
@@ -97,7 +96,7 @@ id|Set id of slider|string|optional
    }}
 />
 ```
-or styling by css:
+##### or styling by css:
 ```javascript
 .my-slider .r-range-slider-value{
    background:orange;
@@ -105,10 +104,9 @@ or styling by css:
    top:-30px;
 }
 ```
-
 ![alt text](/images/valuestyle1.jpg)
-
-## fillStyle(props):
+-----------------------------------------------------
+- ## fillStyle(props):
 ```javascript
 <Slider 
       className='my-slider'
@@ -120,7 +118,7 @@ or styling by css:
       }}
 />
 ```
-or styling by css:
+##### or styling by css:
 ```javascript
 .my-slider .r-range-slider-fill{
    background:dodgerblue;
@@ -141,7 +139,7 @@ or styling by css:
    }}
 />
 ```
-or styling by css:
+##### or styling by css:
 ```javascript
 .my-slider .r-range-slider-fill[data-index=1]{
    background:dodgerblue;
@@ -163,34 +161,44 @@ or styling by css:
       }}
 />
 ```
-or styling by css:
+##### or styling by css:
 ```javascript
 .my-slider .r-range-slider-fill[data-index=1]{
    background:dodgerblue;
 }
 ```
-
 ![alt text](/images/getfillstyle3.jpg)
-
-### pointStyle (function)
+-------------------------------------------------
+- ## pointStyle (function)
 ```javascript
 <Slider 
-      start={0} 
-      end={100}
-      points={[20,60]}
-      pointStyle={(index)=>{
-            if(index === 0){
-                  return {background:'orange',borderRadius:0}
-            }
-            else {
-                  return {background:'pink'}
-            }
-      }}
+   className='my-slider'
+   start={0} 
+   end={100}
+   points={[20,60]}
+   pointStyle={(index)=>{
+      if(index === 0){
+         return {background:'orange',borderRadius:0}
+      }
+      else {
+         return {background:'pink'}
+      }
+   }}
 />
 ```
+##### or styling by css:
+```javascript
+.my-slider .r-range-slider-point{
+   background:pink;
+}
+.my-slider .r-range-slider-point[data-index=0]{
+   background:orange;
+   border-radius:0;
+}
+```
 ![alt text](/images/getpointstyle1.jpg)
-
-### lineStyle (function)
+----------------------------------------------------------------------
+- ## lineStyle (function)
 ```javascript
 <Slider 
       start={0} 
