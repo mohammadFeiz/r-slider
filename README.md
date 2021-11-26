@@ -28,8 +28,8 @@ step | Step of change slider | number | 1
 min | Set Minimum amount allowed | number | optional
 max | Set Maximum amount allowed(optional) | number | optional
 points | Slider Points value | array of numbers| [0] 
-getFillStyle | get fill index as parameter and should returns fill css object | function | optional
-getPointStyle | get point index as parameter and should returns point css object | function | optional
+fillStyle | get fill index as parameter and should returns fill css object | function | optional
+pointStyle | get point index as parameter and should returns point css object | function | optional
 changable | This allows us to change the slider with mouse | boolean | true
 showValue | Makes the point value appear on the point.if false , never show value, and if 'fixed' alwais show value |boolean or 'fixed'
 label | Labeling slider based on number of steps or custom labels | object | optional
@@ -57,13 +57,27 @@ id|Set id of slider|string|optional
 ```
 ![alt text](/images/multi-points.jpg)
 
-### getFillStyle
+### showValue
+
+##### showValue as undefined:
+###### if you not set showValue, value of points will be visible when you mousedown on points. 
+```javascript
+<Slider />
+```
+![alt text](/images/showvalue-undefined.jpg)
+##### showValue as true:
+###### if you set showValue={true}, value of points alwais will be visible. 
+![alt text](/images/showvalue-true.jpg)
+##### showValue as false:
+###### if you set showValue={false}, value of points alwais will be invisible. 
+![alt text](/images/showvalue-false.jpg)
+### fillStyle
 ```javascript
 <Slider 
       points={[20]} 
       start={0} 
       end={100}
-      getFillStyle={()=>{
+      fillStyle={()=>{
             return {background:'dodgerblue'}
       }}
 />
@@ -75,7 +89,7 @@ id|Set id of slider|string|optional
       points={[20]} 
       start={0} 
       end={100}
-      getFillStyle={(index)=>{
+      fillStyle={(index)=>{
             if(index === 0){
                   return {background:'dodgerblue'}
             }
@@ -89,7 +103,7 @@ id|Set id of slider|string|optional
       start={0} 
       end={100}
       points={[20,50]}
-      getFillStyle={(index)=>{
+      fillStyle={(index)=>{
             if(index === 1){
                   return {background:'dodgerblue'}
             }
@@ -98,13 +112,13 @@ id|Set id of slider|string|optional
 ```
 ![alt text](/images/getfillstyle3.jpg)
 
-### getPointStyle (function)
+### pointStyle (function)
 ```javascript
 <Slider 
       start={0} 
       end={100}
       points={[20,60]}
-      getPointStyle={(index)=>{
+      pointStyle={(index)=>{
             if(index === 0){
                   return {background:'orange',borderRadius:0}
             }
@@ -116,13 +130,13 @@ id|Set id of slider|string|optional
 ```
 ![alt text](/images/getpointstyle1.jpg)
 
-### getLineStyle (function)
+### lineStyle (function)
 ```javascript
 <Slider 
       start={0} 
       end={100}
       points={[20]}
-      getLineStyle:()=>{
+      lineStyle:()=>{
             return {height:12,background:'lightblue'}
       },
 />
@@ -173,4 +187,78 @@ id|Set id of slider|string|optional
 ```
 ![alt text](/images/scale1.jpg)
 
+```javascript
+<Slider
+    ...
+    editLabel={(value)=>{
+      if(value === -300){return 'min'}
+      if(value === 300){return 'max'}
+      return null;      
+    }}
+    ...
+/>
+```
+![alt text](/images/label2.jpg)
 
+### awesome slider configuration1
+```javascript
+<div className='slider-container'>   
+         <Slider
+                  points={[30]}
+                  labelStep={10}
+                  scaleStep={10}
+                  style={()=>{
+                           return {
+                                    background:'#666',
+                                    padding:'0 12px',
+                                    height:24,
+                                    borderRadius:40,
+                                    boxShadow:'inset 0 1px 4px 0px'
+                           }
+                  }}
+                  pointStyle={()=>{
+                        return {
+                          width:40,
+                          height:40,
+                          background:'#aaa',
+                          border:'3px solid #666',
+                          boxShadow:'4px 4px 8px 0px rgba(0,0,0,.5)'
+                        }
+                  }}
+                  labelStyle={()=>{
+                           return {top:63,color:'#666'}
+                  }}
+                  scaleStyle={()=>{
+                        return {
+                          width:6,
+                          height:6,
+                          top:48,
+                          background:'#666',
+                          borderRadius:'100%',
+                          transform:'translateX(-3px)'
+                        }
+                  }}
+                  lineStyle={()=>{
+                           return {background:'#777'}
+                  }}
+                  showValue={true}
+                  valueStyle={()=>{
+                        return {
+                          background:'none',
+                          top:-8,
+                          color:'#666'
+                        }
+                  }}
+         />
+</div>
+```
+css
+```javascript
+.slider-container{
+  background: linear-gradient(to bottom, #454545 0%, #ddd 100%);
+  padding:10px;
+  box-sizing:border-box;
+  border-radius:40px; 
+}
+```
+![alt text](/images/awesome-1.jpg)
