@@ -331,6 +331,9 @@ id|Set id of slider|string|optional
 ```
 css
 ```javascript
+body{
+  background:#ccc;
+}
 .slider-container{
   background: linear-gradient(to bottom, #454545 0%, #ddd 100%);
   padding:10px;
@@ -338,4 +341,4 @@ css
   border-radius:40px; 
 }
 ```
-![alt text](/images/awesome-1.jpg)
+![alt text](/images/awesome1.jpg)
