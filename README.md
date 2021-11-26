@@ -57,7 +57,7 @@ id|Set id of slider|string|optional
 ```
 ![alt text](/images/multi-points.jpg)
 
-## showValue
+## showValue(props):
 
 ##### showValue as undefined:
 ###### if you not set showValue, value of points will be visible when you mousedown on points. 
@@ -82,7 +82,7 @@ id|Set id of slider|string|optional
 />
 ```
 ![alt text](/images/showvalue-false.gif)
-## valueStyle:
+## valueStyle(props):
 ```javascript
 <Slider 
    className='my-slider'
@@ -92,7 +92,7 @@ id|Set id of slider|string|optional
      return {
         background:'orange',
         fontSize:16,
-        top:'-30px'
+        top:-30
      }
    }}
 />
@@ -101,7 +101,7 @@ or styling by css:
 ```javascript
 .my-slider .r-range-slider-value{
    background:orange;
-   fontSize:16pc;
+   fontSize:16px;
    top:-30px;
 }
 ```
