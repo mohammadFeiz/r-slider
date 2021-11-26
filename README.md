@@ -57,7 +57,7 @@ id|Set id of slider|string|optional
 ```
 ![alt text](/images/multi-points.jpg)
 
-### showValue
+## showValue
 
 ##### showValue as undefined:
 ###### if you not set showValue, value of points will be visible when you mousedown on points. 
@@ -82,7 +82,7 @@ id|Set id of slider|string|optional
 />
 ```
 ![alt text](/images/showvalue-false.gif)
-##### valueStyle:
+## valueStyle:
 ```javascript
 <Slider 
    className='my-slider'
