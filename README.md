@@ -342,3 +342,50 @@ body{
 }
 ```
 ![alt text](/images/awesome1.jpg)
+--------------------------------------------------
+- ## awesome slider configuration2
+```javascript
+<div className='slider-container'>   
+<Slider
+   start={1}
+   end:{7}
+   points={[3]}
+   pointStyle={()=>{
+      return {
+        width:30,
+        height:30,
+        border:'3px solid #888',
+        background:'#ddd'
+      }
+   }}
+   scaleStep={1}
+   scaleStyle={()=>{
+      return {
+        width:30,
+        height:30,
+        borderRadius:'100%',
+        top:3,
+        transform:'translateX(-15px)',
+        background:'#888',
+        zIndex:10,
+      }
+   }}
+   lineStyle{()=>{
+      return {
+        background:'#888'
+      }
+   }}
+   showValue={true}
+   valueStyle={()=>{
+      return {
+        background:'none',
+        color:'#888',
+        top:-11,
+        fontSize:16
+      }
+   }}
+/>
+</div>
+```
+![alt text](/images/awesome2.jpg)
+
