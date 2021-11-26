@@ -85,6 +85,7 @@ id|Set id of slider|string|optional
 ##### valueStyle:
 ```javascript
 <Slider 
+   className='my-slider'
    points={[30]}
    showValue={true}
    valueStyle={()=>{
@@ -96,6 +97,15 @@ id|Set id of slider|string|optional
    }}
 />
 ```
+or styling by css:
+```javascript
+.my-slider .r-range-slider-value{
+   background:orange;
+   fontSize:16pc;
+   top:-30px;
+}
+```
+
 ![alt text](/images/valuestyle1.jpg)
 
 ### fillStyle
