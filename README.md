@@ -201,6 +201,7 @@ id|Set id of slider|string|optional
 - ## lineStyle (function)
 ```javascript
 <Slider 
+      className='my-slider'
       start={0} 
       end={100}
       points={[20]}
@@ -209,26 +210,34 @@ id|Set id of slider|string|optional
       },
 />
 ```
+##### or styling by css:
+```javascript
+.my-slider .r-range-slider-line{
+   height:12px;
+   background:lightblue;
+}
+```
 ![alt text](/images/getlinestyle1.jpg)
-
-### labeling
+-------------------------------------------------------------------
+- ## labeling
 ```javascript
 <Slider 
-      start={0}
-      end={11}
-      step={1}
-      labelStep={1}
-      editLabel={(value)=>{
-            return ['January','February','March','April','May','June','July','August','September','October','November','December'][value].slice(0,3)
-      }}
-      getLabelStyle={(value)=>{
-            if(value === 6){return {fontSize:12,color:'red',fontWeight:'bold'}}
-            return {fontSize:10,color:'dodgerblue'}
-      }}
+   start={0}
+   end={11}
+   step={1}
+   labelStep={1}
+   editLabel={(value)=>{
+      return ['January','February','March','April','May','June','July','August','September','October','November','December'][value].slice(0,3)
+   }}
+   getLabelStyle={(value)=>{
+      if(value === 6){return {fontSize:12,color:'red',fontWeight:'bold'}}
+      return {fontSize:10,color:'dodgerblue'}
+   }}
 />
 ```
 ![alt text](/images/label1.jpg)
-### scaling
+--------------------------------------------------------------
+- ## scaling
 ```javascript
 <Slider 
     start={-500}
@@ -254,7 +263,7 @@ id|Set id of slider|string|optional
 />
 ```
 ![alt text](/images/scale1.jpg)
-
+##### other example:
 ```javascript
 <Slider
     ...
@@ -267,8 +276,8 @@ id|Set id of slider|string|optional
 />
 ```
 ![alt text](/images/label2.jpg)
-
-### awesome slider configuration1
+--------------------------------------------------
+- ## awesome slider configuration1
 ```javascript
 <div className='slider-container'>   
 <Slider
