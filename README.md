@@ -127,7 +127,7 @@ or styling by css:
 }
 ```
 ![alt text](/images/getfillstyle1.jpg)
-other example:
+##### other example:
 ```javascript
 <Slider 
    className='my-slider'
@@ -150,7 +150,7 @@ or styling by css:
 
 ![alt text](/images/getfillstyle2.jpg)
 
-other example:
+##### other example:
 ```javascript
 <Slider 
       start={0} 
