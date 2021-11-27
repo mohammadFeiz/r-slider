@@ -240,6 +240,21 @@ class App extends Component {
   }
 }
 ```
+##### or styling by css:
+```javascript
+.my-slider .r-range-slider-value{
+  background:#ccc;
+  width:36px;
+  height:36px;
+  top:-22px;
+  padding:0;
+  border:2px solid #ddd;
+  border-radius:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+```
 ![alt text](/images/valuestyle2.gif)
 
 -----------------------------------------------------
