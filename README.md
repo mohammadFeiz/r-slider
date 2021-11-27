@@ -182,7 +182,7 @@ class App extends Component {
   }
 }
 ```
-![alt text](/images/directions-left.gif)
+![alt text](/images/direction-left.gif)
 -----------------------------------------------------------
 
 - ## valueStyle(props):
