@@ -33,8 +33,7 @@ pointStyle | get point index as parameter and should returns point css object | 
 changable | This allows us to change the slider with mouse | boolean | true
 showValue | Makes the point value appear on the point.if false , never show value, and if 'fixed' alwais show value |boolean or 'fixed'
 label | Labeling slider based on number of steps or custom labels | object | optional
-onchange|callback function that is to be executed in end of changing point(s) of slider. this function get all props of slider as parameter|function
-ondrag|callback function that is to be executed while draging point(s) of slider. this function get all props of slider as parameter.|function
+onChange|function that get points and dragging as parameters|function|required
 direction|Set direction of slider("left","right","top","bottom")|string|"right"
 className|Set className of slider|string|optional
 id|Set id of slider|string|optional
@@ -57,6 +56,41 @@ id|Set id of slider|string|optional
 ```
 ![alt text](/images/multi-points.jpg)
 -------------------------------------------------------
+- ## onChange
+```javascript
+export default class App extends Component {
+  state = {value:30,draggingValue:'value is 30',finalValue:'value is 30'};
+  render() {
+    let {value,draggingValue,finalValue} = this.state;
+    return (
+      <>
+        <Slider
+          start={0}
+          end={100}
+          points={[value]}
+          onChange={(points,dragging)=>{
+            this.setState({
+              value:points[0],
+              draggingValue:`value is ${points[0]}`
+            });
+            if(!dragging){
+              this.setState({
+                finalValue:`value is ${points[0]}`
+              });
+            }
+
+          }}
+        />
+        <span>{draggingValue}</span>
+        <br/>
+        <span>{finalValue}</span>
+      </> 
+    );
+  }
+}
+```
+![alt text](/images/onchange1.jpg)
+
 - ## showValue(props):
 ##### showValue as undefined:
 ###### if you not set showValue, value of points will be visible when you mousedown on points. 
