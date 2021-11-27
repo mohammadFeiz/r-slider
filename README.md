@@ -33,7 +33,8 @@ fillStyle | get fill index as parameter and should returns fill css object | fun
 pointStyle | get point index as parameter and should returns point css object | function | optional
 valueStyle | returns css object for value of points | function | optional
 lineStyle | returns css object for slider line | function | optional
-showValue | Makes the point value appear on the point.if false , never show value, if true alwais show value and if not set , show when mouse down on points |boolean or 'fixed'
+showValue | Makes the point value appear on the point.if false , never show value, if true alwais show value and if not set , show when mouse down on points |boolean or undefined
+editValue | get point popover value as parameter and returns edited value to show on point |function
 labelStep | show labels based on labelStep from start to end | number | optional
 editLabel | get value of label as parameter and returns edited label based on value | function | optional
 labelStyle | get value of label as parameter and returns css object of label | function | optional
