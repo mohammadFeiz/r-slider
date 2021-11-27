@@ -208,6 +208,40 @@ class App extends Component {
 }
 ```
 ![alt text](/images/valuestyle1.jpg)
+##### other example:
+```javascript
+class App extends Component {
+  state = {value:50};
+  render() {
+    let {value} = this.state;
+    return (  
+      <Slider
+        start={0}
+        end={100}
+        points={[value]}
+        onChange={(points)=>this.setState({value:points[0]})}
+        showValue={true}
+        valueStyle={()=>{
+          return {
+            background:'#ccc',
+            width:36,
+            top:-22,
+            height:36,
+            padding:0,
+            border:'2px solid #ddd',
+            borderRadius:'100%',
+            display:'flex',
+            alignItems:'center',
+            justifyContent:'center'
+          }
+        }}
+      /> 
+    );
+  }
+}
+```
+![alt text](/images/valuestyle2.jpg)
+
 -----------------------------------------------------
 - ## fillStyle(props):
 ```javascript
