@@ -89,7 +89,7 @@ export default class App extends Component {
   }
 }
 ```
-![alt text](/images/onchange1.jpg)
+![alt text](/images/onchange1.gif)
 
 - ## showValue(props):
 ##### showValue as undefined:
