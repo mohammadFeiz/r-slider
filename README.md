@@ -219,50 +219,51 @@ id|Set id of slider|string|optional
 ```
 ![alt text](/images/getlinestyle1.jpg)
 -------------------------------------------------------------------
-- ## labeling
+- ## labeling and scaling
 ```javascript
-<Slider 
-   start={0}
-   end={11}
-   step={1}
-   labelStep={1}
-   editLabel={(value)=>{
-      return ['January','February','March','April','May','June','July','August','September','October','November','December'][value].slice(0,3)
-   }}
-   getLabelStyle={(value)=>{
-      if(value === 6){return {fontSize:12,color:'red',fontWeight:'bold'}}
-      return {fontSize:10,color:'dodgerblue'}
-   }}
-/>
+import React, { Component } from 'react';
+import Slider from 'r-range-slider';
+import './style.css';
+
+export default class App extends Component {
+  state = {points:[-500]};
+  render() {
+    let {points} = this.state;
+    return (
+      <Slider
+        start={-500}
+        end={500}
+        points={points}
+        scaleStep={10}
+        scaleStyle={(value)=>{
+          if(value % 100 === 0){return {height:'16px'}}
+          if(value % 50 === 0){return {height:'8px'}}
+          return {height:'5px'} 
+        }}
+        labelStep={100}
+        editLabel={(value)=>{
+          if(value === -300){return 'min'}
+          if(value === 300){return 'max'}
+          return value;      
+        }}
+        labelStyle={(value)=>{
+          if(value === -300 || value === 300){
+            return {color:'red',fontWeight:'bold',fontSize:12}
+          }
+        }}
+        onChange={(points)=>{
+          this.setState({points})
+        }}
+        onLabelClick={(value)=>{
+          this.setState({points:[value]})
+        }}
+      /> 
+    );
+  }
+}
 ```
 ![alt text](/images/label1.jpg)
---------------------------------------------------------------
-- ## scaling
-```javascript
-<Slider 
-    start={-500}
-    end={500}
-    points={[-500]}
-    scaleStep={10}
-    scaleStyle={(value)=>{
-      if(value % 100 === 0){return {height:'16px'}}
-      if(value % 50 === 0){return {height:'8px'}}
-      return {height:'5px'} 
-    }}
-    labelStep={100}
-    editLabel={(value)=>{
-      if(value === -300){return 'min'}
-      if(value === 300){return 'max'}
-      return value;      
-    }}
-    getLabelStyle={(value)=>{
-      if(value === -300 || value === 300){
-        return {color:'red',fontWeight:'bold',fontSize:12}
-      }
-    }}
-/>
-```
-![alt text](/images/scale1.jpg)
+
 ##### other example:
 ```javascript
 <Slider
