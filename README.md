@@ -220,6 +220,49 @@ id|Set id of slider|string|optional
 ![alt text](/images/getlinestyle1.jpg)
 -------------------------------------------------------------------
 - ## labeling and scaling
+```havascript
+<Slider
+  start={0}
+  end={100}
+  points={[50]}
+  labelStep={10}
+/> 
+```
+![alt text](/images/labeling1.jpg)
+```havascript
+<Slider
+  start={0}
+  end={100}
+  points={[50]}
+  labelStep={10}
+  scaleStep={5}
+/> 
+```
+![alt text](/images/labeling2.jpg)
+```havascript
+<Slider
+  start={0}
+  end={100}
+  points={[50]}
+  labelStep={10}
+  scaleStep={5}
+  scaleStyle={(value)=>{
+    return {
+      height:value % 10 === 0?12:7,
+      background:'#888',
+      width:2,
+      transform:'translateX(-1px)'
+    }
+  }}
+  labelStyle={()=>{
+    return {
+      top:40,
+      color:'#888'
+    }
+  }}
+/>
+```
+![alt text](/images/labeling3.jpg)
 
 ```javascript
 export default class App extends Component {
