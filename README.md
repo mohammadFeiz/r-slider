@@ -589,5 +589,5 @@ class App extends Component {
   }
 }
 ```
-![alt text](/images/awesome3.jpg)
+![alt text](/images/awesome3.gif)
 
