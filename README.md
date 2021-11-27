@@ -630,6 +630,16 @@ class App extends Component {
             end={1}
             showValue={false}
             attrs={{
+              style:{
+                width:90,
+                height:36,
+                background:'#111',
+                borderRadius:36,
+                padding:'0 18px',
+                boxShadow:'inset 0 2px 6px 1px #000',
+                border:'1px solid',
+                borderColor:'#222 #222 #333 #222',
+              },
               onClick:()=>{
                 this.setState({value:!value})
               }
@@ -651,18 +661,6 @@ class App extends Component {
                   transform:'translateX(10px)'
 
                 }
-              }
-            }}
-            style={()=>{
-              return {
-                width:90,
-                height:36,
-                background:'#111',
-                borderRadius:36,
-                padding:'0 18px',
-                boxShadow:'inset 0 2px 6px 1px #000',
-                border:'1px solid',
-                borderColor:'#222 #222 #333 #222',
               }
             }}
             pointStyle={()=>{
