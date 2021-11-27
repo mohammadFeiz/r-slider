@@ -41,7 +41,7 @@ onLabelClick | callback when click on label. get value of label as parameter | f
 scaleStep | scaling slider based on scaleStep from start to end | number | optional
 scaleStyle | get value of scale as parameter and returns css object of scale | function | optional
 direction | Set direction of slider("left","right","top","bottom")|string|"right"
-attrs | send html attributes as object to slider | object | optional
+attrs | send html attributes as object to slider (className,id,style,onClick,...) | object | optional
 -------------------------------------------------------
 - ## points
 #### single point:
