@@ -26,14 +26,14 @@ start | Start of slider range | number | 0
 end | End of slider range | number | 100
 step | Step of change slider | number | 1
 min | Set Minimum amount allowed | number | optional
-max | Set Maximum amount allowed(optional) | number | optional
+max | Set Maximum amount allowed | number | optional
 points | Slider Points value | array of numbers| [0] 
 fillStyle | get fill index as parameter and should returns fill css object | function | optional
 pointStyle | get point index as parameter and should returns point css object | function | optional
-changable | This allows us to change the slider with mouse | boolean | true
+valueStyle | returns css object for value of points | function | optional
+lineStyle | returns css object for slider line | function | optional
 showValue | Makes the point value appear on the point.if false , never show value, and if 'fixed' alwais show value |boolean or 'fixed'
-label | Labeling slider based on number of steps or custom labels | object | optional
-onChange|function that get points and dragging as parameters|function|required
+onChange|function that get points(array) and dragging(boolean) as parameters|function|required
 direction|Set direction of slider("left","right","top","bottom")|string|"right"
 className|Set className of slider|string|optional
 id|Set id of slider|string|optional
