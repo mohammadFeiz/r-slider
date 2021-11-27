@@ -389,3 +389,72 @@ body{
 ```
 ![alt text](/images/awesome2.jpg)
 
+--------------------------------------------------
+- ## awesome slider configuration3
+```javascript
+class App extends Component {
+  state = {value:true};
+  render() {
+    let {value} = this.state;
+    return (
+      <div className='slider-container'>
+          <RRangeSlider
+            points={[value === false?0:1]}
+            start={0}
+            end={1}
+            showValue={false}
+            attrs={{
+              onClick:()=>{
+                this.setState({value:!value})
+              }
+            }}
+            getText={(index)=>{
+              return index === 0?'ON':'OFF';
+            }}
+            textStyle={(index)=>{
+              if(index === 0){
+                return {
+                  color:'#fff',
+                  transform:'translateX(-10px)'
+
+                }
+              }
+              else if(index === 1){
+                return {
+                  color:'#fff',
+                  transform:'translateX(10px)'
+
+                }
+              }
+            }}
+            style={()=>{
+              return {
+                width:90,
+                height:36,
+                background:'#111',
+                borderRadius:36,
+                padding:'0 18px',
+                boxShadow:'inset 0 2px 6px 1px #000',
+                border:'1px solid',
+                borderColor:'#222 #222 #333 #222',
+              }
+            }}
+            pointStyle={()=>{
+              return {
+                width:36,
+                height:36,
+                background:'#444'
+              }
+            }}
+            lineStyle={()=>{
+              return {display:'none'}
+            }}
+          /> 
+        
+      </div>
+    );
+  }
+}
+```
+![alt text](/images/awesome3.jpg)
+
