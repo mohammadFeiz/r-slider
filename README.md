@@ -256,7 +256,26 @@ class App extends Component {
 }
 ```
 ![alt text](/images/valuestyle2.gif)
-
+- ## editValue(function):
+```javascript
+class App extends Component {
+  state = {value:50};
+  render() {
+    let {value} = this.state;
+    return (  
+      <Slider
+        start={0}
+        end={100}
+        points={[value]}
+        onChange={(points)=>this.setState({value:points[0]})}
+        showValue={true}
+        editValue={(value)=>value + '%'}
+      /> 
+    );
+  }
+}
+```
+![alt text](/images/editvalue.gif)
 -----------------------------------------------------
 - ## fillStyle(props):
 ```javascript
