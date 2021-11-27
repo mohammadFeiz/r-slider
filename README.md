@@ -27,30 +27,37 @@ end | End of slider range | number | 100
 step | Step of change slider | number | 1
 min | Set Minimum amount allowed | number | optional
 max | Set Maximum amount allowed | number | optional
+onChange|function that get points(array) and dragging(boolean) as parameters|function|required
 points | Slider Points value | array of numbers| [0] 
 fillStyle | get fill index as parameter and should returns fill css object | function | optional
 pointStyle | get point index as parameter and should returns point css object | function | optional
 valueStyle | returns css object for value of points | function | optional
 lineStyle | returns css object for slider line | function | optional
-showValue | Makes the point value appear on the point.if false , never show value, and if 'fixed' alwais show value |boolean or 'fixed'
-onChange|function that get points(array) and dragging(boolean) as parameters|function|required
+showValue | Makes the point value appear on the point.if false , never show value, if true alwais show value and if not set , show when mouse down on points |boolean or 'fixed'
+labelStep | show labels based on labelStep from start to end | number | optional
+editLabel | get value of label as parameter and returns edited label based on value | function | optional
+labelStyle | get value of label as parameter and returns css object of label | function | optional
+onLabelClick | callback when click on label. get value of label as parameter | function | optional
+scaleStep | scaling slider based on scaleStep from start to end | number | optional
+scaleStyle | get value of scale as parameter and returns css object of scale | function | optional
 direction|Set direction of slider("left","right","top","bottom")|string|"right"
 className|Set className of slider|string|optional
 id|Set id of slider|string|optional
 -------------------------------------------------------
-- ## Basic (one point)
+- ## points
+#### single point:
 ```javascript
 <Slider points={[20]} start={0} end={100}/>
 ```
 ![alt text](/images/basic.jpg)
 -------------------------------------------------------   
-- ## 2 points
+#### 2 points:
 ```javascript
 <Slider points={[20,60]} start={0} end={100}/>
 ```
 ![alt text](/images/2-points.jpg)
 -------------------------------------------------------
-- ## multi points
+#### multi points:
 ```javascript
 <Slider points={[20,60,80,100]} start={0} end={100}/>
 ```
@@ -69,12 +76,15 @@ export default class App extends Component {
           end={100}
           points={[value]}
           onChange={(points,dragging)=>{
-            this.setState({
-              value:points[0],
-              draggingValue:`value is ${points[0]}`
-            });
-            if(!dragging){
+            if(dragging){
               this.setState({
+                value:points[0],
+                draggingValue:`value is ${points[0]}`
+              });
+            }
+            else{
+              this.setState({
+                value:points[0],
                 finalValue:`value is ${points[0]}`
               });
             }
@@ -154,6 +164,27 @@ class App extends Component {
 ```
 ![alt text](/images/showvalue-false.gif)
 -----------------------------------------------------------
+- ## direction:
+```javascript
+class App extends Component {
+  state = {value:50};
+  render() {
+    let {value} = this.state;
+    return (  
+      <Slider
+        start={0}
+        end={100}
+        points={[value]}
+        onChange={(points)=>this.setState({value:points[0]})}
+        direction='left'
+      /> 
+    );
+  }
+}
+```
+![alt text](/images/directions-left.gif)
+-----------------------------------------------------------
+
 - ## valueStyle(props):
 ```javascript
 <Slider 
