@@ -40,9 +40,8 @@ labelStyle | get value of label as parameter and returns css object of label | f
 onLabelClick | callback when click on label. get value of label as parameter | function | optional
 scaleStep | scaling slider based on scaleStep from start to end | number | optional
 scaleStyle | get value of scale as parameter and returns css object of scale | function | optional
-direction|Set direction of slider("left","right","top","bottom")|string|"right"
-className|Set className of slider|string|optional
-id|Set id of slider|string|optional
+direction | Set direction of slider("left","right","top","bottom")|string|"right"
+attrs | send html attributes as object to slider | object | optional
 -------------------------------------------------------
 - ## points
 #### single point:
@@ -188,7 +187,7 @@ class App extends Component {
 - ## valueStyle(props):
 ```javascript
 <Slider 
-   className='my-slider'
+   attrs={{className:'my-slider'}}
    points={[30]}
    showValue={true}
    valueStyle={()=>{
@@ -213,7 +212,7 @@ class App extends Component {
 - ## fillStyle(props):
 ```javascript
 <Slider 
-      className='my-slider'
+      attrs={{className:'my-slider'}}
       points={[20]} 
       start={0} 
       end={100}
@@ -232,7 +231,7 @@ class App extends Component {
 ##### other example:
 ```javascript
 <Slider 
-   className='my-slider'
+   attrs={{className:'my-slider'}}
    points={[20]} 
    start={0} 
    end={100}
@@ -255,6 +254,7 @@ class App extends Component {
 ##### other example:
 ```javascript
 <Slider 
+      attrs={{className:'my-slider'}}
       start={0} 
       end={100}
       points={[20,50]}
@@ -276,7 +276,7 @@ class App extends Component {
 - ## pointStyle (function)
 ```javascript
 <Slider 
-   className='my-slider'
+   attrs={{className:'my-slider'}}
    start={0} 
    end={100}
    points={[20,60]}
@@ -305,7 +305,7 @@ class App extends Component {
 - ## lineStyle (function)
 ```javascript
 <Slider 
-      className='my-slider'
+      attrs={{className:'my-slider'}}
       start={0} 
       end={100}
       points={[20]}
