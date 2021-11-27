@@ -220,6 +220,39 @@ id|Set id of slider|string|optional
 ![alt text](/images/getlinestyle1.jpg)
 -------------------------------------------------------------------
 - ## labeling and scaling
+
+```javascript
+export default class App extends Component {
+  state = {date:'March'};
+  render() {
+    let {date} = this.state;
+    let months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+    return (
+      <Slider
+        start={0}
+        end={11}
+        points={[months.indexOf(date)]}
+        labelStep={1}
+        editLabel={(value)=>months[value].slice(0,3)}
+      /> 
+    );
+  }
+}
+```
+![alt text](/images/labeling-scaling1.jpg)
 ```javascript
 import React, { Component } from 'react';
 import Slider from 'r-range-slider';
