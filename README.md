@@ -263,6 +263,43 @@ id|Set id of slider|string|optional
 />
 ```
 ![alt text](/images/labeling3.jpg)
+```havascript
+<Slider
+  start={0}
+  end={100}
+  points={[50]}
+  labelStep={10} 
+  scaleStep={5}
+  scaleStyle={(value)=>{
+    return {
+      width:6,
+      height:6,
+      top:30,
+      borderRadius:'100%',
+      background:'#888',
+      transform:'translateX(-3px)'
+    }
+  }}
+  labelStyle={()=>{
+    return {
+      top:46,
+      color:'#888'
+    }
+  }}
+  lineStyle={()=>{
+    return {
+      background:'#ddd'
+    }
+  }}
+  pointStyle={()=>{
+    return {
+      background:'#ccc',
+      border:'2px solid #888'
+    }
+  }}
+/> 
+```
+![alt text](/images/labeling4.jpg)
 
 ```javascript
 export default class App extends Component {
@@ -331,12 +368,6 @@ export default class App extends Component {
             return {color:'red',fontWeight:'bold',fontSize:12}
           }
         }}
-        onChange={(points)=>{
-          this.setState({points})
-        }}
-        onLabelClick={(value)=>{
-          this.setState({points:[value]})
-        }}
       /> 
     );
   }
@@ -344,19 +375,6 @@ export default class App extends Component {
 ```
 ![alt text](/images/scale1.jpg)
 
-##### other example:
-```javascript
-<Slider
-    ...
-    editLabel={(value)=>{
-      if(value === -300){return 'min'}
-      if(value === 300){return 'max'}
-      return null;      
-    }}
-    ...
-/>
-```
-![alt text](/images/label2.jpg)
 --------------------------------------------------
 - ## awesome slider configuration1
 ```javascript
