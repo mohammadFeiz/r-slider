@@ -109,6 +109,27 @@ class App extends Component {
 }
 ```
 ![alt text](/images/step.gif)
+- ## min , max
+```javascript
+class App extends Component {
+  state = {value:50};
+  render() {
+    let {value} = this.state;
+    return ( 
+      <Slider
+        start={0}
+        end={100}
+        min={30}
+        max={80}
+        points={[value]}
+        onChange={(points)=>this.setState({value:points[0]})}
+      /> 
+    );
+  }
+}
+```
+![alt text](/images/minmax.gif)
+
 - ## showValue(props):
 ##### showValue as undefined:
 ###### if you not set showValue, value of points will be visible when you mousedown on points. 
