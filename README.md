@@ -240,7 +240,7 @@ class App extends Component {
   }
 }
 ```
-![alt text](/images/valuestyle2.jpg)
+![alt text](/images/valuestyle2.gif)
 
 -----------------------------------------------------
 - ## fillStyle(props):
