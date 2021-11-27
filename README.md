@@ -447,6 +447,29 @@ export default class App extends Component {
 }
 ```
 ![alt text](/images/scale1.jpg)
+- ## onLabelClick
+```javascript
+class App extends Component {
+  state = {value:50};
+  render() {
+    let {value} = this.state;
+    return (  
+      <Slider
+        start={0}
+        end={100}
+        points={[value]}
+        onChange={(points)=>this.setState({value:points[0]})}
+        labelStep={10}
+        onLabelClick={(value)=>{
+          this.setState({value})
+        }}
+      /> 
+    );
+  }
+}
+```
+![alt text](/images/onlabelclick.gif)
+
 
 --------------------------------------------------
 - ## awesome slider configuration1
@@ -570,7 +593,7 @@ class App extends Component {
     let {value} = this.state;
     return (
       <div className='slider-container'>
-          <RRangeSlider
+          <Slider
             points={[value === false?0:1]}
             start={0}
             end={1}
