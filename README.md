@@ -252,7 +252,7 @@ export default class App extends Component {
   }
 }
 ```
-![alt text](/images/labeling-scaling1.jpg)
+![alt text](/images/scaling-labeling1.jpg)
 ```javascript
 import React, { Component } from 'react';
 import Slider from 'r-range-slider';
