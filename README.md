@@ -92,13 +92,21 @@ export default class App extends Component {
 ![alt text](/images/onchange1.gif)
 - ## step
 ```javascript
-<Slider
-  start={0}
-  end={100}
-  step={5}
-  points={[value]}
-  onChange={(points)=>this.setState({value:points[0]})}
-/> 
+class App extends Component {
+  state = {value:30};
+  render() {
+    let {value} = this.state;
+    return (
+      <Slider
+        start={0}
+        end={100}
+        step={5}
+        points={[value]}
+        onChange={(points)=>this.setState({value:points[0]})}
+      /> 
+    );
+  }
+}
 ```
 ![alt text](/images/step.gif)
 - ## showValue(props):
