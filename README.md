@@ -244,9 +244,13 @@ export default class App extends Component {
       <Slider
         start={0}
         end={11}
+        showValue={false}
         points={[months.indexOf(date)]}
         labelStep={1}
         editLabel={(value)=>months[value].slice(0,3)}
+        onChange={(points,drag)=>{
+          this.setState({date:months[points[0]]})
+        }}
       /> 
     );
   }
