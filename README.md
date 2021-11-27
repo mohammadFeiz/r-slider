@@ -262,7 +262,7 @@ export default class App extends Component {
   }
 }
 ```
-![alt text](/images/label1.jpg)
+![alt text](/images/scale1.jpg)
 
 ##### other example:
 ```javascript
