@@ -119,7 +119,7 @@ var RRangeSlider = /*#__PURE__*/function (_Component) {
     key: "fix",
     value: function fix(number) {
       var dotPos = this.props.step.toString().indexOf('.');
-      var a = dotPos === -1 ? 0 : step.length - dotPos - 1;
+      var a = dotPos === -1 ? 0 : this.props.step.toString().length - dotPos - 1;
       return parseFloat(number.toFixed(a));
     }
   }, {

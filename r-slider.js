@@ -28,7 +28,7 @@ export default class RRangeSlider extends Component{
   getPercentByValue(value,start,end){return 100 * (value - start) / (end - start);} //getPercentByValue
   fix(number){
     let dotPos = this.props.step.toString().indexOf('.');
-    let a = dotPos === -1?0:step.length - dotPos - 1;
+    let a = dotPos === -1?0:this.props.step.toString().length - dotPos - 1;
     return parseFloat((number).toFixed(a));
   }
   getStartByStep(start,step){
