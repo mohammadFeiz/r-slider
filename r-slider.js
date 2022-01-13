@@ -172,6 +172,7 @@ export default class RRangeSlider extends Component{
   getContext(){
     var context = {...this.props}; 
     context.touch = this.touch;
+    context.fix = this.fix.bind(this);
     context.oriention = this.oriention;
     context.getValue = this.getValue.bind(this); 
     context.isDown = this.state.isDown;
@@ -221,7 +222,7 @@ RRangeSlider.defaultProps = {
   direction:'right',editLabel:(a)=>a,labelStyle:()=>{return {}},labelRotate:()=>{return 0},
   points:[0],scaleStyle:()=>{return {}},getPointHTML:()=>'',style:()=>{},
   start:0,end:100,step:1,activegetPointStyle:{},getText:()=>{return ''},attrs:{},
-  pointStyle:()=>{return {}},lineStyle:()=>{return {}},fillStyle:()=>{return {}},valueStyle:()=>{return {}},textStyle:{},editValue:(value,index)=>value,textStyle:()=>{},onChange:()=>{}
+  pointStyle:()=>{return {}},lineStyle:()=>{return {}},fillStyle:()=>{return {}},valueStyle:()=>{return {}},textStyle:{},editValue:(value,index)=>value,textStyle:()=>{}
 }
 class RRangeSliderLine extends Component{
   static contextType = RRangeSliderContext;
@@ -280,7 +281,7 @@ class RRangeSliderPoint extends Component{
     return {display:'none'};
   }
   render(){
-    var {points,mouseDown,editValue,pointEvents,getPointHTML,pointStyle,touch} = this.context;
+    var {points,mouseDown,editValue,pointEvents,getPointHTML,pointStyle,touch,fix} = this.context;
     var {index} = this.props;
     var point = points[index];
     var props = {
@@ -302,7 +303,7 @@ class RRangeSliderPoint extends Component{
     return (
       <div {...props}>
         <div {...pointProps}>{html}</div>
-        <div {...valueProps}>{editValue(point,index)}</div>
+        <div {...valueProps}>{editValue(fix(point),index)}</div>
       </div>
       
     );

@@ -2,7 +2,7 @@
 
 function _instanceof(left, right) { if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) { return !!right[Symbol.hasInstance](left); } else { return left instanceof right; } }
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -14,8 +14,6 @@ var _react = _interopRequireWildcard(require("react"));
 var _jquery = _interopRequireDefault(require("jquery"));
 
 require("./index.css");
-
-var _RRangeSlider$default;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31,9 +29,9 @@ function _classCallCheck(instance, Constructor) { if (!_instanceof(instance, Con
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
@@ -405,6 +403,7 @@ var RRangeSlider = /*#__PURE__*/function (_Component) {
       var context = { ...this.props
       };
       context.touch = this.touch;
+      context.fix = this.fix.bind(this);
       context.oriention = this.oriention;
       context.getValue = this.getValue.bind(this);
       context.isDown = this.state.isDown;
@@ -485,7 +484,7 @@ var RRangeSlider = /*#__PURE__*/function (_Component) {
 }(_react.Component);
 
 exports.default = RRangeSlider;
-RRangeSlider.defaultProps = (_RRangeSlider$default = {
+RRangeSlider.defaultProps = _defineProperty({
   direction: 'right',
   editLabel: function editLabel(a) {
     return a;
@@ -528,7 +527,7 @@ RRangeSlider.defaultProps = (_RRangeSlider$default = {
   editValue: function editValue(value, index) {
     return value;
   }
-}, _defineProperty(_RRangeSlider$default, "textStyle", function textStyle() {}), _defineProperty(_RRangeSlider$default, "onChange", function onChange() {}), _RRangeSlider$default);
+}, "textStyle", function textStyle() {});
 
 var RRangeSliderLine = /*#__PURE__*/function (_Component2) {
   _inherits(RRangeSliderLine, _Component2);
@@ -695,7 +694,8 @@ var RRangeSliderPoint = /*#__PURE__*/function (_Component4) {
           pointEvents = _this$context4.pointEvents,
           getPointHTML = _this$context4.getPointHTML,
           pointStyle = _this$context4.pointStyle,
-          touch = _this$context4.touch;
+          touch = _this$context4.touch,
+          fix = _this$context4.fix;
       var index = this.props.index;
       var point = points[index];
 
@@ -727,7 +727,7 @@ var RRangeSliderPoint = /*#__PURE__*/function (_Component4) {
         className: 'r-range-slider-value'
       };
       var html = getPointHTML(index, this.context);
-      return /*#__PURE__*/_react.default.createElement("div", props, /*#__PURE__*/_react.default.createElement("div", pointProps, html), /*#__PURE__*/_react.default.createElement("div", valueProps, editValue(point, index)));
+      return /*#__PURE__*/_react.default.createElement("div", props, /*#__PURE__*/_react.default.createElement("div", pointProps, html), /*#__PURE__*/_react.default.createElement("div", valueProps, editValue(fix(point), index)));
     }
   }]);
 
