@@ -251,9 +251,10 @@ var RRangeSlider = /*#__PURE__*/function (_Component) {
           min = _this$props4$min === void 0 ? start : _this$props4$min,
           _this$props4$max = _this$props4.max,
           max = _this$props4$max === void 0 ? end : _this$props4$max,
-          onChange = _this$props4.onChange;
+          onChange = _this$props4.onChange,
+          disabled = _this$props4.disabled;
 
-      if (!onChange) {
+      if (!onChange || disabled) {
         return;
       }
 

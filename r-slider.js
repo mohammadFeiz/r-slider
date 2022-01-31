@@ -89,8 +89,8 @@ export default class RRangeSlider extends Component{
   }
   mouseDown(e,index,type){
     e.preventDefault();
-    var {start,end,min = start,max = end,onChange} = this.props;
-    if(!onChange){return}
+    var {start,end,min = start,max = end,onChange,disabled} = this.props;
+    if(!onChange || disabled){return}
     var {x,y} = this.getClient(e),dom = $(this.dom.current);
     var pointContainers = dom.find('.r-range-slider-point-container');
     var size = dom.find('.r-range-slider-line')[this.oriention === 'horizontal'?'width':'height']();
