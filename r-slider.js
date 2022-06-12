@@ -424,8 +424,8 @@ class RRangeSliderLabel extends Component{
 
 class RRangeSliderScales extends Component{
   static contextType = RRangeSliderContext;
-  getScalesByStep(){
-    var {start,end,getStartByStep,scaleStep} = this.context;
+  getScalesByStep(scaleStep){
+    var {start,end,getStartByStep} = this.context;
     var value = getStartByStep(start,scaleStep);
     var key = 0,scales = []; 
     while (value <= end) {
@@ -435,10 +435,14 @@ class RRangeSliderScales extends Component{
     }
     return scales;
   }
+  getScales(scaleStep){
+    return scaleStep.map((o)=><RRangeSliderScale value={o} key={o}/>)
+  }
   render(){
+    let {scaleStep} = this.context;  
     return(
       <div className='r-range-slider-scales'>
-        {this.getScalesByStep()}
+        {Array.isArray(scaleStep)?this.getScales(scaleStep):this.getScalesByStep(scaleStep)}
       </div>
     );
   }
@@ -454,8 +458,12 @@ class RRangeSliderScale extends Component{
     return obj;
   }
   render(){
+    let {getScaleHTML} = this.context;
+    let {value} = this.props;
     return (
-      <div className="r-range-slider-scale" style={this.getStyle()}></div>
+      <div className="r-range-slider-scale" style={this.getStyle()}>
+        {getScaleHTML && getScaleHTML(value)} 
+      </div>
     );
   }
 }
