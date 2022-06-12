@@ -317,8 +317,8 @@ class RRangeSliderLabels extends Component{
     this.dom = createRef();
     $(window).on('resize',this.update.bind(this))
   }
-  getLabelsByStep(){
-    var {start,label = {},end,getStartByStep,labelStep} = this.context;
+  getLabelsByStep(labelStep){
+    var {start,label = {},end,getStartByStep} = this.context;
     var Labels = [];
     var value = getStartByStep(start,labelStep); 
     var key = 0;
@@ -331,6 +331,9 @@ class RRangeSliderLabels extends Component{
       key++;
     } 
     return Labels;
+  }
+  getLabels(labelStep){
+    return labelStep.map((o)=><RRangeSliderLabel key={o} value={o}/>)
   }
   update(){ 
     var container = $(this.dom.current); 
@@ -373,9 +376,10 @@ class RRangeSliderLabels extends Component{
   componentDidMount(){this.update()}
   componentDidUpdate(){this.update()}
   render(){
+    let {labelStep} = this.context;
     return (
       <div className='r-range-slider-labels' ref={this.dom}>
-        {this.getLabelsByStep()}
+        {Array.isArray(labelStep)?this.getLabels(labelStep):this.getLabelsByStep(labelStep)}
       </div>
     );
   }

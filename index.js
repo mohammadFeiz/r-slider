@@ -648,13 +648,12 @@ class RRangeSliderLabels extends _react.Component {
     (0, _jquery.default)(window).on('resize', this.update.bind(this));
   }
 
-  getLabelsByStep() {
+  getLabelsByStep(labelStep) {
     var {
       start,
       label = {},
       end,
-      getStartByStep,
-      labelStep
+      getStartByStep
     } = this.context;
     var Labels = [];
     var value = getStartByStep(start, labelStep);
@@ -671,6 +670,13 @@ class RRangeSliderLabels extends _react.Component {
     }
 
     return Labels;
+  }
+
+  getLabels(labelStep) {
+    return labelStep.map(o => /*#__PURE__*/_react.default.createElement(RRangeSliderLabel, {
+      key: o,
+      value: o
+    }));
   }
 
   update() {
@@ -741,10 +747,13 @@ class RRangeSliderLabels extends _react.Component {
   }
 
   render() {
+    let {
+      labelStep
+    } = this.context;
     return /*#__PURE__*/_react.default.createElement("div", {
       className: "r-range-slider-labels",
       ref: this.dom
-    }, this.getLabelsByStep());
+    }, Array.isArray(labelStep) ? this.getLabels(labelStep) : this.getLabelsByStep(labelStep));
   }
 
 }
